@@ -29,6 +29,8 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+      - name: Add permission - Gradle 명령 실행을 위한 권한을 부여합니다
+        run: chmod +x gradlew
       - name: Build with Gradle
         uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25 # v2.6.0
         with:
