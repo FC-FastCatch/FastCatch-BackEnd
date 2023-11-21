@@ -1,7 +1,6 @@
 package kr.co.fastcampus.fastcatch.domain.accommodation.controller;
 
 import java.util.List;
-
 import kr.co.fastcampus.fastcatch.common.response.ResponseBody;
 import kr.co.fastcampus.fastcatch.domain.accommodation.dto.AccommodationSummaryResponse;
 import lombok.RequiredArgsConstructor;

@@ -6,7 +6,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
-
 import kr.co.fastcampus.fastcatch.common.exception.BaseException;
 import kr.co.fastcampus.fastcatch.common.response.ResponseBody;
 import lombok.extern.slf4j.Slf4j;
