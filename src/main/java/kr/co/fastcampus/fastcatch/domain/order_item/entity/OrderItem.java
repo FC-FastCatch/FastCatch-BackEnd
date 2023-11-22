@@ -1,5 +1,7 @@
 package kr.co.fastcampus.fastcatch.domain.order_item.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -9,12 +11,11 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import java.time.LocalDate;
 import kr.co.fastcampus.fastcatch.common.baseentity.BaseEntity;
-import kr.co.fastcampus.fastcatch.domain.order.entity.Order;
+import kr.co.fastcampus.fastcatch.domain.orders.entity.Orders;
 import kr.co.fastcampus.fastcatch.domain.room.entity.Room;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 
 @Getter
 @NoArgsConstructor
@@ -23,35 +24,38 @@ public class OrderItem extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @JsonIgnore
+    private Long orderItemId;
 
-    @NonNull
+    @Column(nullable = false)
     private LocalDate startDate;
 
-    @NonNull
+    @Column(nullable = false)
     private LocalDate endDate;
 
-    @NonNull
+    @Column(nullable = false)
     private Integer headCount;
 
-    @NonNull
+    @Column(nullable = false)
     private Integer price;
 
     @ManyToOne
     @JoinColumn(name = "order_id")
-    private Order order;
+    @JsonIgnore
+    private Orders orders;
 
     @OneToOne
     @JoinColumn(name = "room_id")
+    @JsonIgnore
     private Room room;
 
     @Builder
     public OrderItem(
-        Long id, Order order, Room room, LocalDate startDate,
+        Long orderItemId, Orders orders, Room room, LocalDate startDate,
         LocalDate endDate, Integer headCount, Integer price
     ) {
-        this.id = id;
-        this.order = order;
+        this.orderItemId = orderItemId;
+        this.orders = orders;
         this.room = room;
         this.startDate = startDate;
         this.endDate = endDate;

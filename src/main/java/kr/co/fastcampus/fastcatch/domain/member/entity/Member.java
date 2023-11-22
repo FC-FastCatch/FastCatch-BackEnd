@@ -1,5 +1,6 @@
 package kr.co.fastcampus.fastcatch.domain.member.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -10,7 +11,6 @@ import kr.co.fastcampus.fastcatch.common.baseentity.BaseEntity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 
 @Getter
 @NoArgsConstructor
@@ -19,31 +19,29 @@ public class Member extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @JsonIgnore
+    private Long memberId;
 
-    @Column(unique = true, length = 30)
-    @NonNull
+    @Column(unique = true, length = 30, nullable = false)
     private String email;
 
-    @NonNull
+    @Column(nullable = false)
     private String password;
 
-    @Column(length = 30)
-    @NonNull
+    @Column(length = 30, nullable = false)
     private String name;
 
-    @Column(unique = true, length = 30)
-    @NonNull
+    @Column(unique = true, length = 30, nullable = false)
     private String nickname;
 
-    @NonNull
+    @Column(nullable = false)
     private LocalDate birthday;
 
     @Builder
     public Member(
-        Long id, String email, String password,
+        Long memberId, String email, String password,
         String name, String nickname, LocalDate birthday) {
-        this.id = id;
+        this.memberId = memberId;
         this.email = email;
         this.name = name;
         this.nickname = nickname;

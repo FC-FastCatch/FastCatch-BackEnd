@@ -11,12 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/accommodations")
 @RequiredArgsConstructor
 public class MemberController {
 
-    @GetMapping
-    public ResponseBody<List<AccommodationSummaryResponse>> getAccommodationList() {
-        return ResponseBody.ok(null);
-    }
+
 }

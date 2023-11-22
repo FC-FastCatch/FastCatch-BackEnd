@@ -1,4 +1,4 @@
-package kr.co.fastcampus.fastcatch.domain.order.controller;
+package kr.co.fastcampus.fastcatch.domain.orders.controller;
 
 import java.util.List;
 import kr.co.fastcampus.fastcatch.common.response.ResponseBody;
@@ -11,12 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/accommodations")
 @RequiredArgsConstructor
 public class OrderController {
 
-    @GetMapping
-    public ResponseBody<List<AccommodationSummaryResponse>> getAccommodationList() {
-        return ResponseBody.ok(null);
-    }
+
 }

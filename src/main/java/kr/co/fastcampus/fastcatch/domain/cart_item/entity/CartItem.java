@@ -1,5 +1,7 @@
 package kr.co.fastcampus.fastcatch.domain.cart_item.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -13,7 +15,6 @@ import kr.co.fastcampus.fastcatch.domain.room.entity.Room;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 
 @Getter
 @NoArgsConstructor
@@ -22,34 +23,37 @@ public class CartItem extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @JsonIgnore
+    private Long cartItemId;
 
-    @NonNull
+    @Column(nullable = false)
     private LocalDate startDate;
 
-    @NonNull
+    @Column(nullable = false)
     private LocalDate endDate;
 
-    @NonNull
+    @Column(nullable = false)
     private Integer headCount;
 
-    @NonNull
+    @Column(nullable = false)
     private Integer price;
 
     @ManyToOne
     @JoinColumn(name = "cart_id")
+    @JsonIgnore
     private Cart cart;
 
     @ManyToOne
     @JoinColumn(name = "room_id")
+    @JsonIgnore
     private Room room;
 
     @Builder
     public CartItem(
-        Long id, Cart cart, Room room, LocalDate startDate,
+        Long cartItemId, Cart cart, Room room, LocalDate startDate,
         LocalDate endDate, Integer headCount, Integer price
     ) {
-        this.id = id;
+        this.cartItemId = cartItemId;
         this.cart = cart;
         this.room = room;
         this.startDate = startDate;

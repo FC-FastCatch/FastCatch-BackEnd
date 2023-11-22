@@ -1,5 +1,6 @@
-package kr.co.fastcampus.fastcatch.domain.order.entity;
+package kr.co.fastcampus.fastcatch.domain.orders.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -20,45 +21,46 @@ import kr.co.fastcampus.fastcatch.domain.order_item.entity.OrderItem;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 
 @Getter
 @NoArgsConstructor
 @Entity
-public class Order extends BaseEntity {
+public class Orders extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @JsonIgnore
+    private Long orderId;
 
-    @Column(length = 30)
-    @NonNull
+    @Column(length = 30, nullable = false)
     private String reservationPersonName;
 
-    @NonNull
+    @Column(nullable = false)
     private String phoneNumber;
 
-    @NonNull
+    @Column(nullable = false)
     private Integer totalPrice;
 
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
 
     @ManyToOne
     @JoinColumn(name = "member_id")
+    @JsonIgnore
     private Member member;
 
     @OneToMany(
-        fetch = FetchType.LAZY, mappedBy = "order",
+        fetch = FetchType.LAZY, mappedBy = "orders",
         cascade = CascadeType.PERSIST, orphanRemoval = true
     )
     private List<OrderItem> orderItems = new ArrayList<>();
 
     @Builder
-    public Order(
-        Long id, String reservationPersonName, String phoneNumber,
+    public Orders(
+        Long orderId, String reservationPersonName, String phoneNumber,
         Integer totalPrice, OrderStatus orderStatus) {
-        this.id = id;
+        this.orderId = orderId;
         this.reservationPersonName = reservationPersonName;
         this.phoneNumber = phoneNumber;
         this.totalPrice = totalPrice;

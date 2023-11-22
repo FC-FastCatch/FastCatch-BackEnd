@@ -1,4 +1,4 @@
-package kr.co.fastcampus.fastcatch.domain.order.entity;
+package kr.co.fastcampus.fastcatch.domain.orders.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
