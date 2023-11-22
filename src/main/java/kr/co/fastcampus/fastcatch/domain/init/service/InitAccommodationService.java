@@ -6,8 +6,8 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-import kr.co.fastcampus.fastcatch.domain.init.dto.FirstJsonReadDTO;
-import kr.co.fastcampus.fastcatch.domain.init.dto.InitAccommodationDTO;
+import kr.co.fastcampus.fastcatch.domain.init.dto.FirstJsonReadDto;
+import kr.co.fastcampus.fastcatch.domain.init.dto.InitAccommodationDto;
 import kr.co.fastcampus.fastcatch.domain.init.entity.InitAccommodation;
 import kr.co.fastcampus.fastcatch.domain.init.exception.InitAccommodationFailedSaveException;
 import kr.co.fastcampus.fastcatch.domain.init.exception.InitAccommodationNotFoundException;
@@ -43,11 +43,11 @@ public class InitAccommodationService {
 
     private List<InitAccommodation> loadAccommodationData() {
 
-        FirstJsonReadDTO fromJson = gson.fromJson(readJsonFile(filePath), FirstJsonReadDTO.class);
-        List<InitAccommodationDTO> dataList = fromJson.getData();
+        FirstJsonReadDto fromJson = gson.fromJson(readJsonFile(filePath), FirstJsonReadDto.class);
+        List<InitAccommodationDto> dataList = fromJson.getData();
         List<InitAccommodation> initAccommodationList = new ArrayList<>();
 
-        for (InitAccommodationDTO data : dataList) {
+        for (InitAccommodationDto data : dataList) {
             initAccommodationList.add(dtoToEntity(data));
         }
 
@@ -66,7 +66,7 @@ public class InitAccommodationService {
         }
     }
 
-    private InitAccommodation dtoToEntity(InitAccommodationDTO data) {
+    private InitAccommodation dtoToEntity(InitAccommodationDto data) {
         return InitAccommodation.builder()
             .name(data.getName())
             .address(data.getAddress())

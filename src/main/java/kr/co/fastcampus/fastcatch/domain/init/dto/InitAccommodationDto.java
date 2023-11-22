@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 @Builder
 //json이랑 같이 카멜 변수로 바꿔도 에러 생김 그냥 스네이크 쓰는 걸로
-public class InitAccommodationDTO {
+public class InitAccommodationDto {
 
     private String name;
     private String address;

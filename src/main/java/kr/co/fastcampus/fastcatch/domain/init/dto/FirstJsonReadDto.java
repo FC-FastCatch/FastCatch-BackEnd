@@ -4,8 +4,8 @@ import java.util.List;
 import lombok.Getter;
 
 @Getter
-public class FirstJsonReadDTO {
+public class FirstJsonReadDto {
 
-    private List<InitAccommodationDTO> data;
+    private List<InitAccommodationDto> data;
 
 }

@@ -17,6 +17,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class InitAccommodation {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonIgnore
@@ -34,6 +35,7 @@ public class InitAccommodation {
     @Column(nullable = false)
     private Integer category;
 
-    @Column(length=1000)
+    @Column(length = 1000)
     private String description;
+
 }
