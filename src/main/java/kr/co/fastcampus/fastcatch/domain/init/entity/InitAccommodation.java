@@ -30,7 +30,7 @@ public class InitAccommodation {
     private String address;
 
     @Column(nullable = false)
-    private String addressShort;
+    private String region;
 
     @Column(nullable = false)
     private Integer category;

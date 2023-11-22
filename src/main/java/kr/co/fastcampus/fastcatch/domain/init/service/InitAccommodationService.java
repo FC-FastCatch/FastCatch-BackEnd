@@ -70,7 +70,7 @@ public class InitAccommodationService {
         return InitAccommodation.builder()
             .name(data.getName())
             .address(data.getAddress())
-            .addressShort(data.getAddress_short())
+            .region(data.getRegion())
             .category(data.getCategory())
             .description(data.getDescription())
             .build();

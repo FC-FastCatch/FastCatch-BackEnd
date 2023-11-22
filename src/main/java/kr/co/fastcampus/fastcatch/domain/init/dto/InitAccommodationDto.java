@@ -12,7 +12,7 @@ public class InitAccommodationDto {
 
     private String name;
     private String address;
-    private String address_short;
+    private String region;
     private int category;
     private String description;
 
