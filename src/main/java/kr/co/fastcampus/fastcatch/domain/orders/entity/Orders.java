@@ -36,7 +36,7 @@ public class Orders extends BaseEntity {
     private String reservationPersonName;
 
     @Column(nullable = false)
-    private String phoneNumber;
+    private String reservationPhoneNumber;
 
     @Column(nullable = false)
     private Integer totalPrice;
@@ -58,11 +58,12 @@ public class Orders extends BaseEntity {
 
     @Builder
     public Orders(
-        Long orderId, String reservationPersonName, String phoneNumber,
-        Integer totalPrice, OrderStatus orderStatus) {
+        Long orderId, String reservationPersonName, String reservationPhoneNumber,
+        Integer totalPrice, OrderStatus orderStatus
+    ) {
         this.orderId = orderId;
         this.reservationPersonName = reservationPersonName;
-        this.phoneNumber = phoneNumber;
+        this.reservationPhoneNumber = reservationPhoneNumber;
         this.totalPrice = totalPrice;
         this.orderStatus = orderStatus;
     }

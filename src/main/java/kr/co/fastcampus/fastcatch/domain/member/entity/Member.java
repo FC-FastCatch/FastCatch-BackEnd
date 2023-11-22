@@ -37,16 +37,21 @@ public class Member extends BaseEntity {
     @Column(nullable = false)
     private LocalDate birthday;
 
+    @Column(nullable = false)
+    private String phoneNumber;
+
     @Builder
     public Member(
-        Long memberId, String email, String password,
-        String name, String nickname, LocalDate birthday) {
+        Long memberId, String email, String password, String name,
+        String nickname, LocalDate birthday, String phoneNumber
+    ) {
         this.memberId = memberId;
         this.email = email;
         this.name = name;
         this.nickname = nickname;
         this.password = password;
         this.birthday = birthday;
+        this.phoneNumber = phoneNumber;
     }
 
 }
