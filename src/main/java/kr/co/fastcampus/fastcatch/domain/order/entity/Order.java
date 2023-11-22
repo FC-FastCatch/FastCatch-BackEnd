@@ -1,4 +1,4 @@
-package kr.co.fastcampus.fastcatch.domain.orders.entity;
+package kr.co.fastcampus.fastcatch.domain.order.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.CascadeType;
@@ -15,6 +15,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
+import jakarta.persistence.Table;
 import kr.co.fastcampus.fastcatch.common.baseentity.BaseEntity;
 import kr.co.fastcampus.fastcatch.domain.member.entity.Member;
 import kr.co.fastcampus.fastcatch.domain.orderitem.entity.OrderItem;
@@ -25,7 +26,8 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @Entity
-public class Orders extends BaseEntity {
+@Table(name = "order_room")
+public class Order extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -51,13 +53,13 @@ public class Orders extends BaseEntity {
     private Member member;
 
     @OneToMany(
-        fetch = FetchType.LAZY, mappedBy = "orders",
+        fetch = FetchType.LAZY, mappedBy = "order",
         cascade = CascadeType.PERSIST, orphanRemoval = true
     )
     private List<OrderItem> orderItems = new ArrayList<>();
 
     @Builder
-    public Orders(
+    public Order(
         Long orderId, String reservationPersonName, String reservationPhoneNumber,
         Integer totalPrice, OrderStatus orderStatus
     ) {
