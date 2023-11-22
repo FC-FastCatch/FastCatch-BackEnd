@@ -1,8 +1,6 @@
 package kr.co.fastcampus.fastcatch.domain.init.service;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
@@ -46,7 +44,7 @@ public class InitAccommodationService {
     private List<InitAccommodation> loadAccommodationData() {
 
         FirstJsonReadDTO fromJson = gson.fromJson(readJsonFile(filePath), FirstJsonReadDTO.class);
-        List<InitAccommodationDTO> dataList = fromJson.getDATA();
+        List<InitAccommodationDTO> dataList = fromJson.getData();
         List<InitAccommodation> initAccommodationList = new ArrayList<>();
 
         for (InitAccommodationDTO data : dataList) {

@@ -13,7 +13,7 @@ import jakarta.persistence.OneToOne;
 import java.util.ArrayList;
 import java.util.List;
 import kr.co.fastcampus.fastcatch.common.baseentity.BaseEntity;
-import kr.co.fastcampus.fastcatch.domain.cart_item.entity.CartItem;
+import kr.co.fastcampus.fastcatch.domain.cartitem.entity.CartItem;
 import kr.co.fastcampus.fastcatch.domain.member.entity.Member;
 import lombok.Builder;
 import lombok.Getter;

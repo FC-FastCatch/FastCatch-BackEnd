@@ -5,5 +5,7 @@ import lombok.Getter;
 
 @Getter
 public class FirstJsonReadDTO {
-    private List<InitAccommodationDTO> DATA;
+
+    private List<InitAccommodationDTO> data;
+
 }
