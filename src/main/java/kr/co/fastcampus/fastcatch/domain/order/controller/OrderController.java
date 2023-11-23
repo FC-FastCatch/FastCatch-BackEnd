@@ -23,7 +23,7 @@ public class OrderController {
 
     @PostMapping
     public ResponseBody addOrder(@Valid @RequestBody OrderRequest orderRequest) {
-        if(!orderRequest.ageConsent()){
+        if (!orderRequest.ageConsent()) {
             return ResponseBody.fail("14세 이상 이용 동의가 필요합니다.");
         }
         //memberId는 회원 기능 추가 후, 수정 예정

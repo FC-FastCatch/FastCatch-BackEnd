@@ -7,6 +7,7 @@ import java.time.format.DateTimeParseException;
 import kr.co.fastcampus.fastcatch.common.exception.handler.InvalidDateFormatException;
 
 public class DateUtil {
+
     /**
      * String 타입을 LocalDateTime 타입으로 변환
      *

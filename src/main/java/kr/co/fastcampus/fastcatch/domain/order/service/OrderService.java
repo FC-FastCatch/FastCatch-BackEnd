@@ -36,7 +36,7 @@ public class OrderService {
 
         Long orderId = order.getOrderId();
 
-        for(OrderItemRequest orderItemRequest: orderRequest.orderItemRequests()) {
+        for (OrderItemRequest orderItemRequest : orderRequest.orderItemRequests()) {
             createOrderItem(orderItemRequest, orderId);
         }
     }
@@ -56,7 +56,7 @@ public class OrderService {
         orderItemRepository.save(orderItem);
     }
 
-    public Order getOrder(Long orderId){
+    public Order getOrder(Long orderId) {
         return orderRepository.findById(orderId).orElseThrow(OrderNotFoundException::new);
     }
 
