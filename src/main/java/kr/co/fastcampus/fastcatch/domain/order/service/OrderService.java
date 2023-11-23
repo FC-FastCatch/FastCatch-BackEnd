@@ -60,6 +60,9 @@ public class OrderService {
         return orderRepository.findById(orderId).orElseThrow(OrderNotFoundException::new);
     }
 
-
-
+    public void updateOrderStatusToCanceled(Long memberId, Long orderId) {
+        Order order = getOrder(orderId);
+        order.setOrderCanceled();
+        orderRepository.save(order);
+    }
 }
