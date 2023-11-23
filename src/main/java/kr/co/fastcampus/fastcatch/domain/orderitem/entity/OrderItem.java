@@ -11,7 +11,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import java.time.LocalDate;
 import kr.co.fastcampus.fastcatch.common.baseentity.BaseEntity;
-import kr.co.fastcampus.fastcatch.domain.orders.entity.Orders;
+import kr.co.fastcampus.fastcatch.domain.order.entity.Order;
 import kr.co.fastcampus.fastcatch.domain.room.entity.Room;
 import lombok.Builder;
 import lombok.Getter;
@@ -42,7 +42,7 @@ public class OrderItem extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "order_id")
     @JsonIgnore
-    private Orders orders;
+    private Order order;
 
     @OneToOne
     @JoinColumn(name = "room_id")
@@ -51,11 +51,11 @@ public class OrderItem extends BaseEntity {
 
     @Builder
     public OrderItem(
-        Long orderItemId, Orders orders, Room room, LocalDate startDate,
+        Long orderItemId, Order order, Room room, LocalDate startDate,
         LocalDate endDate, Integer headCount, Integer price
     ) {
         this.orderItemId = orderItemId;
-        this.orders = orders;
+        this.order = order;
         this.room = room;
         this.startDate = startDate;
         this.endDate = endDate;
