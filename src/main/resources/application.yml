@@ -1,29 +1,31 @@
 spring:
-#  datasource:
-#    driver-class-name: org.h2.Driver
-#    url: jdbc:h2:mem:testdb;MODE=MYSQL
-#    username: sa
-#    password:
-#  h2:
-#    console:
-#      enabled: true
-#  jpa:
-#    database-platform: H2
-#    show-sql: true
-#    generate-ddl: true
-#    hibernate:
-#      ddl-auto: create
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/MiniProject?createDatabaseIfNotExist=true&useSSL=true
-    username: root
-    password: root1234!!
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:testdb;MODE=MYSQL
+    username: sa
+    password:
+  h2:
+    console:
+      enabled: true
   jpa:
+    database-platform: H2
     hibernate:
-      ddl-auto: update
-    database: mysql
-    show-sql: true
+      ddl-auto: create-drop
     properties:
       hibernate:
         show_sql: true
         format_sql: true
+#  datasource:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://localhost:3306/MiniProject?createDatabaseIfNotExist=true&useSSL=true
+#    username: root
+#    password: root1234!!
+#  jpa:
+#    hibernate:
+#      ddl-auto: update
+#    database: mysql
+#    show-sql: true
+#    properties:
+#      hibernate:
+#        show_sql: true
+#        format_sql: true
