@@ -8,6 +8,7 @@ import kr.co.fastcampus.fastcatch.domain.order.dto.OrderRequest;
 import kr.co.fastcampus.fastcatch.domain.order.entity.Order;
 import kr.co.fastcampus.fastcatch.domain.order.entity.OrderItem;
 import kr.co.fastcampus.fastcatch.domain.order.entity.OrderStatus;
+import kr.co.fastcampus.fastcatch.domain.order.exception.OrderNotFoundException;
 import kr.co.fastcampus.fastcatch.domain.order.repository.OrderItemRepository;
 import kr.co.fastcampus.fastcatch.domain.order.repository.OrderRepository;
 import kr.co.fastcampus.fastcatch.domain.room.entity.Room;
@@ -44,17 +45,19 @@ public class OrderService {
 
         LocalDate checkInDate = DateUtil.stringToDate(orderItemRequest.startDate());
         LocalDate checkOutDate = DateUtil.stringToDate(orderItemRequest.endDate());
-        Optional<Order> order = orderRepository.findById(orderId);
         Optional<Room> room = roomRepository.findById(orderItemRequest.roomId());
         OrderItem orderItem = OrderItem.builder()
             .startDate(checkInDate).endDate(checkOutDate)
             .headCount(orderItemRequest.headCount())
             .price(orderItemRequest.orderPrice())
-            //.order(orderItemRepository.findById(orderId).orElseThrow(OrderNotFoundException::new))
-            .order(order.orElseThrow())
+            .order(getOrder(orderId))
             .room(room.orElseThrow())
             .build();
         orderItemRepository.save(orderItem);
+    }
+
+    public Order getOrder(Long orderId){
+        return orderRepository.findById(orderId).orElseThrow(OrderNotFoundException::new);
     }
 
 
