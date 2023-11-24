@@ -16,6 +16,7 @@ public class TestService {
         return InfoResponse.from(testEntity);
     }
 
+    @Transactional
     public InfoResponse save(SaveRequest request) {
         TestEntity testEntity = request.toEntity();
         TestEntity result = testRepository.save(testEntity);
