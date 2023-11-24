@@ -51,8 +51,11 @@ jobs:
         run: |
           mkdir -p ~/.ssh
           ssh-keyscan ${{ secrets.DEVELOP_SERVER_IP }} >> ~/.ssh/known_hosts
-      - name: Create remote directory
-        run: ssh -v ${{ secrets.DEVELOP_SERVER_USERNAME }}@${{ secrets.DEVELOP_SERVER_IP }} "mkdir -p ~/cicd"
+      - name: Create remote directory if not exists
+        run: |
+          if [ ! -d ~/cicd ]; then
+            mkdir -p ~/cicd
+          fi
       - name: SCP transfer
         run: scp *.jar ${{ secrets.DEVELOP_SERVER_USERNAME }}@${{ secrets.DEVELOP_SERVER_IP }}:~/cicd
       - name: Execute remote commands
