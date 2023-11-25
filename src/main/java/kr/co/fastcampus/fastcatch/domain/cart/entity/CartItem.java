@@ -1,4 +1,4 @@
-package kr.co.fastcampus.fastcatch.domain.cartitem.entity;
+package kr.co.fastcampus.fastcatch.domain.cart.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
