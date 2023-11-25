@@ -11,12 +11,15 @@ import kr.co.fastcampus.fastcatch.common.response.ResponseBody;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.NestedExceptionUtils;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 @Slf4j
 @RestControllerAdvice
@@ -46,6 +49,46 @@ public class GlobalExceptionHandler {
                 )
             ).collect(Collectors.joining());
         return ResponseBody.fail(response);
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(value = IllegalArgumentException.class)
+    public ResponseBody<Void> illegalArgumentException(IllegalArgumentException e) {
+        log.error("[IllegalArgumentException] Message = {}", e.getMessage());
+        return ResponseBody.fail(e.getMessage());
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(value = HttpMessageNotReadableException.class)
+    public ResponseBody<Void> httpMessageNotReadableException(HttpMessageNotReadableException e) {
+        log.error("[HttpMessageNotReadableException] Message = {}", e.getMessage());
+        return ResponseBody.fail(e.getMessage());
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(value = MethodArgumentTypeMismatchException.class)
+    public ResponseBody<Void> methodArgumentTypeMismatchException(
+        MethodArgumentTypeMismatchException e
+    ) {
+        log.error("[MethodArgumentTypeMismatchException] Message = {}", e.getMessage());
+        return ResponseBody.fail(e.getMessage());
+    }
+
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseBody<Void> missingServletRequestParameterException(
+        MissingServletRequestParameterException e
+    ) {
+        log.error("[MissingServletRequestParameterException] Message = {}", e.getMessage());
+        return ResponseBody.fail(e.getParameterName() +
+            " 파라미터가 빈 값이거나 잘못된 유형입니다.");
+    }
+
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(value = Exception.class)
+    public ResponseBody<Void> handleUnexpectedException(Exception e) {
+        log.error("[Exception]" + e.getCause(), e);
+        return ResponseBody.error(e.getMessage());
     }
 
     private List<FieldError> getSortedFieldErrors(BindingResult bindingResult) {
