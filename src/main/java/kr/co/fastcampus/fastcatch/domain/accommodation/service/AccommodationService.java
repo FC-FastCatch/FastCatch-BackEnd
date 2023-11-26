@@ -69,7 +69,7 @@ public class AccommodationService {
     public void createRoom(Long accommodationId, List<RoomSaveRequest> requests) {
         Accommodation accommodation = findAccommodationById(accommodationId);
         requests.stream()
-            .map(RoomSaveRequest -> RoomSaveRequest.toEntity(accommodation))
+            .map(roomSaveRequest -> roomSaveRequest.toEntity(accommodation))
             .forEach(accommodation::addRoom);
     }
 
@@ -87,7 +87,7 @@ public class AccommodationService {
     public void createRoomImage(Long roomId, List<RoomImageSaveRequest> request) {
         Room room = findRoomById(roomId);
         request.stream()
-            .map(RoomImageSaveRequest -> RoomImageSaveRequest.toEntity(room))
+            .map(roomImageSaveRequest -> roomImageSaveRequest.toEntity(room))
             .forEach(room::addRoomImage);
     }
 
