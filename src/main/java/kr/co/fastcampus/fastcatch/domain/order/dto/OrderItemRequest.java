@@ -1,19 +1,20 @@
 package kr.co.fastcampus.fastcatch.domain.order.dto;
 
-import java.util.Objects;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import java.time.LocalDate;
 
 public record OrderItemRequest(
+    @NotNull(message = "룸 ID를 필수로 입력하셔야 합니다.")
     Long roomId,
-    String startDate,
-    String endDate,
+    @NotNull(message = "입실일을 필수로 입력하셔야 합니다.")
+    LocalDate startDate,
+    @NotBlank(message = "퇴실일을 필수로 입력하셔야 합니다.")
+    LocalDate endDate,
+    @NotNull(message = "인원수를 필수로 입력하셔야 합니다.")
     Integer headCount,
-    Integer orderPrice) {
+    @NotNull(message = "주문 가격을 필수로 입력하셔야 합니다.")
+    Integer orderPrice
+) {
 
-    public OrderItemRequest {
-        Objects.requireNonNull(roomId, "객실 ID를 입력하세요.");
-        Objects.requireNonNull(startDate, "입실일을 입력하세요.");
-        Objects.requireNonNull(endDate, "퇴실일을 입력하세요.");
-        Objects.requireNonNull(headCount, "인원 수를 입력하세요.");
-        Objects.requireNonNull(orderPrice, "주문 가격을 입력하세요.");
-    }
 }

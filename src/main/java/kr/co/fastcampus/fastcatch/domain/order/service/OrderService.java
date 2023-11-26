@@ -1,8 +1,6 @@
 package kr.co.fastcampus.fastcatch.domain.order.service;
 
-import java.time.LocalDate;
-import java.util.Optional;
-import kr.co.fastcampus.fastcatch.common.utility.DateUtil;
+import jakarta.transaction.Transactional;
 import kr.co.fastcampus.fastcatch.domain.order.dto.OrderItemRequest;
 import kr.co.fastcampus.fastcatch.domain.order.dto.OrderRequest;
 import kr.co.fastcampus.fastcatch.domain.order.entity.Order;
@@ -10,12 +8,12 @@ import kr.co.fastcampus.fastcatch.domain.order.entity.OrderItem;
 import kr.co.fastcampus.fastcatch.domain.order.exception.OrderNotFoundException;
 import kr.co.fastcampus.fastcatch.domain.order.repository.OrderItemRepository;
 import kr.co.fastcampus.fastcatch.domain.order.repository.OrderRepository;
-import kr.co.fastcampus.fastcatch.domain.room.entity.Room;
 import kr.co.fastcampus.fastcatch.domain.room.repository.RoomRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class OrderService {
 
@@ -44,17 +42,14 @@ public class OrderService {
      * @param orderId 주문 ID
      */
     public void createOrderItem(OrderItemRequest orderItemRequest, Long orderId) {
-
-        LocalDate checkInDate = DateUtil.stringToDate(orderItemRequest.startDate());
-        LocalDate checkOutDate = DateUtil.stringToDate(orderItemRequest.endDate());
-        Optional<Room> room = roomRepository.findById(orderItemRequest.roomId());
         OrderItem orderItem = OrderItem.builder()
-            .startDate(checkInDate).endDate(checkOutDate)
+            .startDate(orderItemRequest.startDate()).endDate(orderItemRequest.endDate())
             .headCount(orderItemRequest.headCount())
             .price(orderItemRequest.orderPrice())
             .order(getOrder(orderId))
-            .room(room.orElseThrow())
+            .room(roomRepository.findById(orderItemRequest.roomId()).orElseThrow())
             .build();
+
         orderItemRepository.save(orderItem);
     }
 

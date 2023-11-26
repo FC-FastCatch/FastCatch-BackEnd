@@ -1,24 +1,23 @@
 package kr.co.fastcampus.fastcatch.domain.order.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import java.util.List;
-import java.util.Objects;
 import kr.co.fastcampus.fastcatch.domain.order.entity.Order;
 import kr.co.fastcampus.fastcatch.domain.order.entity.OrderStatus;
+import lombok.Builder;
 
 public record OrderRequest(
+    @NotNull(message = "나이 동의 여부를 필수로 입력하셔야 합니다.")
     Boolean ageConsent,
+    @NotBlank(message = "예약자 이름을 필수로 입력하셔야 합니다.")
     String reservationPersonName,
+    @NotBlank(message = "예약자 휴대폰번호를 필수로 입력하셔야 합니다.")
     String reservationPhoneNumber,
+    @NotNull(message = "주문 전체 가격을 필수로 입력하셔야 합니다.")
     Integer totalPrice,
+    @NotNull(message = "주문 아이템을 필수로 입력하셔야 합니다.")
     List<OrderItemRequest> orderItemRequests) {
-
-    public OrderRequest {
-        Objects.requireNonNull(ageConsent, "연령 동의 여부를 입력하세요.");
-        Objects.requireNonNull(reservationPersonName, "예약자 이름을 입력하세요.");
-        Objects.requireNonNull(reservationPhoneNumber, "예약자 휴대폰 번호를 입력하세요.");
-        Objects.requireNonNull(totalPrice, "주문 전체 가격을 입력하세요.");
-        Objects.requireNonNull(orderItemRequests, "주문 아이템 목록을 입력하세요.");
-    }
 
     public Order toEntity() {
         return Order.builder()
