@@ -2,7 +2,9 @@ package kr.co.fastcampus.fastcatch.domain.order.service;
 
 import jakarta.transaction.Transactional;
 import java.time.LocalDate;
-import kr.co.fastcampus.fastcatch.domain.member.dao.MemberRepository;
+import kr.co.fastcampus.fastcatch.domain.cartitem.repository.CartItemRepository;
+import kr.co.fastcampus.fastcatch.domain.member.repository.MemberRepository;
+import kr.co.fastcampus.fastcatch.domain.order.dto.OrderByCartRequest;
 import kr.co.fastcampus.fastcatch.domain.order.dto.OrderItemRequest;
 import kr.co.fastcampus.fastcatch.domain.order.repository.OrderRecordRepository;
 import kr.co.fastcampus.fastcatch.domain.order.dto.OrderRequest;
@@ -28,6 +30,7 @@ public class OrderService {
     //추후 각 도메인 service method 활용하여 수정 예정
     private final RoomRepository roomRepository;
     private final MemberRepository memberRepository;
+    private final CartItemRepository cartItemRepository;
 
     /***
      * 주문 생성
@@ -36,12 +39,29 @@ public class OrderService {
      * @param orderRequest 주문 요청 DTO
      */
     public void createOrder(Long memberId, OrderRequest orderRequest) {
-
         Long newOrderId = orderRepository.save(
             orderRequest.toEntity(memberRepository.findById(memberId).orElseThrow())).getOrderId();
         for (OrderItemRequest orderItemRequest : orderRequest.orderItemRequests()) {
             createOrderItem(orderItemRequest, newOrderId);
             createOrderRecord(orderItemRequest, newOrderId);
+        }
+    }
+
+    /***
+     * 장바구니를 통한 주문 생성
+     * @param memberId 회원 ID
+     * @param orderByCartRequest 장바구니를 통한 주문 요청 DTO
+     */
+    public void createOrderByCart(Long memberId, OrderByCartRequest orderByCartRequest) {
+        Long newOrderId = orderRepository.save(
+                orderByCartRequest.toEntity(memberRepository.findById(memberId).orElseThrow()))
+            .getOrderId();
+        for (Long cartItemId : orderByCartRequest.cartItemIds()) {
+            OrderItemRequest orderItemRequest = OrderItemRequest.fromCartItem(
+                cartItemRepository.findById(cartItemId).orElseThrow());
+            createOrderItem(orderItemRequest, newOrderId);
+            createOrderRecord(orderItemRequest, newOrderId);
+            cartItemRepository.deleteById(cartItemId);
         }
     }
 
@@ -57,7 +77,6 @@ public class OrderService {
             .headCount(orderItemRequest.headCount())
             .price(orderItemRequest.orderPrice())
             .order(getOrder(orderId))
-            .room(roomRepository.findById(orderItemRequest.roomId()).orElseThrow())
             .build();
         orderItemRepository.save(orderItem);
     }

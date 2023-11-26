@@ -2,6 +2,7 @@ package kr.co.fastcampus.fastcatch.domain.order.controller;
 
 import jakarta.validation.Valid;
 import kr.co.fastcampus.fastcatch.common.response.ResponseBody;
+import kr.co.fastcampus.fastcatch.domain.order.dto.OrderByCartRequest;
 import kr.co.fastcampus.fastcatch.domain.order.dto.OrderRequest;
 import kr.co.fastcampus.fastcatch.domain.order.service.OrderService;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,16 @@ public class OrderController {
         }
         //memberId는 회원 기능 추가 후, 수정 예정
         orderService.createOrder(1L, orderRequest);
+        return ResponseBody.ok();
+    }
+
+    @PostMapping("/carts")
+    public ResponseBody addOrderByCart(@Valid @RequestBody OrderByCartRequest orderByCartRequest) {
+        if (!orderByCartRequest.ageConsent()) {
+            return ResponseBody.fail("14세 이상 이용 동의가 필요합니다.");
+        }
+        //memberId는 회원 기능 추가 후, 수정 예정
+        orderService.createOrderByCart(1L, orderByCartRequest);
         return ResponseBody.ok();
     }
 
