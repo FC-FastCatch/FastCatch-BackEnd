@@ -80,8 +80,8 @@ public class GlobalExceptionHandler {
         MissingServletRequestParameterException e
     ) {
         log.error("[MissingServletRequestParameterException] Message = {}", e.getMessage());
-        return ResponseBody.fail(e.getParameterName() +
-            " 파라미터가 빈 값이거나 잘못된 유형입니다.");
+        return ResponseBody.fail(e.getParameterName()
+            + " 파라미터가 빈 값이거나 잘못된 유형입니다.");
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)

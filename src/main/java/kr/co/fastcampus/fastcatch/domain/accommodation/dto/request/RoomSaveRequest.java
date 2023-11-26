@@ -1,8 +1,7 @@
 package kr.co.fastcampus.fastcatch.domain.accommodation.dto.request;
 
-import java.time.LocalTime;
-
 import jakarta.validation.constraints.NotBlank;
+import java.time.LocalTime;
 import kr.co.fastcampus.fastcatch.domain.accommodation.entity.Accommodation;
 import kr.co.fastcampus.fastcatch.domain.accommodation.entity.Room;
 import org.springframework.format.annotation.DateTimeFormat;
