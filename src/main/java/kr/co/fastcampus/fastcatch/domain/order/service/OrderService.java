@@ -2,10 +2,20 @@ package kr.co.fastcampus.fastcatch.domain.order.service;
 
 import jakarta.transaction.Transactional;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import kr.co.fastcampus.fastcatch.domain.cartitem.repository.CartItemRepository;
+import kr.co.fastcampus.fastcatch.domain.member.entity.Member;
 import kr.co.fastcampus.fastcatch.domain.member.repository.MemberRepository;
 import kr.co.fastcampus.fastcatch.domain.order.dto.OrderByCartRequest;
 import kr.co.fastcampus.fastcatch.domain.order.dto.OrderItemRequest;
+import kr.co.fastcampus.fastcatch.domain.order.dto.OrderItemResponse;
+import kr.co.fastcampus.fastcatch.domain.order.dto.OrderPageResponse;
+import kr.co.fastcampus.fastcatch.domain.order.dto.OrderResponse;
+import kr.co.fastcampus.fastcatch.domain.order.entity.OrderStatus;
+import kr.co.fastcampus.fastcatch.domain.order.exception.InvalidOrderStatusException;
 import kr.co.fastcampus.fastcatch.domain.order.repository.OrderRecordRepository;
 import kr.co.fastcampus.fastcatch.domain.order.dto.OrderRequest;
 import kr.co.fastcampus.fastcatch.domain.order.entity.Order;
@@ -17,6 +27,9 @@ import kr.co.fastcampus.fastcatch.domain.order.repository.OrderItemRepository;
 import kr.co.fastcampus.fastcatch.domain.order.repository.OrderRepository;
 import kr.co.fastcampus.fastcatch.domain.room.repository.RoomRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -96,6 +109,59 @@ public class OrderService {
                 .stayDate(date).build();
             orderRecordRepository.save(orderRecord);
         }
+    }
+
+    /***
+     * 주문 상태 값 유효성 검증
+     * @param status 주문 상태 값
+     * @return 유효 여부
+     */
+    private boolean isValidOrderStatus(String status) {
+        return Arrays.asList("RESERVED", "USED", "CANCELED").contains(status);
+    }
+
+    /***
+     * 특정 주문 상태에 대한 주문 목록 조회
+     * @param memberId 회원 ID
+     * @param status 주문 상태
+     * @param pageable 페이징 정보
+     * @return 주문 페이징 응답 DTO
+     */
+    public OrderPageResponse findOrdersByStatus(Long memberId, String status, Pageable pageable) {
+        Member member = memberRepository.findById(memberId).orElseThrow();
+        Page<Order> orders = new PageImpl<>(Collections.emptyList());
+
+        if (status.equals("RESERVED")){
+            orders = orderRepository.findOrdersReserved(member, OrderStatus.COMPLETED, LocalDate.now(), pageable);
+        }else if (status.equals("USED")) {
+            orders = orderRepository.findOrdersUsed(member, OrderStatus.COMPLETED, LocalDate.now(), pageable);
+        }else if (status.equals("CANCELED")) {
+            orders = orderRepository.findByMemberAndOrderStatusOrderByCreatedDateDesc(member, OrderStatus.CANCELED, pageable);
+        }else {
+            if(!isValidOrderStatus(status)) {
+                throw new InvalidOrderStatusException();
+            }
+        }
+
+        Page<OrderResponse> orderResponsePage = orders.map(
+            order -> mapToOrderResponse(order, status)
+        );
+        return OrderPageResponse.from(orderResponsePage);
+    }
+
+    /***
+     * 주문 정보 조회
+     * @param order 주문
+     * @param status 주문 상태
+     * @return 주문 정보 응답 DTO
+     */
+    private OrderResponse mapToOrderResponse(Order order, String status) {
+        List<OrderItem> orderItems = orderItemRepository.findByOrder_OrderId(order.getOrderId());
+        List<OrderItemResponse> orderItemResponses = new ArrayList<>();
+        for(OrderItem orderItem: orderItems) {
+            orderItemResponses.add(OrderItemResponse.from(orderItem));
+        }
+        return OrderResponse.from(order, orderItemResponses, status);
     }
 
     /***
