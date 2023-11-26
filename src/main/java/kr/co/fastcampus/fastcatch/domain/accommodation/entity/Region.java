@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum Region {
+    ALL("전체"),
     SEOUL("서울"),
     GYEONGGI("경기"),
     GANGWON("강원"),
