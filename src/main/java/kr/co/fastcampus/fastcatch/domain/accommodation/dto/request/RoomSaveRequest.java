@@ -1,20 +1,29 @@
 package kr.co.fastcampus.fastcatch.domain.accommodation.dto.request;
 
 import java.time.LocalTime;
+
+import jakarta.validation.constraints.NotBlank;
 import kr.co.fastcampus.fastcatch.domain.accommodation.entity.Accommodation;
 import kr.co.fastcampus.fastcatch.domain.accommodation.entity.Room;
-import kr.co.fastcampus.fastcatch.domain.accommodation.entity.RoomOption;
+import org.springframework.format.annotation.DateTimeFormat;
 
 public record RoomSaveRequest(
-    Long accommodationId,
+    @NotBlank(message = "이름을 필수로 입력하셔야 합니다.")
     String name,
+    @NotBlank(message = "가격을 필수로 입력하셔야 합니다.")
     int price,
+    @NotBlank(message = "기준 인원수를 필수로 입력하셔야 합니다.")
     int baseHeadCount,
+    @NotBlank(message = "최대 인원수를 필수로 입력하셔야 합니다.")
     int maxHeadCount,
+    @NotBlank(message = "방 소개를 필수로 입력하셔야 합니다.")
     String description,
+    @DateTimeFormat(pattern = "HH:mm")
+    @NotBlank(message = "체크인 시간을 필수로 입력하셔야 합니다.")
     LocalTime checkInTime,
-    LocalTime checkOutTime,
-    RoomOption roomOption
+    @DateTimeFormat(pattern = "HH:mm")
+    @NotBlank(message = "체크아웃 시간을 필수로 입력하셔야 합니다.")
+    LocalTime checkOutTime
 ) {
 
     public Room toEntity(Accommodation accommodation) {
@@ -27,7 +36,6 @@ public record RoomSaveRequest(
             .description(description)
             .checkInTime(checkInTime)
             .checkOutTime(checkOutTime)
-            .roomOption(roomOption)
             .build();
     }
 }

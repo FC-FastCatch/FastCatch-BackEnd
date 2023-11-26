@@ -5,12 +5,12 @@ import kr.co.fastcampus.fastcatch.domain.accommodation.entity.RoomOption;
 
 public record RoomOptionSaveRequest(
     Long roomId,
-    boolean canSmoking,
-    boolean petAccompanying,
-    boolean cityView,
-    boolean oceanView,
-    boolean hasNetflix,
-    boolean canCooking
+    Boolean canSmoking,
+    Boolean petAccompanying,
+    Boolean cityView,
+    Boolean oceanView,
+    Boolean hasNetflix,
+    Boolean canCooking
 ) {
 
     public RoomOption toEntity(Room room) {
