@@ -33,6 +33,7 @@ public class Cart extends BaseEntity {
     @JsonIgnore
     private Member member;
 
+
     @OneToMany(
         fetch = FetchType.LAZY, mappedBy = "cart",
         cascade = CascadeType.PERSIST, orphanRemoval = true
@@ -46,6 +47,17 @@ public class Cart extends BaseEntity {
         this.cartId = cartId;
         this.member = member;
         this.cartItems = cartItems;
+    }
+
+    public static Cart createCart(Member member) {
+        Cart cart = new Cart();
+        cart.member = member;
+        return cart;
+    }
+
+    public void addCartItem(CartItem cartItem){
+        cartItems.add(cartItem);
+        cartItem.setCart(this);
     }
 
 }

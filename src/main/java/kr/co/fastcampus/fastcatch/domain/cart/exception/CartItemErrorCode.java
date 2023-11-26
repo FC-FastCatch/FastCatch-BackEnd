@@ -5,9 +5,10 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum CartErrorCode {
+public enum CartItemErrorCode {
 
-    NO_CART("해당 하는 카트가 없습니다.");
+    NO_CART_ITEM("해당 하는 카트 아이템이 없습니다.")
+    ;
 
     private final String errorMsg;
 

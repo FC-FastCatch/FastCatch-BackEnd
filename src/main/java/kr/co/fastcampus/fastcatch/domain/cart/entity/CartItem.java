@@ -11,7 +11,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import java.time.LocalDate;
 import kr.co.fastcampus.fastcatch.common.baseentity.BaseEntity;
-import kr.co.fastcampus.fastcatch.domain.accommodation.entity.Room;
+import kr.co.fastcampus.fastcatch.domain.room.entity.Room;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -60,6 +60,15 @@ public class CartItem extends BaseEntity {
         this.endDate = endDate;
         this.headCount = headCount;
         this.price = price;
+    }
+
+    public void updateCartItem(Cart cart, Room room) {
+        this.cart = cart;
+        this.room = room;
+    }
+
+    public void setCart(Cart cart){
+        this.cart = cart;
     }
 
 }
