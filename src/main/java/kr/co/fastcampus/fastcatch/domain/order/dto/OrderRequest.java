@@ -3,9 +3,9 @@ package kr.co.fastcampus.fastcatch.domain.order.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.util.List;
+import kr.co.fastcampus.fastcatch.domain.member.entity.Member;
 import kr.co.fastcampus.fastcatch.domain.order.entity.Order;
 import kr.co.fastcampus.fastcatch.domain.order.entity.OrderStatus;
-import lombok.Builder;
 
 public record OrderRequest(
     @NotNull(message = "나이 동의 여부를 필수로 입력하셔야 합니다.")
@@ -19,8 +19,9 @@ public record OrderRequest(
     @NotNull(message = "주문 아이템을 필수로 입력하셔야 합니다.")
     List<OrderItemRequest> orderItemRequests) {
 
-    public Order toEntity() {
+    public Order toEntity(Member member) {
         return Order.builder()
+            .member(member)
             .reservationPersonName(this.reservationPersonName)
             .reservationPersonName(this.reservationPhoneNumber)
             .totalPrice(this.totalPrice)

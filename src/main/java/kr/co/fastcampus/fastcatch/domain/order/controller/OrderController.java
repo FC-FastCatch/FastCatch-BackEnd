@@ -34,7 +34,7 @@ public class OrderController {
     @DeleteMapping("/{orderId}")
     public ResponseBody modifyOrderStatusToCanceled(@PathVariable Long orderId) {
         //memberId는 회원 기능 추가 후, 수정 예정
-        orderService.updateOrderStatusToCanceled(1L, orderId);
+        orderService.deleteOrder(1L, orderId);
         return ResponseBody.ok();
     }
 }

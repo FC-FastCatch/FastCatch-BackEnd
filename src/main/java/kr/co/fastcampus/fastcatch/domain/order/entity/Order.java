@@ -59,10 +59,11 @@ public class Order extends BaseEntity {
 
     @Builder
     public Order(
-        Long orderId, String reservationPersonName, String reservationPhoneNumber,
+        Long orderId, Member member, String reservationPersonName, String reservationPhoneNumber,
         Integer totalPrice, OrderStatus orderStatus
     ) {
         this.orderId = orderId;
+        this.member = member;
         this.reservationPersonName = reservationPersonName;
         this.reservationPhoneNumber = reservationPhoneNumber;
         this.totalPrice = totalPrice;
