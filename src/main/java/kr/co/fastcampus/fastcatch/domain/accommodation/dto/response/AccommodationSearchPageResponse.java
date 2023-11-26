@@ -1,8 +1,8 @@
 package kr.co.fastcampus.fastcatch.domain.accommodation.dto.response;
 
+import java.util.List;
 import lombok.Builder;
 import org.springframework.data.domain.Page;
-import java.util.List;
 
 @Builder
 public record AccommodationSearchPageResponse(

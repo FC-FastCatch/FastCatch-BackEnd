@@ -1,7 +1,5 @@
 package kr.co.fastcampus.fastcatch.domain.accommodation.entity;
 
-import java.util.ArrayList;
-import java.util.List;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -13,6 +11,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import java.util.ArrayList;
+import java.util.List;
 import kr.co.fastcampus.fastcatch.common.baseentity.BaseEntity;
 import lombok.AccessLevel;
 import lombok.Builder;

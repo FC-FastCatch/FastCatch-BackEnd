@@ -19,7 +19,9 @@ public record AccommodationSummaryResponse(
 
 ) {
 
-    public static AccommodationSummaryResponse from(Accommodation accommodation, boolean isSoldOut) {
+    public static AccommodationSummaryResponse from(
+        Accommodation accommodation, boolean isSoldOut
+    ) {
         return AccommodationSummaryResponse.builder()
             .id(accommodation.getId())
             .name(accommodation.getName())
