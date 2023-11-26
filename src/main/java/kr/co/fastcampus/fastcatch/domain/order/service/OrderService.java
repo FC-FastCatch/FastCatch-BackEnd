@@ -14,6 +14,7 @@ import kr.co.fastcampus.fastcatch.domain.order.dto.OrderItemRequest;
 import kr.co.fastcampus.fastcatch.domain.order.dto.OrderItemResponse;
 import kr.co.fastcampus.fastcatch.domain.order.dto.OrderPageResponse;
 import kr.co.fastcampus.fastcatch.domain.order.dto.OrderResponse;
+import kr.co.fastcampus.fastcatch.domain.order.dto.OrdersResponse;
 import kr.co.fastcampus.fastcatch.domain.order.entity.OrderStatus;
 import kr.co.fastcampus.fastcatch.domain.order.exception.InvalidOrderStatusException;
 import kr.co.fastcampus.fastcatch.domain.order.repository.OrderRecordRepository;
@@ -109,6 +110,20 @@ public class OrderService {
                 .stayDate(date).build();
             orderRecordRepository.save(orderRecord);
         }
+    }
+
+    /***
+     * 주문 목록 조회
+     * @param memberId 회원 ID
+     * @param pageable 페이징 정보
+     * @return 주문 목록 응답 DTO
+     */
+    public OrdersResponse findOrders(Long memberId, Pageable pageable) {
+        List<OrderPageResponse> orderPageResponses = new ArrayList<>();
+        orderPageResponses.add(findOrdersByStatus(memberId, "RESERVED", pageable));
+        orderPageResponses.add(findOrdersByStatus(memberId, "USED", pageable));
+        orderPageResponses.add(findOrdersByStatus(memberId, "CANCELED", pageable));
+        return OrdersResponse.from(orderPageResponses);
     }
 
     /***

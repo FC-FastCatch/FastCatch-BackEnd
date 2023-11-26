@@ -5,6 +5,7 @@ import kr.co.fastcampus.fastcatch.common.response.ResponseBody;
 import kr.co.fastcampus.fastcatch.domain.order.dto.OrderByCartRequest;
 import kr.co.fastcampus.fastcatch.domain.order.dto.OrderPageResponse;
 import kr.co.fastcampus.fastcatch.domain.order.dto.OrderRequest;
+import kr.co.fastcampus.fastcatch.domain.order.dto.OrdersResponse;
 import kr.co.fastcampus.fastcatch.domain.order.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -46,6 +47,13 @@ public class OrderController {
         //memberId는 회원 기능 추가 후, 수정 예정
         orderService.createOrderByCart(1L, orderByCartRequest);
         return ResponseBody.ok();
+    }
+
+    @GetMapping
+    public ResponseBody<OrdersResponse> getOrders(
+        @PageableDefault(page = 0, size = 3, sort = "createdDate",
+            direction = Sort.Direction.DESC) Pageable pageable) {
+        return ResponseBody.ok(orderService.findOrders(1L, pageable));
     }
 
     @GetMapping
