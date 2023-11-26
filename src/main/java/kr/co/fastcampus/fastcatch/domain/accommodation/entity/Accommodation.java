@@ -45,15 +45,18 @@ public class Accommodation extends BaseEntity {
     private Category category;
 
     @Formula("(SELECT MAX(r.max_head_count) FROM Room r WHERE r.accommodation_id = id)")
-    private int maximumCapacity;
+    private Integer maximumCapacity;
 
     @Formula("(SELECT MIN(r.price) FROM Room r WHERE r.accommodation_id = id)")
-    private int lowestPrice;
+    private Integer lowestPrice;
 
     @Column(nullable = true)
     private String image;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(
+        fetch = FetchType.LAZY, mappedBy = "accommodation",
+        cascade = CascadeType.PERSIST, orphanRemoval = true
+    )
     private AccommodationOption accommodationOption;
 
     @OneToMany(
@@ -68,13 +71,15 @@ public class Accommodation extends BaseEntity {
         String address,
         Region region,
         String description,
-        Category category
+        Category category,
+        String image
     ) {
         this.name = name;
         this.address = address;
         this.region = region;
         this.description = description;
         this.category = category;
+        this.image = image;
     }
 
     public void addRoom(Room room) {
