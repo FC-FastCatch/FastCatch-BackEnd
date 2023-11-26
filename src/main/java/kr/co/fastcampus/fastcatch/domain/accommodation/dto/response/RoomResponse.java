@@ -1,7 +1,10 @@
 package kr.co.fastcampus.fastcatch.domain.accommodation.dto.response;
 
 import java.time.LocalTime;
+import java.util.List;
+import java.util.stream.Collectors;
 import kr.co.fastcampus.fastcatch.domain.accommodation.entity.Room;
+import kr.co.fastcampus.fastcatch.domain.accommodation.entity.RoomImage;
 import lombok.Builder;
 
 @Builder
@@ -15,7 +18,8 @@ public record RoomResponse(
     LocalTime checkInTime,
     LocalTime checkOutTime,
     boolean soldOut,
-    RoomOptionResponse roomOption
+    RoomOptionResponse roomOption,
+    List<RoomImageResponse> images
 ) {
 
     public static RoomResponse from(Room room, boolean isSoldOut) {
@@ -30,6 +34,11 @@ public record RoomResponse(
             .checkOutTime(room.getCheckOutTime())
             .soldOut(isSoldOut)
             .roomOption(RoomOptionResponse.from(room.getRoomOption()))
+            .images(convertEntityToDto(room.getRoomImages()))
             .build();
+    }
+
+    private static List<RoomImageResponse> convertEntityToDto(List<RoomImage> images) {
+        return images.stream().map(RoomImageResponse::from).collect(Collectors.toList());
     }
 }

@@ -55,7 +55,10 @@ public class Room extends BaseEntity {
     @DateTimeFormat(pattern = "HH:mm")
     private LocalTime checkOutTime;
 
-    @OneToOne
+    @OneToOne(
+        fetch = FetchType.LAZY, mappedBy = "room",
+        cascade = CascadeType.PERSIST, orphanRemoval = true
+    )
     private RoomOption roomOption;
 
     @OneToMany(
@@ -73,8 +76,7 @@ public class Room extends BaseEntity {
         int maxHeadCount,
         String description,
         LocalTime checkInTime,
-        LocalTime checkOutTime,
-        RoomOption roomOption
+        LocalTime checkOutTime
     ) {
         this.accommodation = accommodation;
         this.name = name;
@@ -84,7 +86,6 @@ public class Room extends BaseEntity {
         this.description = description;
         this.checkInTime = checkInTime;
         this.checkOutTime = checkOutTime;
-        this.roomOption = roomOption;
     }
 
     public void registerRoomOption(RoomOption roomOption) {
