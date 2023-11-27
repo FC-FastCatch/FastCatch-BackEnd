@@ -10,7 +10,7 @@ import lombok.Builder;
 public record CartResponse(
     List<CartItemResponse> cartItemResponseList
 ) {
-    public static CartResponse fromDto(
+    public static CartResponse from(
         Cart cart
     ) {
         return CartResponse.builder()

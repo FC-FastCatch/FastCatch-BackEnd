@@ -1,18 +1,18 @@
 package kr.co.fastcampus.fastcatch.domain.cart.service;
 
-import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.LocalDate;
 import java.util.List;
+import kr.co.fastcampus.fastcatch.domain.accommodation.entity.Room;
 import kr.co.fastcampus.fastcatch.domain.cart.dto.response.CartResponse;
 import kr.co.fastcampus.fastcatch.domain.cart.entity.Cart;
 import kr.co.fastcampus.fastcatch.domain.cart.entity.CartItem;
 import kr.co.fastcampus.fastcatch.domain.cart.repository.CartItemRepository;
 import kr.co.fastcampus.fastcatch.domain.cart.repository.CartRepository;
 import kr.co.fastcampus.fastcatch.domain.member.entity.Member;
-import kr.co.fastcampus.fastcatch.domain.room.entity.Room;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -29,9 +29,15 @@ class CartServiceTest {
     @InjectMocks
     private CartService cartService;
 
-    private final Room room = new Room();
+    private final Room room = Room.builder().build();
     private final Member member = Member.builder()
         .memberId(1l)
+        .email("adsa")
+        .password("asdas")
+        .name("asd")
+        .nickname("ads")
+        .phoneNumber("01012334567")
+        .birthday(LocalDate.now())
         .build();
     private final Cart defaultCart = Cart.builder()
         .cartId(1l)
@@ -49,11 +55,11 @@ class CartServiceTest {
         .build();
 
 
-//    @Test : 사용자가 안 만들어짐
+//    @Test
     void 카트_조회_성공() {
         assertThat(cartService.findCartItemList(1l))
             .usingRecursiveComparison()
-            .isEqualTo(List.of(CartResponse.fromDto(defaultCart)));
+            .isEqualTo(List.of(CartResponse.from(defaultCart)));
     }
 
 

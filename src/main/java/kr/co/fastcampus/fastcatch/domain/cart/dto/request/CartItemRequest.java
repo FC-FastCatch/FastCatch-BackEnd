@@ -3,6 +3,7 @@ package kr.co.fastcampus.fastcatch.domain.cart.dto.request;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
+import kr.co.fastcampus.fastcatch.domain.accommodation.entity.Room;
 import kr.co.fastcampus.fastcatch.domain.cart.entity.CartItem;
 
 public record CartItemRequest(
@@ -19,9 +20,9 @@ public record CartItemRequest(
     @NotNull(message = "orderPrice는 필수 입력입니다.")
     Integer orderPrice
 ) {
-    public CartItem toEntity(CartItemRequest cartItemRequest) {
+    public CartItem toEntity(Room room) {
         return CartItem.builder()
-            /*room 처리 못 함*/
+            .room(room)
             .startDate(startDate)
             .endDate(endDate)
             .headCount(headCount)
