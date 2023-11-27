@@ -28,44 +28,44 @@ public class AccommodationOption extends BaseEntity {
     private Accommodation accommodation;
 
     @Column(nullable = false)
-    private boolean hasSmokingRoom;
+    private Boolean hasSmokingRoom;
 
     @Column(nullable = false)
-    private boolean hasPetRoom;
+    private Boolean hasPetRoom;
 
     @Column(nullable = false)
-    private boolean hasParkingLot;
+    private Boolean hasParkingLot;
 
     @Column(nullable = false)
-    private boolean hasWifi;
+    private Boolean hasWifi;
 
     @Column(nullable = false)
-    private boolean hasSwimmingPool;
+    private Boolean hasSwimmingPool;
 
     @Column(nullable = false)
-    private boolean hasGym;
+    private Boolean hasGym;
 
     @Column(nullable = false)
-    private boolean hasBreakfast;
+    private Boolean hasBreakfast;
 
     @Column(nullable = false)
-    private boolean hasRestaurant;
+    private Boolean hasRestaurant;
 
     @Column(nullable = false)
-    private boolean hasCookingRoom;
+    private Boolean hasCookingRoom;
 
     @Builder
     private AccommodationOption(
         Accommodation accommodation,
-        boolean hasSmokingRoom,
-        boolean hasPetRoom,
-        boolean hasParkingLot,
-        boolean hasWifi,
-        boolean hasSwimmingPool,
-        boolean hasGym,
-        boolean hasBreakfast,
-        boolean hasRestaurant,
-        boolean hasCookingRoom
+        Boolean hasSmokingRoom,
+        Boolean hasPetRoom,
+        Boolean hasParkingLot,
+        Boolean hasWifi,
+        Boolean hasSwimmingPool,
+        Boolean hasGym,
+        Boolean hasBreakfast,
+        Boolean hasRestaurant,
+        Boolean hasCookingRoom
 
     ) {
         this.accommodation = accommodation;

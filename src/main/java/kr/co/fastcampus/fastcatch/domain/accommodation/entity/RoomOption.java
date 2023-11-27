@@ -28,32 +28,32 @@ public class RoomOption extends BaseEntity {
     private Room room;
 
     @Column(nullable = false)
-    private boolean canSmoking;
+    private Boolean canSmoking;
 
     @Column(nullable = false)
-    private boolean petAccompanying;
+    private Boolean petAccompanying;
 
     @Column(nullable = false)
-    private boolean cityView;
+    private Boolean cityView;
 
     @Column(nullable = false)
-    private boolean oceanView;
+    private Boolean oceanView;
 
     @Column(nullable = false)
-    private boolean hasNetflix;
+    private Boolean hasNetflix;
 
     @Column(nullable = false)
-    private boolean canCooking;
+    private Boolean canCooking;
 
     @Builder
     public RoomOption(
         Room room,
-        boolean canSmoking,
-        boolean petAccompanying,
-        boolean cityView,
-        boolean oceanView,
-        boolean hasNetflix,
-        boolean canCooking
+        Boolean canSmoking,
+        Boolean petAccompanying,
+        Boolean cityView,
+        Boolean oceanView,
+        Boolean hasNetflix,
+        Boolean canCooking
     ) {
         this.room = room;
         this.canSmoking = canSmoking;
