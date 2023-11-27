@@ -1,16 +1,14 @@
-package kr.co.fastcampus.fastcatch.domain.member.dto;
+package kr.co.fastcampus.fastcatch.domain.member.dto.response;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import kr.co.fastcampus.fastcatch.domain.member.entity.Member;
 import lombok.Builder;
-
 import java.time.LocalDate;
 
 @Builder
 public record MemberSignupResponse(
-
-    Long memberId,
+    Long id,
     @NotBlank(message = "이메일을 필수로 입력하셔야 합니다.")
     String email,
     @NotBlank(message = "비밀번호를 필수로 입력하셔야 합니다.")
@@ -26,7 +24,7 @@ public record MemberSignupResponse(
 ) {
     public static MemberSignupResponse from(Member member) {
         return MemberSignupResponse.builder()
-            .memberId(member.getMemberId())
+            .id(member.getMemberId())
             .email(member.getEmail())
             .name(member.getName())
             .nickname(member.getNickname())
