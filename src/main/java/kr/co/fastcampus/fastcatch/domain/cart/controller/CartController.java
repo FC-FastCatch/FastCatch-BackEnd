@@ -22,7 +22,7 @@ public class CartController {
 
     private final CartService cartService;
 
-    @GetMapping("/api/cart")
+    @GetMapping("/api/carts")
     public ResponseBody<CartResponse> getCart(
         @RequestParam final Long memberId //나중에 credential로 대체 해야 함
     ) {
@@ -30,7 +30,7 @@ public class CartController {
         return ResponseBody.ok(cartService.findCartItemList(memberId));
     }
 
-    @PostMapping("/api/cart/{cartId}")
+    @PostMapping("/api/carts/{cartId}")
     public ResponseBody<CartResponse> addCartItem(
         @RequestParam final Long memberId, //나중에 credential로 대체 해야 함
         @Valid @RequestBody final CartItemRequest cartItemRequest
@@ -39,7 +39,7 @@ public class CartController {
         return ResponseBody.ok(cartService.createCartItem(memberId, cartItemRequest));
     }
 
-    @DeleteMapping("/api/cart/{cartId}")
+    @DeleteMapping("/api/carts/{cartId}")
     public ResponseBody<CartResponse> deleteAllCartItem(
         @RequestParam final Long memberId //나중에 credential로 대체 해야 함
     ) {

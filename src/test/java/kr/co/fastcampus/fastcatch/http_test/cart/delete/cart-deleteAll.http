@@ -1,2 +1,2 @@
-DELETE http://localhost:8080/api/cart/1?memberId=1
+DELETE http://localhost:8080/api/carts/1?memberId=1
 Content-Type: application/json
