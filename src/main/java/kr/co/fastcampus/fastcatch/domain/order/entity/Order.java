@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 import kr.co.fastcampus.fastcatch.common.baseentity.BaseEntity;
 import kr.co.fastcampus.fastcatch.domain.member.entity.Member;
-import kr.co.fastcampus.fastcatch.domain.orderitem.entity.OrderItem;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

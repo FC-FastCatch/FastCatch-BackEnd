@@ -1,4 +1,4 @@
-package kr.co.fastcampus.fastcatch.domain.cartitem.entity;
+package kr.co.fastcampus.fastcatch.domain.cart.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
@@ -10,8 +10,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import java.time.LocalDate;
 import kr.co.fastcampus.fastcatch.common.baseentity.BaseEntity;
-import kr.co.fastcampus.fastcatch.domain.cart.entity.Cart;
-import kr.co.fastcampus.fastcatch.domain.room.entity.Room;
+import kr.co.fastcampus.fastcatch.domain.accommodation.entity.Room;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
