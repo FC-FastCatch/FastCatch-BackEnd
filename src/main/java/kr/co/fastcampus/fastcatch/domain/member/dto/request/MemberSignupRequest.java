@@ -1,10 +1,9 @@
-package kr.co.fastcampus.fastcatch.domain.member.dto;
+package kr.co.fastcampus.fastcatch.domain.member.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import kr.co.fastcampus.fastcatch.domain.member.entity.Member;
 import kr.co.fastcampus.fastcatch.domain.member.passwordencoder.BCryptPasswordEncoder;
-
 import java.time.LocalDate;
 
 public record MemberSignupRequest(
@@ -21,7 +20,8 @@ public record MemberSignupRequest(
     @NotBlank(message = "핸드폰 번호를 필수로 입력하셔야 합니다.")
     String phoneNumber
 ) {
-    public Member toEntity(BCryptPasswordEncoder bCryptPasswordEncoder){
+
+    public Member toEntity(BCryptPasswordEncoder bCryptPasswordEncoder) {
         return Member.builder()
             .email(email)
             .password(bCryptPasswordEncoder.hashPassword(password))
