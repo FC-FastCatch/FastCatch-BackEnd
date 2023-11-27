@@ -12,12 +12,13 @@ import jakarta.persistence.ManyToOne;
 import java.time.LocalDate;
 import kr.co.fastcampus.fastcatch.common.baseentity.BaseEntity;
 import kr.co.fastcampus.fastcatch.domain.accommodation.entity.Room;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class CartItem extends BaseEntity {
 
