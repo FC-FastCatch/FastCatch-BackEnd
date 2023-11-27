@@ -82,6 +82,10 @@ public class CartService {
     //검증할게 또 생기면 추가
     private void validateCartItemRequest(CartItemRequest cartItemRequest) {
         AvailableOrderUtil.validateDate(cartItemRequest.startDate(), cartItemRequest.endDate());
+
+        Room room = accommodationService.findRoomById(cartItemRequest.roomId());
+        AvailableOrderUtil.validateHeadCount(cartItemRequest.headCount(), room.getBaseHeadCount(),
+            room.getMaxHeadCount());
     }
 
 }

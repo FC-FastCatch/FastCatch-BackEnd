@@ -4,8 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.time.LocalDate;
-import kr.co.fastcampus.fastcatch.common.exception.DateIsLaterThanCurrentException;
-import kr.co.fastcampus.fastcatch.common.exception.StartDateIsLaterThanEndDateException;
+import kr.co.fastcampus.fastcatch.common.exception.PastDateException;
+import kr.co.fastcampus.fastcatch.common.exception.InvaildDateRangeException;
 import org.junit.jupiter.api.DisplayName;
 
 class AvailableOrderUtilTest {
@@ -16,14 +16,14 @@ class AvailableOrderUtilTest {
         LocalDate startD = LocalDate.of(1923, 11, 22);
         LocalDate endD = LocalDate.of(2023, 11, 24);
 
-        assertThrows(DateIsLaterThanCurrentException.class,
+        assertThrows(PastDateException.class,
             () -> {
                 AvailableOrderUtil.validateDate(startD, endD);
             }
         );
 
-        DateIsLaterThanCurrentException exception = assertThrows(
-            DateIsLaterThanCurrentException.class,
+        PastDateException exception = assertThrows(
+            PastDateException.class,
             () -> AvailableOrderUtil.validateDate(startD, endD)
         );
 
@@ -39,8 +39,8 @@ class AvailableOrderUtilTest {
         LocalDate startD = LocalDate.of(2023, 11, 22);
         LocalDate endD = LocalDate.of(2023, 10, 22);
 
-        StartDateIsLaterThanEndDateException exception = assertThrows(
-            StartDateIsLaterThanEndDateException.class,
+        InvaildDateRangeException exception = assertThrows(
+            InvaildDateRangeException.class,
             () -> AvailableOrderUtil.validateDate(startD, endD)
         );
 

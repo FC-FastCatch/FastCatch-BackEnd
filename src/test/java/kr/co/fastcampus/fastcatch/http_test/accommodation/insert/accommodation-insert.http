@@ -2,10 +2,13 @@ POST http://localhost:8080/api/accommodations
 Content-Type: application/json
 
 {
-    "name": "춘천세종호텔",
-    "address": "강원특별자치도 춘천시 봉의산길 31",
-    "region": "GANGWON",
-    "category": "HOTELRESORT",
-    "description": "춘천시 봉의동에 위치한 춘천세종관광호텔은 1등급의 호텔로 지하 1층, 지상 3층의 별관 2개 동을 갖춘 숙박 시설이다. ",
-    "image" : "1.jpg"
+  "name": "춘천세종호텔",
+  "address": "강원특별자치도 춘천시 봉의산길 31",
+  "phoneNumber" : "02-2323-2323",
+  "longitude" : "128.9882125981",
+  "latitude" : "37.1631049574",
+  "region": "GANGWON",
+  "category": "HOTELRESORT",
+  "description": "춘천시 봉의동에 위치한 춘천세종관광호텔은 1등급의 호텔로 지하 1층, 지상 3층의 별관 2개 동을 갖춘 숙박 시설이다. ",
+  "image" : "1.jpg"
 }
