@@ -8,13 +8,14 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import java.time.LocalDate;
 import kr.co.fastcampus.fastcatch.common.baseentity.BaseEntity;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Getter
-@NoArgsConstructor
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 public class Member extends BaseEntity {
 
     @Id
@@ -42,16 +43,20 @@ public class Member extends BaseEntity {
 
     @Builder
     public Member(
-        Long memberId, String email, String password, String name,
-        String nickname, LocalDate birthday, String phoneNumber
+        Long memberId,
+        String email,
+        String password,
+        String name,
+        String nickname,
+        LocalDate birthday,
+        String phoneNumber
     ) {
         this.memberId = memberId;
         this.email = email;
+        this.password = password;
         this.name = name;
         this.nickname = nickname;
-        this.password = password;
         this.birthday = birthday;
         this.phoneNumber = phoneNumber;
     }
-
 }
