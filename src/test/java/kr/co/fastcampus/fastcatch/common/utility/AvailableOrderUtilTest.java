@@ -4,10 +4,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.time.LocalDate;
-import kr.co.fastcampus.fastcatch.common.utility.exception.DateIsLaterThanCurrentException;
-import kr.co.fastcampus.fastcatch.common.utility.exception.StartDateIsLaterThanEndDateException;
+import kr.co.fastcampus.fastcatch.common.exception.DateIsLaterThanCurrentException;
+import kr.co.fastcampus.fastcatch.common.exception.StartDateIsLaterThanEndDateException;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 
 class AvailableOrderUtilTest {
 

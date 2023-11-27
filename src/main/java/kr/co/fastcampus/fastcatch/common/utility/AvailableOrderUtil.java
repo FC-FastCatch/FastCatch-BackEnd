@@ -1,8 +1,8 @@
 package kr.co.fastcampus.fastcatch.common.utility;
 
 import java.time.LocalDate;
-import kr.co.fastcampus.fastcatch.common.utility.exception.DateIsLaterThanCurrentException;
-import kr.co.fastcampus.fastcatch.common.utility.exception.StartDateIsLaterThanEndDateException;
+import kr.co.fastcampus.fastcatch.common.exception.DateIsLaterThanCurrentException;
+import kr.co.fastcampus.fastcatch.common.exception.StartDateIsLaterThanEndDateException;
 
 public class AvailableOrderUtil {
     public static void validateDate(LocalDate start, LocalDate end) {

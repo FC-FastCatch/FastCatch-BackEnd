@@ -1,4 +1,4 @@
-package kr.co.fastcampus.fastcatch.common.utility.exception;
+package kr.co.fastcampus.fastcatch.common.exception;
 
 import kr.co.fastcampus.fastcatch.common.exception.BaseException;
 import kr.co.fastcampus.fastcatch.common.response.ErrorCode;
