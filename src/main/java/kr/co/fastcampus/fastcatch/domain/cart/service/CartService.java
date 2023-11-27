@@ -8,7 +8,7 @@ import kr.co.fastcampus.fastcatch.domain.cart.dto.request.CartItemRequest;
 import kr.co.fastcampus.fastcatch.domain.cart.dto.response.CartResponse;
 import kr.co.fastcampus.fastcatch.domain.cart.entity.Cart;
 import kr.co.fastcampus.fastcatch.domain.cart.entity.CartItem;
-import kr.co.fastcampus.fastcatch.domain.cart.exception.NoCartItemException;
+import kr.co.fastcampus.fastcatch.common.exception.NoCartItemException;
 import kr.co.fastcampus.fastcatch.domain.cart.repository.CartItemRepository;
 import kr.co.fastcampus.fastcatch.domain.cart.repository.CartRepository;
 import kr.co.fastcampus.fastcatch.domain.member.service.MemberService;

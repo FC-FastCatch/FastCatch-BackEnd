@@ -1,11 +1,12 @@
 package kr.co.fastcampus.fastcatch.common.utility.exception;
 
 import kr.co.fastcampus.fastcatch.common.exception.BaseException;
+import kr.co.fastcampus.fastcatch.common.response.ErrorCode;
 
 public class DateIsLaterThanCurrentException extends BaseException {
 
     public DateIsLaterThanCurrentException() {
-        super(AvailableUtilErrorCode.DATE_IS_LATER_THAN_CURRENT.getErrorMsg());
+        super(ErrorCode.DATE_IS_LATER_THAN_CURRENT.getErrorMsg());
     }
 
 }
