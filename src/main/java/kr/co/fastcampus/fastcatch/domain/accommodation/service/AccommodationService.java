@@ -184,12 +184,12 @@ public class AccommodationService {
             .collect(Collectors.toList());
     }
 
-    private Accommodation findAccommodationById(Long id) {
+    public Accommodation findAccommodationById(Long id) {
         return accommodationRepository.findById(id)
             .orElseThrow(AccommodationNotFoundException::new);
     }
 
-    private Room findRoomById(Long id) {
+    public Room findRoomById(Long id) {
         return roomRepository.findById(id)
             .orElseThrow(RoomNotFoundException::new);
     }
