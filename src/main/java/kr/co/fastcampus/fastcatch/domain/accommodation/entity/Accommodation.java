@@ -53,10 +53,10 @@ public class Accommodation extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Category category;
 
-    @Formula("(SELECT MAX(r.max_head_count) FROM Room r WHERE r.accommodation_id = id)")
+    @Formula("(SELECT MAX(r.max_head_count) FROM room r WHERE r.accommodation_id = id)")
     private Integer maximumCapacity;
 
-    @Formula("(SELECT MIN(r.price) FROM Room r WHERE r.accommodation_id = id)")
+    @Formula("(SELECT MIN(r.price) FROM room r WHERE r.accommodation_id = id)")
     private Integer lowestPrice;
 
     @Column(nullable = true)
