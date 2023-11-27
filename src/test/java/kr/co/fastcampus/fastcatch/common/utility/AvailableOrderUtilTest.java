@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 
 class AvailableOrderUtilTest {
 
-//    @Test
+    //    @Test
     @DisplayName("시작 날짜가 현재 날짜 보다 과거면 에러 나는지 확인")
     void dateIsLaterThanCurrent_error() {
         LocalDate startD = LocalDate.of(1923, 11, 22);
@@ -34,7 +34,7 @@ class AvailableOrderUtilTest {
 
     }
 
-//    @Test
+    //    @Test
     @DisplayName("시작 날짜가 종료 날짜 보다 늦으면 에러 나는지 확인")
     void startDateIsLaterThanEndDate_error() {
         LocalDate startD = LocalDate.of(2023, 11, 22);

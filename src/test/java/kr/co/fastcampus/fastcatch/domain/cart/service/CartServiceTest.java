@@ -31,7 +31,7 @@ class CartServiceTest {
 
     private final Room room = Room.builder().build();
     private final Member member = Member.builder()
-        .memberId(1l)
+        .memberId(1L)
         .email("adsa")
         .password("asdas")
         .name("asd")
@@ -40,12 +40,12 @@ class CartServiceTest {
         .birthday(LocalDate.now())
         .build();
     private final Cart defaultCart = Cart.builder()
-        .cartId(1l)
+        .cartId(1L)
         .member(member)
         .cartItems(List.of())
         .build();
     private final CartItem defaultCartItem = CartItem.builder()
-        .cartItemId(1l)
+        .cartItemId(1L)
         .startDate(LocalDate.now())
         .endDate(LocalDate.now())
         .headCount(3)
@@ -55,9 +55,10 @@ class CartServiceTest {
         .build();
 
 
-//    @Test
-    void 카트_조회_성공() {
-        assertThat(cartService.findCartItemList(1l))
+    //    @Test
+    @DisplayName("카트 조회 성공")
+    void findCartItemList_success() {
+        assertThat(cartService.findCartItemList(1L))
             .usingRecursiveComparison()
             .isEqualTo(List.of(CartResponse.from(defaultCart)));
     }
