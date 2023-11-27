@@ -19,12 +19,13 @@ import java.util.ArrayList;
 import java.util.List;
 import kr.co.fastcampus.fastcatch.common.baseentity.BaseEntity;
 import kr.co.fastcampus.fastcatch.domain.member.entity.Member;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "order_room")
 public class Order extends BaseEntity {

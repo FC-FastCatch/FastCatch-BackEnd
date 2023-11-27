@@ -1,24 +1,24 @@
 package kr.co.fastcampus.fastcatch.domain.order.service;
 
-import jakarta.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import kr.co.fastcampus.fastcatch.domain.cartitem.repository.CartItemRepository;
+import kr.co.fastcampus.fastcatch.domain.accommodation.repository.RoomRepository;
+import kr.co.fastcampus.fastcatch.domain.cart.repository.CartItemRepository;
 import kr.co.fastcampus.fastcatch.domain.member.entity.Member;
 import kr.co.fastcampus.fastcatch.domain.member.repository.MemberRepository;
-import kr.co.fastcampus.fastcatch.domain.order.dto.OrderByCartRequest;
-import kr.co.fastcampus.fastcatch.domain.order.dto.OrderItemRequest;
-import kr.co.fastcampus.fastcatch.domain.order.dto.OrderItemResponse;
-import kr.co.fastcampus.fastcatch.domain.order.dto.OrderPageResponse;
-import kr.co.fastcampus.fastcatch.domain.order.dto.OrderResponse;
-import kr.co.fastcampus.fastcatch.domain.order.dto.OrdersResponse;
+import kr.co.fastcampus.fastcatch.domain.order.dto.request.OrderByCartRequest;
+import kr.co.fastcampus.fastcatch.domain.order.dto.request.OrderItemRequest;
+import kr.co.fastcampus.fastcatch.domain.order.dto.response.OrderItemResponse;
+import kr.co.fastcampus.fastcatch.domain.order.dto.response.OrderPageResponse;
+import kr.co.fastcampus.fastcatch.domain.order.dto.response.OrderResponse;
+import kr.co.fastcampus.fastcatch.domain.order.dto.response.OrdersResponse;
 import kr.co.fastcampus.fastcatch.domain.order.entity.OrderStatus;
 import kr.co.fastcampus.fastcatch.common.exception.InvalidOrderStatusException;
 import kr.co.fastcampus.fastcatch.domain.order.repository.OrderRecordRepository;
-import kr.co.fastcampus.fastcatch.domain.order.dto.OrderRequest;
+import kr.co.fastcampus.fastcatch.domain.order.dto.request.OrderRequest;
 import kr.co.fastcampus.fastcatch.domain.order.entity.Order;
 import kr.co.fastcampus.fastcatch.domain.order.entity.OrderItem;
 import kr.co.fastcampus.fastcatch.domain.order.entity.OrderRecord;
@@ -26,12 +26,12 @@ import kr.co.fastcampus.fastcatch.common.exception.OrderNotFoundException;
 import kr.co.fastcampus.fastcatch.common.exception.OrderUnauthorizedException;
 import kr.co.fastcampus.fastcatch.domain.order.repository.OrderItemRepository;
 import kr.co.fastcampus.fastcatch.domain.order.repository.OrderRepository;
-import kr.co.fastcampus.fastcatch.domain.room.repository.RoomRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
@@ -53,60 +53,64 @@ public class OrderService {
      * @param orderRequest 주문 요청 DTO
      */
     public void createOrder(Long memberId, OrderRequest orderRequest) {
-        Long newOrderId = orderRepository.save(
-            orderRequest.toEntity(memberRepository.findById(memberId).orElseThrow())).getOrderId();
+        Order order = orderRequest.toEntity(memberRepository.findById(memberId).orElseThrow());
         for (OrderItemRequest orderItemRequest : orderRequest.orderItemRequests()) {
-            createOrderItem(orderItemRequest, newOrderId);
-            createOrderRecord(orderItemRequest, newOrderId);
+            createOrderItem(orderItemRequest, order);
+            createOrderRecord(orderItemRequest, order);
         }
+        orderRepository.save(order);
     }
 
     /***
      * 장바구니를 통한 주문 생성
+     *
      * @param memberId 회원 ID
      * @param orderByCartRequest 장바구니를 통한 주문 요청 DTO
      */
     public void createOrderByCart(Long memberId, OrderByCartRequest orderByCartRequest) {
-        Long newOrderId = orderRepository.save(
-                orderByCartRequest.toEntity(memberRepository.findById(memberId).orElseThrow()))
-            .getOrderId();
+        Order order = orderByCartRequest.toEntity(
+            memberRepository.findById(memberId).orElseThrow());
         for (Long cartItemId : orderByCartRequest.cartItemIds()) {
             OrderItemRequest orderItemRequest = OrderItemRequest.fromCartItem(
                 cartItemRepository.findById(cartItemId).orElseThrow());
-            createOrderItem(orderItemRequest, newOrderId);
-            createOrderRecord(orderItemRequest, newOrderId);
+            createOrderItem(orderItemRequest, order);
+            createOrderRecord(orderItemRequest, order);
             cartItemRepository.deleteById(cartItemId);
         }
+        orderRepository.save(order);
     }
 
     /***
      * 주문 아이템 생성
      *
      * @param orderItemRequest 주문 아이템 요청 DTO
-     * @param orderId 주문 ID
+     * @param order 주문 Entity
      */
-    public void createOrderItem(OrderItemRequest orderItemRequest, Long orderId) {
+    public void createOrderItem(OrderItemRequest orderItemRequest, Order order) {
         OrderItem orderItem = OrderItem.builder()
             .startDate(orderItemRequest.startDate()).endDate(orderItemRequest.endDate())
             .headCount(orderItemRequest.headCount())
             .price(orderItemRequest.orderPrice())
-            .order(findOrderById(orderId))
+            .order(order)
             .build();
-        findOrderById(orderId).getOrderItems().add(orderItem);
+
+        order.getOrderItems().add(orderItem);
     }
 
     /***
      * 주문 현황 생성
      *
      * @param orderItemRequest 주문 아이템 요청 DTO
+     * @param order 주문 Entity
      */
-    public void createOrderRecord(OrderItemRequest orderItemRequest, Long orderId) {
+    public void createOrderRecord(OrderItemRequest orderItemRequest, Order order) {
         for (LocalDate date = orderItemRequest.startDate();
             date.isBefore(orderItemRequest.endDate()); date = date.plusDays(1)) {
-            //accommodation 추가 예정
             OrderRecord orderRecord = OrderRecord.builder()
+                .accommodation(roomRepository.findById(orderItemRequest.roomId()).orElseThrow()
+                    .getAccommodation())
                 .room(roomRepository.findById(orderItemRequest.roomId()).orElseThrow())
-                .order(findOrderById(orderId))
+                .order(order)
                 .stayDate(date).build();
             orderRecordRepository.save(orderRecord);
         }
@@ -114,6 +118,7 @@ public class OrderService {
 
     /***
      * 주문 목록 조회
+     *
      * @param memberId 회원 ID
      * @param pageable 페이징 정보
      * @return 주문 목록 응답 DTO
@@ -128,6 +133,7 @@ public class OrderService {
 
     /***
      * 주문 상태 값 유효성 검증
+     *
      * @param status 주문 상태 값
      * @return 유효 여부
      */
@@ -137,6 +143,7 @@ public class OrderService {
 
     /***
      * 특정 주문 상태에 대한 주문 목록 조회
+     *
      * @param memberId 회원 ID
      * @param status 주문 상태
      * @param pageable 페이징 정보
@@ -169,6 +176,7 @@ public class OrderService {
 
     /***
      * 주문 정보 조회
+     *
      * @param order 주문
      * @param status 주문 상태
      * @return 주문 정보 응답 DTO
@@ -194,6 +202,7 @@ public class OrderService {
 
     /***
      * 주문 취소
+     *
      * @param memberId 회원 ID
      * @param orderId 주문 ID
      */
@@ -205,5 +214,17 @@ public class OrderService {
         order.setOrderCanceled();
         orderRepository.save(order);
         orderRecordRepository.deleteByOrder(order);
+    }
+
+    public long countAccommodationAtDate(Long accommodationId, LocalDate stayDate) {
+        return orderRecordRepository.countByAccommodationIdAndStayDate(
+            accommodationId, stayDate
+        );
+    }
+
+    public boolean existsByRoomIdOnDate(Long roomId, LocalDate stayDate) {
+        return orderRecordRepository.existsByRoomIdAndStayDate(
+            roomId, stayDate
+        );
     }
 }

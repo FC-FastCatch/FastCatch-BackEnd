@@ -9,7 +9,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import java.time.LocalDate;
 import kr.co.fastcampus.fastcatch.common.baseentity.BaseEntity;
-import kr.co.fastcampus.fastcatch.domain.room.entity.Room;
+import kr.co.fastcampus.fastcatch.domain.accommodation.entity.Accommodation;
+import kr.co.fastcampus.fastcatch.domain.accommodation.entity.Room;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,11 +25,10 @@ public class OrderRecord extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    /* 숙박 도메인 merge 후 구현 예정
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "accommodation_id")
     private Accommodation accommodation;
-     */
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "room_id")
     private Room room;
@@ -41,12 +41,12 @@ public class OrderRecord extends BaseEntity {
 
     @Builder
     private OrderRecord(
-        //Accommodation accommodation,
+        Accommodation accommodation,
         Room room,
         Order order,
         LocalDate stayDate
     ) {
-        //this.accommodation = accommodation;
+        this.accommodation = accommodation;
         this.room = room;
         this.order = order;
         this.stayDate = stayDate;

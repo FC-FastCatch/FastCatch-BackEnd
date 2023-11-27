@@ -2,10 +2,10 @@ package kr.co.fastcampus.fastcatch.domain.order.controller;
 
 import jakarta.validation.Valid;
 import kr.co.fastcampus.fastcatch.common.response.ResponseBody;
-import kr.co.fastcampus.fastcatch.domain.order.dto.OrderByCartRequest;
-import kr.co.fastcampus.fastcatch.domain.order.dto.OrderPageResponse;
-import kr.co.fastcampus.fastcatch.domain.order.dto.OrderRequest;
-import kr.co.fastcampus.fastcatch.domain.order.dto.OrdersResponse;
+import kr.co.fastcampus.fastcatch.domain.order.dto.request.OrderByCartRequest;
+import kr.co.fastcampus.fastcatch.domain.order.dto.response.OrderPageResponse;
+import kr.co.fastcampus.fastcatch.domain.order.dto.request.OrderRequest;
+import kr.co.fastcampus.fastcatch.domain.order.dto.response.OrdersResponse;
 import kr.co.fastcampus.fastcatch.domain.order.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
