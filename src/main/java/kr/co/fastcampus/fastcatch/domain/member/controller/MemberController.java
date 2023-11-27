@@ -1,9 +1,10 @@
 package kr.co.fastcampus.fastcatch.domain.member.controller;
 
-import jakarta.validation.Valid;
 import kr.co.fastcampus.fastcatch.common.response.ResponseBody;
-import kr.co.fastcampus.fastcatch.domain.member.dto.MemberSignupRequest;
-import kr.co.fastcampus.fastcatch.domain.member.dto.MemberSignupResponse;
+import kr.co.fastcampus.fastcatch.domain.member.dto.request.MemberLoginRequest;
+import kr.co.fastcampus.fastcatch.domain.member.dto.response.MemberLoginResponse;
+import kr.co.fastcampus.fastcatch.domain.member.dto.request.MemberSignupRequest;
+import kr.co.fastcampus.fastcatch.domain.member.dto.response.MemberSignupResponse;
 import kr.co.fastcampus.fastcatch.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,14 +17,19 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/members")
 @RequiredArgsConstructor
-public class MemberSignupController {
+public class MemberController {
 
     private final MemberService memberService;
 
     @PostMapping("/signup")
-    public ResponseBody<MemberSignupResponse> addMember(@Valid @RequestBody MemberSignupRequest request) {
+    public ResponseBody<MemberSignupResponse> addMember(@RequestBody MemberSignupRequest request) {
         MemberSignupResponse response = memberService.createMember(request);
         return ResponseBody.ok(response);
     }
 
+    @PostMapping("/login")
+    public ResponseBody<MemberLoginResponse> addLogin(@RequestBody MemberLoginRequest request) {
+        MemberLoginResponse response = memberService.createLogin(request);
+        return ResponseBody.ok(response);
+    }
 }
