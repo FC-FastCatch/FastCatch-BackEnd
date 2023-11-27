@@ -4,8 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.time.LocalDate;
-import kr.co.fastcampus.fastcatch.common.exception.PastDateException;
 import kr.co.fastcampus.fastcatch.common.exception.InvaildDateRangeException;
+import kr.co.fastcampus.fastcatch.common.exception.PastDateException;
 import org.junit.jupiter.api.DisplayName;
 
 class AvailableOrderUtilTest {

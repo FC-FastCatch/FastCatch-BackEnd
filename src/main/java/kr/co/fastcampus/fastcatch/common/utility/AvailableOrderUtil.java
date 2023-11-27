@@ -1,9 +1,9 @@
 package kr.co.fastcampus.fastcatch.common.utility;
 
 import java.time.LocalDate;
+import kr.co.fastcampus.fastcatch.common.exception.InvaildDateRangeException;
 import kr.co.fastcampus.fastcatch.common.exception.InvaildHeadRangeException;
 import kr.co.fastcampus.fastcatch.common.exception.PastDateException;
-import kr.co.fastcampus.fastcatch.common.exception.InvaildDateRangeException;
 
 public class AvailableOrderUtil {
     public static void validateDate(LocalDate start, LocalDate end) {
