@@ -5,11 +5,11 @@ import kr.co.fastcampus.fastcatch.domain.accommodation.entity.Category;
 import kr.co.fastcampus.fastcatch.domain.accommodation.entity.Region;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
-public interface AccommodationRepository extends CrudRepository<Accommodation, Long> {
+public interface AccommodationRepository extends JpaRepository<Accommodation, Long> {
 
     @Query("SELECT a FROM Accommodation a "
         + "WHERE a.category = :category "
