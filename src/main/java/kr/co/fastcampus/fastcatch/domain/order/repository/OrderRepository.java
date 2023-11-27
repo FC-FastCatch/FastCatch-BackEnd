@@ -13,7 +13,7 @@ import org.springframework.data.repository.query.Param;
 public interface OrderRepository extends JpaRepository<Order, Long> {
 
     @Query("SELECT o FROM Order o WHERE o.member = :member AND o.orderStatus = :orderStatus " +
-        "AND (SELECT MAX(oi.startDate) FROM OrderItem oi WHERE oi.order = o) >= :today ")
+        "AND (SELECT MIN(oi.startDate) FROM OrderItem oi WHERE oi.order = o) >= :today ")
     Page<Order> findOrdersReserved(
         @Param("member") Member member,
         @Param("orderStatus") OrderStatus orderStatus,
@@ -21,13 +21,15 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
         Pageable pageable);
 
     @Query("SELECT o FROM Order o WHERE o.member = :member AND o.orderStatus = :orderStatus " +
-        "AND (SELECT MAX(oi.startDate) FROM OrderItem oi WHERE oi.order = o) < :today ")
+        "AND (SELECT MIN(oi.startDate) FROM OrderItem oi WHERE oi.order = o) < :today ")
     Page<Order> findOrdersUsed(
         @Param("member") Member member,
         @Param("orderStatus") OrderStatus orderStatus,
         @Param("today") LocalDate today,
         Pageable pageable);
 
-    Page<Order> findByMemberAndOrderStatusOrderByCreatedDateDesc(Member member, OrderStatus orderStatus,
+    Page<Order> findByMemberAndOrderStatusOrderByCreatedDateDesc(
+        Member member,
+        OrderStatus orderStatus,
         Pageable pageable);
 }

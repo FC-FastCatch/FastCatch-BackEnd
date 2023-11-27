@@ -120,9 +120,9 @@ public class OrderService {
      */
     public OrdersResponse findOrders(Long memberId, Pageable pageable) {
         List<OrderPageResponse> orderPageResponses = new ArrayList<>();
-        orderPageResponses.add(findOrdersByStatus(memberId, "RESERVED", pageable));
-        orderPageResponses.add(findOrdersByStatus(memberId, "USED", pageable));
-        orderPageResponses.add(findOrdersByStatus(memberId, "CANCELED", pageable));
+        orderPageResponses.add(findOrdersByStatus(memberId, "reserved", pageable));
+        orderPageResponses.add(findOrdersByStatus(memberId, "used", pageable));
+        orderPageResponses.add(findOrdersByStatus(memberId, "canceled", pageable));
         return OrdersResponse.from(orderPageResponses);
     }
 
@@ -164,7 +164,7 @@ public class OrderService {
         Page<OrderResponse> orderResponsePage = orders.map(
             order -> mapToOrderResponse(order, status)
         );
-        return OrderPageResponse.from(orderResponsePage);
+        return OrderPageResponse.from(orderResponsePage, status);
     }
 
     /***

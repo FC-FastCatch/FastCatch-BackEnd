@@ -56,7 +56,7 @@ public class OrderController {
         return ResponseBody.ok(orderService.findOrders(1L, pageable));
     }
 
-    @GetMapping("/status")
+    @GetMapping("/status/{status}")
     public ResponseBody<OrderPageResponse> getOrdersByOrderStatus(
         @PathVariable String status,
         @PageableDefault(size = 3, sort = "createdDate", direction = Sort.Direction.DESC)
