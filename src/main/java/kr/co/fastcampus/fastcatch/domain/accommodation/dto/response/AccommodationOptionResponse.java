@@ -5,30 +5,30 @@ import lombok.Builder;
 
 @Builder
 public record AccommodationOptionResponse(
-    boolean hasSmokingRoom,
-    boolean hasPetRoom,
-    boolean hasParkingLot,
-    boolean hasWifi,
-    boolean hasSwimmingPool,
-    boolean hasGym,
-    boolean hasBreakfast,
-    boolean hasRestaurant,
-    boolean hasCookingRoom
+    Boolean hasSmokingRoom,
+    Boolean hasPetRoom,
+    Boolean hasParkingLot,
+    Boolean hasWifi,
+    Boolean hasSwimmingPool,
+    Boolean hasGym,
+    Boolean hasBreakfast,
+    Boolean hasRestaurant,
+    Boolean hasCookingRoom
 ) {
 
     public static AccommodationOptionResponse from(
         AccommodationOption accommodationOption
     ) {
         return AccommodationOptionResponse.builder()
-            .hasSmokingRoom(accommodationOption.isHasSmokingRoom())
-            .hasPetRoom(accommodationOption.isHasPetRoom())
-            .hasParkingLot(accommodationOption.isHasParkingLot())
-            .hasWifi(accommodationOption.isHasWifi())
-            .hasSwimmingPool(accommodationOption.isHasSwimmingPool())
-            .hasGym(accommodationOption.isHasGym())
-            .hasBreakfast(accommodationOption.isHasBreakfast())
-            .hasRestaurant(accommodationOption.isHasRestaurant())
-            .hasCookingRoom(accommodationOption.isHasCookingRoom())
+            .hasSmokingRoom(accommodationOption.getHasSmokingRoom())
+            .hasPetRoom(accommodationOption.getHasPetRoom())
+            .hasParkingLot(accommodationOption.getHasParkingLot())
+            .hasWifi(accommodationOption.getHasWifi())
+            .hasSwimmingPool(accommodationOption.getHasSwimmingPool())
+            .hasGym(accommodationOption.getHasGym())
+            .hasBreakfast(accommodationOption.getHasBreakfast())
+            .hasRestaurant(accommodationOption.getHasRestaurant())
+            .hasCookingRoom(accommodationOption.getHasCookingRoom())
             .build();
     }
 }

@@ -5,22 +5,22 @@ import lombok.Builder;
 
 @Builder
 public record RoomOptionResponse(
-    boolean canSmoking,
-    boolean petAccompanying,
-    boolean cityView,
-    boolean oceanView,
-    boolean hasNetflix,
-    boolean canCooking
+    Boolean canSmoking,
+    Boolean petAccompanying,
+    Boolean cityView,
+    Boolean oceanView,
+    Boolean hasNetflix,
+    Boolean canCooking
 ) {
 
     public static RoomOptionResponse from(RoomOption roomOption) {
         return new RoomOptionResponse(
-            roomOption.isCanSmoking(),
-            roomOption.isPetAccompanying(),
-            roomOption.isCityView(),
-            roomOption.isOceanView(),
-            roomOption.isHasNetflix(),
-            roomOption.isCanCooking()
+            roomOption.getCanSmoking(),
+            roomOption.getPetAccompanying(),
+            roomOption.getCityView(),
+            roomOption.getOceanView(),
+            roomOption.getHasNetflix(),
+            roomOption.getCanCooking()
         );
     }
 }
