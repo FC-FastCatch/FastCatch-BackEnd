@@ -56,10 +56,11 @@ public class OrderController {
         return ResponseBody.ok(orderService.findOrders(1L, pageable));
     }
 
-    @GetMapping
+    @GetMapping("/status")
     public ResponseBody<OrderPageResponse> getOrdersByOrderStatus(
-        @RequestParam String status,
-        @PageableDefault(size=3, sort="createdDate", direction = Sort.Direction.DESC) Pageable pageable) {
+        @PathVariable String status,
+        @PageableDefault(size = 3, sort = "createdDate", direction = Sort.Direction.DESC)
+        Pageable pageable) {
         //memberId는 회원 기능 추가 후, 수정 예정
         return ResponseBody.ok(orderService.findOrdersByStatus(1L, status, pageable));
     }

@@ -16,14 +16,14 @@ import kr.co.fastcampus.fastcatch.domain.order.dto.OrderPageResponse;
 import kr.co.fastcampus.fastcatch.domain.order.dto.OrderResponse;
 import kr.co.fastcampus.fastcatch.domain.order.dto.OrdersResponse;
 import kr.co.fastcampus.fastcatch.domain.order.entity.OrderStatus;
-import kr.co.fastcampus.fastcatch.domain.order.exception.InvalidOrderStatusException;
+import kr.co.fastcampus.fastcatch.common.exception.InvalidOrderStatusException;
 import kr.co.fastcampus.fastcatch.domain.order.repository.OrderRecordRepository;
 import kr.co.fastcampus.fastcatch.domain.order.dto.OrderRequest;
 import kr.co.fastcampus.fastcatch.domain.order.entity.Order;
 import kr.co.fastcampus.fastcatch.domain.order.entity.OrderItem;
 import kr.co.fastcampus.fastcatch.domain.order.entity.OrderRecord;
-import kr.co.fastcampus.fastcatch.domain.order.exception.OrderNotFoundException;
-import kr.co.fastcampus.fastcatch.domain.order.exception.OrderUnauthorizedException;
+import kr.co.fastcampus.fastcatch.common.exception.OrderNotFoundException;
+import kr.co.fastcampus.fastcatch.common.exception.OrderUnauthorizedException;
 import kr.co.fastcampus.fastcatch.domain.order.repository.OrderItemRepository;
 import kr.co.fastcampus.fastcatch.domain.order.repository.OrderRepository;
 import kr.co.fastcampus.fastcatch.domain.room.repository.RoomRepository;
@@ -90,9 +90,9 @@ public class OrderService {
             .startDate(orderItemRequest.startDate()).endDate(orderItemRequest.endDate())
             .headCount(orderItemRequest.headCount())
             .price(orderItemRequest.orderPrice())
-            .order(getOrder(orderId))
+            .order(findOrderById(orderId))
             .build();
-        orderItemRepository.save(orderItem);
+        findOrderById(orderId).getOrderItems().add(orderItem);
     }
 
     /***
@@ -106,7 +106,7 @@ public class OrderService {
             //accommodation 추가 예정
             OrderRecord orderRecord = OrderRecord.builder()
                 .room(roomRepository.findById(orderItemRequest.roomId()).orElseThrow())
-                .order(getOrder(orderId))
+                .order(findOrderById(orderId))
                 .stayDate(date).build();
             orderRecordRepository.save(orderRecord);
         }
@@ -146,14 +146,17 @@ public class OrderService {
         Member member = memberRepository.findById(memberId).orElseThrow();
         Page<Order> orders = new PageImpl<>(Collections.emptyList());
 
-        if (status.equals("RESERVED")){
-            orders = orderRepository.findOrdersReserved(member, OrderStatus.COMPLETED, LocalDate.now(), pageable);
-        }else if (status.equals("USED")) {
-            orders = orderRepository.findOrdersUsed(member, OrderStatus.COMPLETED, LocalDate.now(), pageable);
-        }else if (status.equals("CANCELED")) {
-            orders = orderRepository.findByMemberAndOrderStatusOrderByCreatedDateDesc(member, OrderStatus.CANCELED, pageable);
-        }else {
-            if(!isValidOrderStatus(status)) {
+        if (status.equals("RESERVED")) {
+            orders = orderRepository.findOrdersReserved(member, OrderStatus.COMPLETED,
+                LocalDate.now(), pageable);
+        } else if (status.equals("USED")) {
+            orders = orderRepository.findOrdersUsed(member, OrderStatus.COMPLETED, LocalDate.now(),
+                pageable);
+        } else if (status.equals("CANCELED")) {
+            orders = orderRepository.findByMemberAndOrderStatusOrderByCreatedDateDesc(member,
+                OrderStatus.CANCELED, pageable);
+        } else {
+            if (!isValidOrderStatus(status)) {
                 throw new InvalidOrderStatusException();
             }
         }
@@ -173,7 +176,7 @@ public class OrderService {
     private OrderResponse mapToOrderResponse(Order order, String status) {
         List<OrderItem> orderItems = orderItemRepository.findByOrder_OrderId(order.getOrderId());
         List<OrderItemResponse> orderItemResponses = new ArrayList<>();
-        for(OrderItem orderItem: orderItems) {
+        for (OrderItem orderItem : orderItems) {
             orderItemResponses.add(OrderItemResponse.from(orderItem));
         }
         return OrderResponse.from(order, orderItemResponses, status);
@@ -185,7 +188,7 @@ public class OrderService {
      * @param orderId 주문 ID
      * @return 주문 Entity
      */
-    public Order getOrder(Long orderId) {
+    public Order findOrderById(Long orderId) {
         return orderRepository.findById(orderId).orElseThrow(OrderNotFoundException::new);
     }
 
@@ -195,7 +198,7 @@ public class OrderService {
      * @param orderId 주문 ID
      */
     public void deleteOrder(Long memberId, Long orderId) {
-        Order order = getOrder(orderId);
+        Order order = findOrderById(orderId);
         if (order.getMember().getMemberId() != memberId) {
             throw new OrderUnauthorizedException();
         }
