@@ -10,6 +10,7 @@ import lombok.Builder;
 public record CartItemResponse(
     Long cartItemId,
     Long roomId,
+    String accommodationName,
     LocalDate startDate,
     LocalDate endDate,
     Integer headCount,
@@ -21,6 +22,7 @@ public record CartItemResponse(
         return CartItemResponse.builder()
             .cartItemId(cartItem.getCartItemId())
             .roomId(cartItem.getRoom().getId())
+            .accommodationName(cartItem.getRoom().getAccommodation().getName())
             .startDate(cartItem.getStartDate())
             .endDate(cartItem.getEndDate())
             .headCount(cartItem.getHeadCount())
