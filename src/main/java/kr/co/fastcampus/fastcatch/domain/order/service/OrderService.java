@@ -5,8 +5,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import kr.co.fastcampus.fastcatch.common.exception.AlreadyOrderCanceledException;
+import kr.co.fastcampus.fastcatch.common.exception.AlreadyReservedRoomException;
+import kr.co.fastcampus.fastcatch.common.exception.InvalidDateRangeException;
+import kr.co.fastcampus.fastcatch.common.exception.InvalidHeadCountException;
 import kr.co.fastcampus.fastcatch.common.exception.MemberNotFoundException;
 import kr.co.fastcampus.fastcatch.common.exception.RoomNotFoundException;
+import kr.co.fastcampus.fastcatch.domain.accommodation.entity.Room;
 import kr.co.fastcampus.fastcatch.domain.accommodation.repository.RoomRepository;
 import kr.co.fastcampus.fastcatch.domain.cart.repository.CartItemRepository;
 import kr.co.fastcampus.fastcatch.domain.member.entity.Member;
@@ -59,9 +64,12 @@ public class OrderService {
             memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new));
         for (OrderItemRequest orderItemRequest : orderRequest.orderItems()) {
             createOrderItem(orderItemRequest, order);
-            createOrderRecord(orderItemRequest, order);
+            checkOrderRecord(orderItemRequest);
         }
         orderRepository.save(order);
+        for (OrderItem orderItem : order.getOrderItems()) {
+            createOrderRecord(orderItem);
+        }
     }
 
     /***
@@ -77,10 +85,13 @@ public class OrderService {
             OrderItemRequest orderItemRequest = OrderItemRequest.fromCartItem(
                 cartItemRepository.findById(cartItemId).orElseThrow());
             createOrderItem(orderItemRequest, order);
-            createOrderRecord(orderItemRequest, order);
+            checkOrderRecord(orderItemRequest);
             cartItemRepository.deleteById(cartItemId);
         }
         orderRepository.save(order);
+        for (OrderItem orderItem : order.getOrderItems()) {
+            createOrderRecord(orderItem);
+        }
     }
 
     /***
@@ -90,6 +101,7 @@ public class OrderService {
      * @param order 주문 Entity
      */
     public void createOrderItem(OrderItemRequest orderItemRequest, Order order) {
+        checkOrderAvailable(orderItemRequest); //인원 수, 날짜 검증
         OrderItem orderItem = OrderItem.builder()
             .startDate(orderItemRequest.startDate()).endDate(orderItemRequest.endDate())
             .headCount(orderItemRequest.headCount())
@@ -105,21 +117,36 @@ public class OrderService {
     /***
      * 주문 현황 생성
      *
-     * @param orderItemRequest 주문 아이템 요청 DTO
-     * @param order 주문 Entity
+     * @param orderItem 주문 아이템 Entity
      */
-    public void createOrderRecord(OrderItemRequest orderItemRequest, Order order) {
-        for (LocalDate date = orderItemRequest.startDate();
-            date.isBefore(orderItemRequest.endDate()); date = date.plusDays(1)) {
+    public void createOrderRecord(OrderItem orderItem) {
+        for (LocalDate date = orderItem.getStartDate();
+            date.isBefore(orderItem.getEndDate()); date = date.plusDays(1)) {
+
             OrderRecord orderRecord = OrderRecord.builder()
-                .accommodation(roomRepository.findById(orderItemRequest.roomId()).orElseThrow(
+                .accommodation(roomRepository.findById(orderItem.getRoom().getId()).orElseThrow(
                         RoomNotFoundException::new)
                     .getAccommodation())
-                .room(roomRepository.findById(orderItemRequest.roomId())
+                .room(roomRepository.findById(orderItem.getRoom().getId())
                     .orElseThrow(RoomNotFoundException::new))
-                .order(order)
+                .order(orderItem.getOrder())
                 .stayDate(date).build();
             orderRecordRepository.save(orderRecord);
+        }
+    }
+
+    /**
+     * 객실 예약 여부 확인
+     *
+     * @param orderItemRequest 주문 아이템 요청 DTO
+     */
+    public void checkOrderRecord(OrderItemRequest orderItemRequest) {
+        for (LocalDate stayDate = orderItemRequest.startDate();
+            stayDate.isBefore(orderItemRequest.endDate()); stayDate = stayDate.plusDays(1)) {
+            if (orderRecordRepository.existsByRoomIdAndStayDate(orderItemRequest.roomId(),
+                stayDate)) {
+                throw new AlreadyReservedRoomException();
+            }
         }
     }
 
@@ -219,6 +246,9 @@ public class OrderService {
         if (order.getMember().getMemberId() != memberId) {
             throw new OrderUnauthorizedException();
         }
+        if (order.getOrderStatus().equals(OrderStatus.CANCELED)) {
+            throw new AlreadyOrderCanceledException();
+        }
         order.setOrderCanceled();
         orderRepository.save(order);
         orderRecordRepository.deleteByOrder(order);
@@ -234,5 +264,45 @@ public class OrderService {
         return orderRecordRepository.existsByRoomIdAndStayDate(
             roomId, stayDate
         );
+    }
+
+    /***
+     * 주문 가능 여부 확인
+     *
+     * @param orderItemRequest 주문 아이템 요청 DTO
+     */
+    private void checkOrderAvailable(OrderItemRequest orderItemRequest) {
+        Room room = roomRepository.findById(orderItemRequest.roomId())
+            .orElseThrow(RoomNotFoundException::new);
+        checkHeadCountScope(orderItemRequest.headCount(), room.getBaseHeadCount(),
+            room.getMaxHeadCount());
+        checkDateScope(orderItemRequest.startDate(), orderItemRequest.endDate());
+    }
+
+    /***
+     * 숙박 날짜 범위 확인
+     *
+     * @param startDate 입실일
+     * @param endDate 퇴실일
+     */
+    private void checkDateScope(LocalDate startDate, LocalDate endDate) {
+        if (startDate.isBefore(LocalDate.now()) || (startDate.isAfter(endDate))) {
+            //추후 자세한 날짜 예외로 대체
+            throw new InvalidDateRangeException();
+        }
+    }
+
+    /***
+     * 숙박 인원 수 범위 확인
+     *
+     * @param headCount 참여 인원 수
+     * @param baseHeadCount 기존 인원 수
+     * @param maxHeadCount 최대 인원 수
+     */
+    private void checkHeadCountScope(Integer headCount, Integer baseHeadCount,
+        Integer maxHeadCount) {
+        if (headCount < baseHeadCount || headCount > maxHeadCount) {
+            throw new InvalidHeadCountException();
+        }
     }
 }

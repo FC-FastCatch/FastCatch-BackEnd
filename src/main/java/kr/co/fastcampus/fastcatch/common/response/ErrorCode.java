@@ -15,6 +15,9 @@ public enum ErrorCode {
     ORDER_NOT_FOUND("존재하지 않는 주문 정보입니다."),
     ORDER_UNAUTHORIZED("접근 권한이 없는 주문 정보입니다. "),
     INVALID_ORDER_STATUS("유효하지 않은 주문 상태입니다."),
+    INVALID_HEAD_COUNT("인원수가 유효한 범위를 벗어났습니다."),
+    ALREADY_RESERVED_ROOM("이미 예약된 객실입니다."),
+    ALREADY_ORDER_CANCELED("이미 본인이 취소한 주문입니다."),
     MEMBER_NOT_FOUND("존재하지 않는 회원입니다.")
     ;
 
