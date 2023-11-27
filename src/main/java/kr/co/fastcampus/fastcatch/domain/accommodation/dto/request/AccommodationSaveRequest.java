@@ -11,6 +11,12 @@ public record AccommodationSaveRequest(
     String name,
     @NotBlank(message = "주소를 필수로 입력하셔야 합니다.")
     String address,
+    @NotBlank(message = "전화 번호를 필수로 입력하셔야 합니다.")
+    String phoneNumber,
+    @NotBlank(message = "경도를 필수로 입력하셔야 합니다.")
+    String longitude,
+    @NotBlank(message = "위도를 필수로 입력하셔야 합니다.")
+    String latitude,
     @NotNull(message = "지역을 필수로 입력하셔야 합니다.")
     Region region,
     @NotBlank(message = "상세 소개를 필수로 입력하셔야 합니다.")
@@ -24,6 +30,9 @@ public record AccommodationSaveRequest(
         return Accommodation.builder()
             .name(name)
             .address(address)
+            .phoneNumber(phoneNumber)
+            .longitude(longitude)
+            .latitude(latitude)
             .region(region)
             .description(description)
             .category(category)

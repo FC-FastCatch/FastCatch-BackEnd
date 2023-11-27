@@ -35,6 +35,15 @@ public class Accommodation extends BaseEntity {
     @Column(nullable = false, length = 200)
     private String address;
 
+    @Column(nullable = false, length = 20)
+    private String phoneNumber;
+
+    @Column(nullable = false, length = 20)
+    private String longitude;
+
+    @Column(nullable = false, length = 20)
+    private String latitude;
+
     @Enumerated(EnumType.STRING)
     private Region region;
 
@@ -44,10 +53,10 @@ public class Accommodation extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Category category;
 
-    @Formula("(SELECT MAX(r.max_head_count) FROM Room r WHERE r.accommodation_id = id)")
+    @Formula("(SELECT MAX(r.max_head_count) FROM room r WHERE r.accommodation_id = id)")
     private Integer maximumCapacity;
 
-    @Formula("(SELECT MIN(r.price) FROM Room r WHERE r.accommodation_id = id)")
+    @Formula("(SELECT MIN(r.price) FROM room r WHERE r.accommodation_id = id)")
     private Integer lowestPrice;
 
     @Column(nullable = true)
@@ -69,6 +78,9 @@ public class Accommodation extends BaseEntity {
     private Accommodation(
         String name,
         String address,
+        String phoneNumber,
+        String longitude,
+        String latitude,
         Region region,
         String description,
         Category category,
@@ -76,6 +88,9 @@ public class Accommodation extends BaseEntity {
     ) {
         this.name = name;
         this.address = address;
+        this.phoneNumber = phoneNumber;
+        this.longitude = longitude;
+        this.latitude = latitude;
         this.region = region;
         this.description = description;
         this.category = category;

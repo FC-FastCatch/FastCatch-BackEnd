@@ -11,6 +11,9 @@ public record AccommodationInfoResponse(
     Long id,
     String name,
     String address,
+    String phoneNumber,
+    String longitude,
+    String latitude,
     Region region,
     String description,
     Category category,
@@ -26,6 +29,9 @@ public record AccommodationInfoResponse(
             .id(accommodation.getId())
             .name(accommodation.getName())
             .address(accommodation.getAddress())
+            .phoneNumber(accommodation.getPhoneNumber())
+            .longitude(accommodation.getLongitude())
+            .latitude(accommodation.getLatitude())
             .region(accommodation.getRegion())
             .description(accommodation.getDescription())
             .category(accommodation.getCategory())
