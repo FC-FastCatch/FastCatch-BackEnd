@@ -17,13 +17,13 @@ public record OrderRequest(
     @NotNull(message = "주문 전체 가격을 필수로 입력하셔야 합니다.")
     Integer totalPrice,
     @NotNull(message = "주문 아이템을 필수로 입력하셔야 합니다.")
-    List<OrderItemRequest> orderItemRequests) {
+    List<OrderItemRequest> orderItems) {
 
     public Order toEntity(Member member) {
         return Order.builder()
             .member(member)
             .reservationPersonName(this.reservationPersonName)
-            .reservationPersonName(this.reservationPhoneNumber)
+            .reservationPhoneNumber(this.reservationPhoneNumber)
             .totalPrice(this.totalPrice)
             .orderStatus(OrderStatus.COMPLETED)
             .build();

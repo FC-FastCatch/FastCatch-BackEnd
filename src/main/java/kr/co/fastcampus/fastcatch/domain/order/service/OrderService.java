@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import kr.co.fastcampus.fastcatch.common.exception.MemberNotFoundException;
+import kr.co.fastcampus.fastcatch.common.exception.RoomNotFoundException;
 import kr.co.fastcampus.fastcatch.domain.accommodation.repository.RoomRepository;
 import kr.co.fastcampus.fastcatch.domain.cart.repository.CartItemRepository;
 import kr.co.fastcampus.fastcatch.domain.member.entity.Member;
@@ -53,8 +55,9 @@ public class OrderService {
      * @param orderRequest 주문 요청 DTO
      */
     public void createOrder(Long memberId, OrderRequest orderRequest) {
-        Order order = orderRequest.toEntity(memberRepository.findById(memberId).orElseThrow());
-        for (OrderItemRequest orderItemRequest : orderRequest.orderItemRequests()) {
+        Order order = orderRequest.toEntity(
+            memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new));
+        for (OrderItemRequest orderItemRequest : orderRequest.orderItems()) {
             createOrderItem(orderItemRequest, order);
             createOrderRecord(orderItemRequest, order);
         }
@@ -69,7 +72,7 @@ public class OrderService {
      */
     public void createOrderByCart(Long memberId, OrderByCartRequest orderByCartRequest) {
         Order order = orderByCartRequest.toEntity(
-            memberRepository.findById(memberId).orElseThrow());
+            memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new));
         for (Long cartItemId : orderByCartRequest.cartItemIds()) {
             OrderItemRequest orderItemRequest = OrderItemRequest.fromCartItem(
                 cartItemRepository.findById(cartItemId).orElseThrow());
@@ -92,6 +95,8 @@ public class OrderService {
             .headCount(orderItemRequest.headCount())
             .price(orderItemRequest.orderPrice())
             .order(order)
+            .room(roomRepository.findById(orderItemRequest.roomId())
+                .orElseThrow(RoomNotFoundException::new))
             .build();
 
         order.getOrderItems().add(orderItem);
@@ -107,9 +112,11 @@ public class OrderService {
         for (LocalDate date = orderItemRequest.startDate();
             date.isBefore(orderItemRequest.endDate()); date = date.plusDays(1)) {
             OrderRecord orderRecord = OrderRecord.builder()
-                .accommodation(roomRepository.findById(orderItemRequest.roomId()).orElseThrow()
+                .accommodation(roomRepository.findById(orderItemRequest.roomId()).orElseThrow(
+                        RoomNotFoundException::new)
                     .getAccommodation())
-                .room(roomRepository.findById(orderItemRequest.roomId()).orElseThrow())
+                .room(roomRepository.findById(orderItemRequest.roomId())
+                    .orElseThrow(RoomNotFoundException::new))
                 .order(order)
                 .stayDate(date).build();
             orderRecordRepository.save(orderRecord);
@@ -138,7 +145,7 @@ public class OrderService {
      * @return 유효 여부
      */
     private boolean isValidOrderStatus(String status) {
-        return Arrays.asList("RESERVED", "USED", "CANCELED").contains(status);
+        return Arrays.asList("reserved", "used", "canceled").contains(status);
     }
 
     /***
@@ -150,16 +157,17 @@ public class OrderService {
      * @return 주문 페이징 응답 DTO
      */
     public OrderPageResponse findOrdersByStatus(Long memberId, String status, Pageable pageable) {
-        Member member = memberRepository.findById(memberId).orElseThrow();
+        Member member = memberRepository.findById(memberId)
+            .orElseThrow(MemberNotFoundException::new);
         Page<Order> orders = new PageImpl<>(Collections.emptyList());
 
-        if (status.equals("RESERVED")) {
+        if (status.equals("reserved")) {
             orders = orderRepository.findOrdersReserved(member, OrderStatus.COMPLETED,
                 LocalDate.now(), pageable);
-        } else if (status.equals("USED")) {
+        } else if (status.equals("used")) {
             orders = orderRepository.findOrdersUsed(member, OrderStatus.COMPLETED, LocalDate.now(),
                 pageable);
-        } else if (status.equals("CANCELED")) {
+        } else if (status.equals("canceled")) {
             orders = orderRepository.findByMemberAndOrderStatusOrderByCreatedDateDesc(member,
                 OrderStatus.CANCELED, pageable);
         } else {

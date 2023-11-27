@@ -6,16 +6,16 @@ import org.springframework.data.domain.Page;
 
 @Builder
 public record OrderPageResponse(
-    List<OrderResponse> orderResponses,
     String status,
     int pageNum,
-    int pageSize
+    int pageSize,
+    List<OrderResponse> orderResponses
 ) {
 
     public static OrderPageResponse from(Page<OrderResponse> orderResponsePage, String status) {
         return OrderPageResponse.builder().orderResponses(orderResponsePage.getContent())
             .status(status)
-            .pageNum(orderResponsePage.getNumber() + 1)
+            .pageNum(orderResponsePage.getNumber())
             .pageSize(orderResponsePage.getSize())
             .build();
     }

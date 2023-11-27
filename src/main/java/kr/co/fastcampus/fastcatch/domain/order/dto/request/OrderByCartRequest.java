@@ -23,7 +23,7 @@ public record OrderByCartRequest(
         return Order.builder()
             .member(member)
             .reservationPersonName(this.reservationPersonName)
-            .reservationPersonName(this.reservationPhoneNumber)
+            .reservationPhoneNumber(this.reservationPhoneNumber)
             .totalPrice(this.totalPrice)
             .orderStatus(OrderStatus.COMPLETED)
             .build();
