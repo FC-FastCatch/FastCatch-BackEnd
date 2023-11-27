@@ -6,9 +6,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import kr.co.fastcampus.fastcatch.common.exception.DuplicatedRequest;
-import kr.co.fastcampus.fastcatch.common.exception.EntityNotFoundException;
+import kr.co.fastcampus.fastcatch.common.exception.AccommodationNotFoundException;
 import kr.co.fastcampus.fastcatch.common.exception.InvalidDateRangeException;
 import kr.co.fastcampus.fastcatch.common.exception.PastDateException;
+import kr.co.fastcampus.fastcatch.common.exception.RoomNotFoundException;
 import kr.co.fastcampus.fastcatch.domain.accommodation.dto.request.AccommodationOptionSaveRequest;
 import kr.co.fastcampus.fastcatch.domain.accommodation.dto.request.AccommodationSaveRequest;
 import kr.co.fastcampus.fastcatch.domain.accommodation.dto.request.RoomImageSaveRequest;
@@ -185,12 +186,12 @@ public class AccommodationService {
 
     private Accommodation findAccommodationById(Long id) {
         return accommodationRepository.findById(id)
-            .orElseThrow(EntityNotFoundException::new);
+            .orElseThrow(AccommodationNotFoundException::new);
     }
 
     private Room findRoomById(Long id) {
         return roomRepository.findById(id)
-            .orElseThrow(EntityNotFoundException::new);
+            .orElseThrow(RoomNotFoundException::new);
     }
 
     private void invalidDateCheck(LocalDate startDate, LocalDate endDate) {
