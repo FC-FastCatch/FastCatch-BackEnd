@@ -9,7 +9,10 @@ import kr.co.fastcampus.fastcatch.common.exception.AlreadyOrderCanceledException
 import kr.co.fastcampus.fastcatch.common.exception.AlreadyReservedRoomException;
 import kr.co.fastcampus.fastcatch.common.exception.InvalidDateRangeException;
 import kr.co.fastcampus.fastcatch.common.exception.InvalidHeadCountException;
+import kr.co.fastcampus.fastcatch.common.exception.InvalidOrderStatusException;
 import kr.co.fastcampus.fastcatch.common.exception.MemberNotFoundException;
+import kr.co.fastcampus.fastcatch.common.exception.OrderNotFoundException;
+import kr.co.fastcampus.fastcatch.common.exception.OrderUnauthorizedException;
 import kr.co.fastcampus.fastcatch.common.exception.RoomNotFoundException;
 import kr.co.fastcampus.fastcatch.domain.accommodation.entity.Room;
 import kr.co.fastcampus.fastcatch.domain.accommodation.repository.RoomRepository;
@@ -18,20 +21,17 @@ import kr.co.fastcampus.fastcatch.domain.member.entity.Member;
 import kr.co.fastcampus.fastcatch.domain.member.repository.MemberRepository;
 import kr.co.fastcampus.fastcatch.domain.order.dto.request.OrderByCartRequest;
 import kr.co.fastcampus.fastcatch.domain.order.dto.request.OrderItemRequest;
+import kr.co.fastcampus.fastcatch.domain.order.dto.request.OrderRequest;
 import kr.co.fastcampus.fastcatch.domain.order.dto.response.OrderItemResponse;
 import kr.co.fastcampus.fastcatch.domain.order.dto.response.OrderPageResponse;
 import kr.co.fastcampus.fastcatch.domain.order.dto.response.OrderResponse;
 import kr.co.fastcampus.fastcatch.domain.order.dto.response.OrdersResponse;
-import kr.co.fastcampus.fastcatch.domain.order.entity.OrderStatus;
-import kr.co.fastcampus.fastcatch.common.exception.InvalidOrderStatusException;
-import kr.co.fastcampus.fastcatch.domain.order.repository.OrderRecordRepository;
-import kr.co.fastcampus.fastcatch.domain.order.dto.request.OrderRequest;
 import kr.co.fastcampus.fastcatch.domain.order.entity.Order;
 import kr.co.fastcampus.fastcatch.domain.order.entity.OrderItem;
 import kr.co.fastcampus.fastcatch.domain.order.entity.OrderRecord;
-import kr.co.fastcampus.fastcatch.common.exception.OrderNotFoundException;
-import kr.co.fastcampus.fastcatch.common.exception.OrderUnauthorizedException;
+import kr.co.fastcampus.fastcatch.domain.order.entity.OrderStatus;
 import kr.co.fastcampus.fastcatch.domain.order.repository.OrderItemRepository;
+import kr.co.fastcampus.fastcatch.domain.order.repository.OrderRecordRepository;
 import kr.co.fastcampus.fastcatch.domain.order.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -54,7 +54,7 @@ public class OrderService {
     private final CartItemRepository cartItemRepository;
 
     /***
-     * 주문 생성
+     * <p>주문 생성.</p>
      *
      * @param memberId 회원 ID
      * @param orderRequest 주문 요청 DTO
@@ -73,7 +73,7 @@ public class OrderService {
     }
 
     /***
-     * 장바구니를 통한 주문 생성
+     * <p>장바구니를 통한 주문 생성.</p>
      *
      * @param memberId 회원 ID
      * @param orderByCartRequest 장바구니를 통한 주문 요청 DTO
@@ -95,7 +95,7 @@ public class OrderService {
     }
 
     /***
-     * 주문 아이템 생성
+     * <p>주문 아이템 생성.</p>
      *
      * @param orderItemRequest 주문 아이템 요청 DTO
      * @param order 주문 Entity
@@ -115,7 +115,7 @@ public class OrderService {
     }
 
     /***
-     * 주문 현황 생성
+     * <p>주문 현황 생성.</p>
      *
      * @param orderItem 주문 아이템 Entity
      */
@@ -136,7 +136,7 @@ public class OrderService {
     }
 
     /**
-     * 객실 예약 여부 확인
+     * <p>객실 예약 여부 확인.</p>
      *
      * @param orderItemRequest 주문 아이템 요청 DTO
      */
@@ -151,7 +151,7 @@ public class OrderService {
     }
 
     /***
-     * 주문 목록 조회
+     * <p>주문 목록 조회.</p>
      *
      * @param memberId 회원 ID
      * @param pageable 페이징 정보
@@ -166,7 +166,7 @@ public class OrderService {
     }
 
     /***
-     * 주문 상태 값 유효성 검증
+     * <p>주문 상태 값 유효성 검증.</p>
      *
      * @param status 주문 상태 값
      * @return 유효 여부
@@ -176,7 +176,7 @@ public class OrderService {
     }
 
     /***
-     * 특정 주문 상태에 대한 주문 목록 조회
+     * <p>특정 주문 상태에 대한 주문 목록 조회.</p>
      *
      * @param memberId 회원 ID
      * @param status 주문 상태
@@ -210,7 +210,7 @@ public class OrderService {
     }
 
     /***
-     * 주문 정보 조회
+     * <p>주문 정보 조회.</p>
      *
      * @param order 주문
      * @param status 주문 상태
@@ -226,7 +226,7 @@ public class OrderService {
     }
 
     /***
-     * 주문 Entity 조회
+     * <p>주문 Entity 조회.</p>
      *
      * @param orderId 주문 ID
      * @return 주문 Entity
@@ -236,7 +236,7 @@ public class OrderService {
     }
 
     /***
-     * 주문 취소
+     * <p>주문 취소.</p>
      *
      * @param memberId 회원 ID
      * @param orderId 주문 ID
@@ -267,7 +267,7 @@ public class OrderService {
     }
 
     /***
-     * 주문 가능 여부 확인
+     * <p>주문 가능 여부 확인.</p>
      *
      * @param orderItemRequest 주문 아이템 요청 DTO
      */
@@ -280,7 +280,7 @@ public class OrderService {
     }
 
     /***
-     * 숙박 날짜 범위 확인
+     * <p>숙박 날짜 범위 확인.</p>
      *
      * @param startDate 입실일
      * @param endDate 퇴실일
@@ -293,7 +293,7 @@ public class OrderService {
     }
 
     /***
-     * 숙박 인원 수 범위 확인
+     * <p>숙박 인원 수 범위 확인.</p>
      *
      * @param headCount 참여 인원 수
      * @param baseHeadCount 기존 인원 수
