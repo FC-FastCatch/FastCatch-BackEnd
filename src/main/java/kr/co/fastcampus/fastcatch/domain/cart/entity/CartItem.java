@@ -67,7 +67,7 @@ public class CartItem extends BaseEntity {
         this.room = room;
     }
 
-    public void setCart(Cart cart){
+    public void setCart(Cart cart) {
         this.cart = cart;
     }
 

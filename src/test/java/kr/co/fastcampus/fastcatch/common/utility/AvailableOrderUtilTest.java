@@ -6,14 +6,22 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.time.LocalDate;
 import kr.co.fastcampus.fastcatch.common.utility.exception.DateIsLaterThanCurrentException;
 import kr.co.fastcampus.fastcatch.common.utility.exception.StartDateIsLaterThanEndDateException;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 class AvailableOrderUtilTest {
 
     @Test
-    void 시작날짜가_현재날짜_보다_과거면_에러나는지_확인() {
+    @DisplayName("시작 날짜가 현재 날짜 보다 과거면 에러 나는지 확인")
+    void dateIsLaterThanCurrent_error() {
         LocalDate startD = LocalDate.of(1923, 11, 22);
         LocalDate endD = LocalDate.of(2023, 11, 24);
+
+//        assertThrows(DateIsLaterThanCurrentException.class,
+//            () -> {
+//                AvailableOrderUtil.validateDate(startD, endD);
+//            }
+//        );
 
         DateIsLaterThanCurrentException exception = assertThrows(
             DateIsLaterThanCurrentException.class,
@@ -27,7 +35,8 @@ class AvailableOrderUtilTest {
     }
 
     @Test
-    void 시작날짜가_종료날짜_보다_늦으면_에러나는지_확인() {
+    @DisplayName("시작 날짜가 종료 날짜 보다 늦으면 에러 나는지 확인")
+    void startDateIsLaterThanEndDate_error() {
         LocalDate startD = LocalDate.of(2023, 11, 22);
         LocalDate endD = LocalDate.of(2023, 10, 22);
 

@@ -36,7 +36,7 @@ public class CartController {
         @Valid @RequestBody final CartItemRequest cartItemRequest
     ) {
         log.info("장바구니에 상품을 추가 했습니다.");
-        return ResponseBody.ok(cartService.createCartItem(memberId,cartItemRequest));
+        return ResponseBody.ok(cartService.createCartItem(memberId, cartItemRequest));
     }
 
     @DeleteMapping("/api/cart/{cartId}")

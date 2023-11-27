@@ -6,7 +6,7 @@ import kr.co.fastcampus.fastcatch.common.utility.exception.StartDateIsLaterThanE
 
 public class AvailableOrderUtil {
     public static void validateDate(LocalDate start, LocalDate end) {
-        if (start.isBefore(LocalDate.now())){
+        if (start.isBefore(LocalDate.now())) {
             throw new DateIsLaterThanCurrentException();
         }
         //시작이 현재 보다 늦고, 종료가 현재 보다 과거면 여기에 걸리게 돼 있음
