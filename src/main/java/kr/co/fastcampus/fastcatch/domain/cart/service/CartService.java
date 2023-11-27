@@ -37,9 +37,15 @@ public class CartService {
         if (cart.isPresent()) {
             return cart.get();
         } else {
-            Cart newCart = Cart.createCart(memberService.findMemberById(memberId));
-            return cartRepository.save(newCart);
+            return createNewCart(memberId);
         }
+    }
+
+    @Transactional
+    public Cart createNewCart(Long memberId) {
+        return cartRepository.save(
+            Cart.createCart(memberService.findMemberById(memberId))
+        );
     }
 
     @Transactional
