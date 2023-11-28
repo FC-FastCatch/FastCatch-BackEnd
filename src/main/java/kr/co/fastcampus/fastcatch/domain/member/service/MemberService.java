@@ -5,7 +5,7 @@ import kr.co.fastcampus.fastcatch.common.exception.DuplicateEmailException;
 import kr.co.fastcampus.fastcatch.domain.member.dto.request.MemberSignupRequest;
 import kr.co.fastcampus.fastcatch.domain.member.dto.response.MemberSignupResponse;
 import kr.co.fastcampus.fastcatch.domain.member.entity.Member;
-import kr.co.fastcampus.fastcatch.domain.member.passwordencoder.BCryptPasswordEncoder;
+import kr.co.fastcampus.fastcatch.domain.member.passwordencoder.PasswordEncoder;
 import kr.co.fastcampus.fastcatch.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,7 +18,7 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
 
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public MemberSignupResponse createMember(MemberSignupRequest request) {
@@ -26,7 +26,7 @@ public class MemberService {
         if (memberRepository.existsByEmail(request.email())) {
             throw new DuplicateEmailException();
         }
-        Member member = memberRepository.save(request.toEntity(bCryptPasswordEncoder));
+        Member member = memberRepository.save(request.toEntity(passwordEncoder));
 
         return MemberSignupResponse.from(member);
     }
