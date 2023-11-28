@@ -12,8 +12,7 @@ public enum ErrorCode {
     DUPLICATED_REQUEST("중복된 요청입니다."),
     INVALID_DATE_RANGE("종료일이 시작일을 앞설 수 없습니다."),
     PAST_DATE("과거 날짜를 선택할 수 없습니다."),
-    DUPLICATE_EMAIL("이미 등록된 이메일입니다.")
-    ;
+    DUPLICATE_EMAIL("이미 등록된 이메일입니다.");
 
     private final String errorMsg;
 
