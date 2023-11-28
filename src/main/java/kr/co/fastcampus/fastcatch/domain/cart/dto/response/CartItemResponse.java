@@ -1,8 +1,6 @@
 package kr.co.fastcampus.fastcatch.domain.cart.dto.response;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Optional;
 import kr.co.fastcampus.fastcatch.domain.cart.entity.CartItem;
 import lombok.Builder;
 
@@ -20,7 +18,7 @@ public record CartItemResponse(
         CartItem cartItem
     ) {
         return CartItemResponse.builder()
-            .cartItemId(cartItem.getCartItemId())
+            .cartItemId(cartItem.getId())
             .roomId(cartItem.getRoom().getId())
             .accommodationName(cartItem.getRoom().getAccommodation().getName())
             .startDate(cartItem.getStartDate())
