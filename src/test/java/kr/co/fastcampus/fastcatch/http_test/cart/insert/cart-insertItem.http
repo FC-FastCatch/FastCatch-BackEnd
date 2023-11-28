@@ -1,0 +1,10 @@
+POST http://localhost:8080/api/carts/1?memberId=1
+Content-Type: application/json
+
+{
+  "roomId": 1,
+  "startDate": "2023-12-22",
+  "endDate": "2023-12-29",
+  "headCount": 3,
+  "orderPrice": 5000
+}

@@ -17,7 +17,7 @@ public record MemberSignupResponse(
 
     public static MemberSignupResponse from(Member member) {
         return MemberSignupResponse.builder()
-            .id(member.getMemberid())
+            .id(member.getId())
             .email(member.getEmail())
             .name(member.getName())
             .nickname(member.getNickname())
