@@ -95,7 +95,7 @@ public class CartService {
 
     @Transactional(readOnly = true)
     public CartItem findCartItemById(Long cartId) {
-        return cartItemRepository.findById(cartId).orElseThrow();
+        return cartItemRepository.findById(cartId).orElseThrow(CartItemNotFoundException::new);
     }
 
     @Transactional

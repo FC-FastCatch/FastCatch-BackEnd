@@ -1,10 +1,10 @@
 package kr.co.fastcampus.fastcatch.domain.order.entity;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
-@AllArgsConstructor
+@RequiredArgsConstructor
 public enum OrderStatus {
     COMPLETED("주문 완료"),
     CANCELED("주문 취소");
