@@ -30,11 +30,10 @@ public class MemberController {
         return ResponseBody.ok(response);
     }
 
-    @GetMapping("/nickname")
+    @GetMapping
     public ResponseBody<Boolean> getNickname(
         @RequestParam String nickname
     ) {
-
         boolean nicknameExists = memberService.existsByNickname(nickname);
         return ResponseBody.ok(nicknameExists);
     }

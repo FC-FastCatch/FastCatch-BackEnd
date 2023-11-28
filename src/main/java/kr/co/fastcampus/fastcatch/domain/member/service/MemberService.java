@@ -41,6 +41,6 @@ public class MemberService {
     }
 
     public boolean existsByNickname(String nickname) {
-        return memberRepository.findByNickname(nickname).isPresent();
+        return memberRepository.existsByNickname(nickname);
     }
 }
