@@ -10,6 +10,8 @@ public enum ErrorCode {
     ACCOMMODATION_NOT_FOUND("존재하지 않는 숙박 장소입니다."),
     ROOM_NOT_FOUND("존재하지 않는 객실입니다."),
     DUPLICATED_REQUEST("중복된 요청입니다."),
+    DUPLICATED_EMAIL("이미 등록된 이메일입니다."),
+    DUPLICATED_NICKNAME("이미 사용중인 닉네임입니다."),
     CART_NOT_FOUND("해당 하는 장바구니가 없습니다."),
     CART_ITEM_NOT_FOUND("해당 하는 장바구니 아이템이 없습니다."),
     PAST_DATE("현재 날짜 보다 과거의 날짜는 예약 할 수 없습니다."),
