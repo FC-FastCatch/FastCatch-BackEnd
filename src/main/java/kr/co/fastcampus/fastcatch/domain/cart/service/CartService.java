@@ -93,6 +93,16 @@ public class CartService {
             room.getMaxHeadCount());
     }
 
+    @Transactional(readOnly = true)
+    public CartItem findCartItemById(Long cartId) {
+        return cartItemRepository.findById(cartId).orElseThrow();
+    }
+
+    @Transactional
+    public void deleteCartItemById(Long cartItemId) {
+        cartItemRepository.deleteById(cartItemId);
+    }
+
 }
 
 

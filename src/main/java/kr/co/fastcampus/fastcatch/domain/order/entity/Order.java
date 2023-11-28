@@ -14,16 +14,18 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import kr.co.fastcampus.fastcatch.common.baseentity.BaseEntity;
 import kr.co.fastcampus.fastcatch.domain.member.entity.Member;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "order_room")
 public class Order extends BaseEntity {
@@ -31,7 +33,7 @@ public class Order extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonIgnore
-    private Long orderId;
+    private Long id;
 
     @Column(length = 30, nullable = false)
     private String reservationPersonName;
@@ -46,7 +48,7 @@ public class Order extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     @JsonIgnore
     private Member member;
@@ -59,13 +61,22 @@ public class Order extends BaseEntity {
 
     @Builder
     public Order(
-        Long orderId, String reservationPersonName, String reservationPhoneNumber,
+        Long id, Member member, String reservationPersonName, String reservationPhoneNumber,
         Integer totalPrice, OrderStatus orderStatus
     ) {
-        this.orderId = orderId;
+        this.id = id;
+        this.member = member;
         this.reservationPersonName = reservationPersonName;
         this.reservationPhoneNumber = reservationPhoneNumber;
         this.totalPrice = totalPrice;
         this.orderStatus = orderStatus;
+    }
+
+    public void setOrderCanceled() {
+        this.orderStatus = OrderStatus.CANCELED;
+    }
+
+    public LocalDate getOrderDate() {
+        return this.getCreatedDate().toLocalDate();
     }
 }

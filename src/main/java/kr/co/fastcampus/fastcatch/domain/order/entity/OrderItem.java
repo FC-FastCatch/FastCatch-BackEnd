@@ -3,12 +3,12 @@ package kr.co.fastcampus.fastcatch.domain.order.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import java.time.LocalDate;
 import kr.co.fastcampus.fastcatch.common.baseentity.BaseEntity;
 import kr.co.fastcampus.fastcatch.domain.accommodation.entity.Room;
@@ -24,7 +24,7 @@ public class OrderItem extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonIgnore
-    private Long orderItemId;
+    private Long id;
 
     @Column(nullable = false)
     private LocalDate startDate;
@@ -38,22 +38,22 @@ public class OrderItem extends BaseEntity {
     @Column(nullable = false)
     private Integer price;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id")
     @JsonIgnore
     private Order order;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "room_id")
     @JsonIgnore
     private Room room;
 
     @Builder
     public OrderItem(
-        Long orderItemId, Order order, Room room, LocalDate startDate,
+        Long id, Order order, Room room, LocalDate startDate,
         LocalDate endDate, Integer headCount, Integer price
     ) {
-        this.orderItemId = orderItemId;
+        this.id = id;
         this.order = order;
         this.room = room;
         this.startDate = startDate;
