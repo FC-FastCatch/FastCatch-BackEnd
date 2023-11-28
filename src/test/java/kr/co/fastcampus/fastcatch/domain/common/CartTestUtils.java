@@ -43,7 +43,7 @@ public class CartTestUtils {
 
     public static Cart createCart(Member member) {
         return Cart.builder()
-            .cartId(1L)
+            .id(1L)
             .member(member)
             .cartItems(List.of())
             .build();
@@ -51,7 +51,7 @@ public class CartTestUtils {
 
     public static CartItem createCartItem(Room room, Cart cart) {
         return CartItem.builder()
-            .cartItemId(1L)
+            .id(1L)
             .startDate(LocalDate.now())
             .endDate(LocalDate.now())
             .headCount(3)
