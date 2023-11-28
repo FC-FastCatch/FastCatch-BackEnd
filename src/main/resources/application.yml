@@ -15,10 +15,6 @@ spring:
       hibernate:
         show_sql: true
         format_sql: true
-  boot:
-    starter:
-      error:
-        include-message: never
 #  datasource:
 #    driver-class-name: com.mysql.cj.jdbc.Driver
 #    url: jdbc:mysql://localhost:3306/MiniProject?createDatabaseIfNotExist=true&useSSL=true
