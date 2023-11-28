@@ -153,7 +153,7 @@ public class OrderService {
     }
 
     private OrderResponse mapToOrderResponse(Order order, String status) {
-        List<OrderItem> orderItems = orderItemRepository.findByOrder_OrderId(order.getId());
+        List<OrderItem> orderItems = orderItemRepository.findByOrder_Id(order.getId());
         List<OrderItemResponse> orderItemResponses = new ArrayList<>();
         for (OrderItem orderItem : orderItems) {
             orderItemResponses.add(OrderItemResponse.from(orderItem));
