@@ -20,6 +20,7 @@ public class Member extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonIgnore
+    @Column(name = "id")
     private Long id;
 
     @Column(unique = true, length = 30, nullable = false)
