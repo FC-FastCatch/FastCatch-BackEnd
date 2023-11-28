@@ -51,9 +51,9 @@ public class Cart extends BaseEntity {
     }
 
     public static Cart createCart(Member member) {
-        Cart cart = new Cart();
-        cart.member = member;
-        return cart;
+        return Cart.builder()
+            .member(member)
+            .build();
     }
 
     public void addCartItem(CartItem cartItem) {

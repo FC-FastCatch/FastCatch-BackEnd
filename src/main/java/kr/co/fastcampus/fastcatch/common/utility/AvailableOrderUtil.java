@@ -1,8 +1,8 @@
 package kr.co.fastcampus.fastcatch.common.utility;
 
 import java.time.LocalDate;
-import kr.co.fastcampus.fastcatch.common.exception.InvaildDateRangeException;
-import kr.co.fastcampus.fastcatch.common.exception.InvaildHeadRangeException;
+import kr.co.fastcampus.fastcatch.common.exception.InvalidDateRangeException;
+import kr.co.fastcampus.fastcatch.common.exception.InvalidHeadRangeException;
 import kr.co.fastcampus.fastcatch.common.exception.PastDateException;
 
 public class AvailableOrderUtil {
@@ -10,15 +10,15 @@ public class AvailableOrderUtil {
         if (start.isBefore(LocalDate.now())) {
             throw new PastDateException();
         }
-        //시작이 현재 보다 늦고, 종료가 현재 보다 과거면 여기에 걸리게 돼 있음
-        if (!start.isEqual(end) && start.isAfter(end)) {
-            throw new InvaildDateRangeException();
+        if (end.isBefore(start)) {
+            throw new InvalidDateRangeException();
         }
     }
 
-    public static void validateHeadCount(int requestHead, int roomBaseHead, int roomMaxHead) {
-        if (requestHead < roomBaseHead || requestHead > roomMaxHead) {
-            throw new InvaildHeadRangeException();
+    public static void validateHeadCount(int requestHeadCount, int roomBaseHeadCount,
+                                         int roomMaxHeadcount) {
+        if (requestHeadCount < roomBaseHeadCount || requestHeadCount > roomMaxHeadcount) {
+            throw new InvalidHeadRangeException();
         }
     }
 

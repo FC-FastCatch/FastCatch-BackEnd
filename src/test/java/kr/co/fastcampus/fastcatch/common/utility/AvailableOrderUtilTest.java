@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.time.LocalDate;
-import kr.co.fastcampus.fastcatch.common.exception.InvaildDateRangeException;
+import kr.co.fastcampus.fastcatch.common.exception.InvalidDateRangeException;
 import kr.co.fastcampus.fastcatch.common.exception.PastDateException;
 import org.junit.jupiter.api.DisplayName;
 
@@ -39,8 +39,8 @@ class AvailableOrderUtilTest {
         LocalDate startD = LocalDate.of(2023, 11, 22);
         LocalDate endD = LocalDate.of(2023, 10, 22);
 
-        InvaildDateRangeException exception = assertThrows(
-            InvaildDateRangeException.class,
+        InvalidDateRangeException exception = assertThrows(
+            InvalidDateRangeException.class,
             () -> AvailableOrderUtil.validateDate(startD, endD)
         );
 

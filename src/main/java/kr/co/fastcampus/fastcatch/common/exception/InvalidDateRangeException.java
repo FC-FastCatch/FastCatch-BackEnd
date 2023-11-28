@@ -2,9 +2,9 @@ package kr.co.fastcampus.fastcatch.common.exception;
 
 import kr.co.fastcampus.fastcatch.common.response.ErrorCode;
 
-public class InvaildDateRangeException extends BaseException {
+public class InvalidDateRangeException extends BaseException {
 
-    public InvaildDateRangeException() {
+    public InvalidDateRangeException() {
         super(ErrorCode.INVALID_DATE_RANGE.getErrorMsg());
     }
 

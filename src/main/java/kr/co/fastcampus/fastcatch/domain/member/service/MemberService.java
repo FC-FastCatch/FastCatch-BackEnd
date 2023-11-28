@@ -15,7 +15,6 @@ public class MemberService {
 
     public Member findMemberById(Long memberId) {
         return memberRepository.findById(memberId)
-            //exception 나중에 바꾼다
-            .orElseThrow(() -> new EntityNotFoundException());
+            .orElseThrow(EntityNotFoundException::new);
     }
 }

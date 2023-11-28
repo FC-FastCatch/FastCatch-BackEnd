@@ -24,7 +24,7 @@ public class CartController {
 
     @GetMapping("/api/carts")
     public ResponseBody<CartResponse> getCart(
-        @RequestParam final Long memberId //나중에 credential로 대체 해야 함
+        @RequestParam final Long memberId
     ) {
         log.info("장바구니의 전체 정보를 가져 왔습니다.");
         return ResponseBody.ok(cartService.findCartItemList(memberId));
@@ -32,7 +32,7 @@ public class CartController {
 
     @PostMapping("/api/carts/{cartId}")
     public ResponseBody<CartResponse> addCartItem(
-        @RequestParam final Long memberId, //나중에 credential로 대체 해야 함
+        @RequestParam final Long memberId,
         @Valid @RequestBody final CartItemRequest cartItemRequest
     ) {
         log.info("장바구니에 상품을 추가 했습니다.");
@@ -41,7 +41,7 @@ public class CartController {
 
     @DeleteMapping("/api/carts/{cartId}")
     public ResponseBody<CartResponse> deleteAllCartItem(
-        @RequestParam final Long memberId //나중에 credential로 대체 해야 함
+        @RequestParam final Long memberId
     ) {
         log.info("장바구니에서 전체 상품을 삭제 했습니다.");
         return ResponseBody.ok(cartService.deleteAllCartItem(memberId));
@@ -49,7 +49,7 @@ public class CartController {
 
     @DeleteMapping("/api/cart-items/{cartItemId}")
     public ResponseBody<CartResponse> deleteCartItem(
-        @RequestParam final Long memberId, //나중에 credential로 대체 해야 함
+        @RequestParam final Long memberId,
         @PathVariable Long cartItemId
     ) {
         log.info("장바구니에서 선택한 상품을 삭제 했습니다.");

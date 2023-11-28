@@ -28,10 +28,10 @@ public class CartService {
 
     @Transactional(readOnly = true)
     public CartResponse findCartItemList(Long memberId) {
-        return CartResponse.from(getCartByMemberId(memberId));
+        return CartResponse.from(findCartByMemberId(memberId));
     }
 
-    private Cart getCartByMemberId(Long memberId) {
+    private Cart findCartByMemberId(Long memberId) {
         Optional<Cart> cart = cartRepository.findByMemberId(memberId);
 
         if (cart.isPresent()) {
@@ -52,7 +52,7 @@ public class CartService {
     public CartResponse createCartItem(Long memberId, CartItemRequest cartItemRequest) {
         validateCartItemRequest(cartItemRequest);
 
-        Cart cart = getCartByMemberId(memberId);
+        Cart cart = findCartByMemberId(memberId);
         Room room = accommodationService.findRoomById(cartItemRequest.roomId());
         CartItem cartItem = cartItemRequest.toEntity(room);
         cart.addCartItem(cartItem);
@@ -64,7 +64,7 @@ public class CartService {
 
     @Transactional
     public CartResponse deleteAllCartItem(Long memberId) {
-        Cart cart = getCartByMemberId(memberId);
+        Cart cart = findCartByMemberId(memberId);
         cart.getCartItems().clear();
         cartItemRepository.deleteAllByCart(cart);
 
@@ -73,19 +73,18 @@ public class CartService {
 
     @Transactional
     public CartResponse deleteCartItem(Long memberId, Long cartItemId) {
-        Cart cart = getCartByMemberId(memberId);
+        Cart cart = findCartByMemberId(memberId);
         CartItem cartItem = cartItemRepository.findById(cartItemId)
-            .orElseThrow(() -> new NoCartItemException());
+            .orElseThrow(NoCartItemException::new);
 
         cart.getCartItems().remove(cartItem);
         cartItemRepository.delete(cartItem);
 
         return CartResponse.from(
-            getCartByMemberId(memberId)
+            findCartByMemberId(memberId)
         );
     }
 
-    //검증할게 또 생기면 추가
     private void validateCartItemRequest(CartItemRequest cartItemRequest) {
         AvailableOrderUtil.validateDate(cartItemRequest.startDate(), cartItemRequest.endDate());
 
