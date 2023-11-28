@@ -1,9 +1,14 @@
 package kr.co.fastcampus.fastcatch.domain.cart.service;
 
+import static kr.co.fastcampus.fastcatch.domain.common.CartTestUtils.createAccommodation;
+import static kr.co.fastcampus.fastcatch.domain.common.CartTestUtils.createCart;
+import static kr.co.fastcampus.fastcatch.domain.common.CartTestUtils.createCartItem;
+import static kr.co.fastcampus.fastcatch.domain.common.CartTestUtils.createMember;
+import static kr.co.fastcampus.fastcatch.domain.common.CartTestUtils.createRoom;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.time.LocalDate;
 import java.util.List;
+import kr.co.fastcampus.fastcatch.domain.accommodation.entity.Accommodation;
 import kr.co.fastcampus.fastcatch.domain.accommodation.entity.Room;
 import kr.co.fastcampus.fastcatch.domain.cart.dto.response.CartResponse;
 import kr.co.fastcampus.fastcatch.domain.cart.entity.Cart;
@@ -12,7 +17,6 @@ import kr.co.fastcampus.fastcatch.domain.cart.repository.CartItemRepository;
 import kr.co.fastcampus.fastcatch.domain.cart.repository.CartRepository;
 import kr.co.fastcampus.fastcatch.domain.member.entity.Member;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -29,35 +33,15 @@ class CartServiceTest {
     @InjectMocks
     private CartService cartService;
 
-    private final Room room = Room.builder().build();
-    private final Member member = Member.builder()
-        .memberId(1L)
-        .email("adsa")
-        .password("asdas")
-        .name("asd")
-        .nickname("ads")
-        .phoneNumber("01012334567")
-        .birthday(LocalDate.now())
-        .build();
-    private final Cart defaultCart = Cart.builder()
-        .cartId(1L)
-        .member(member)
-        .cartItems(List.of())
-        .build();
-    private final CartItem defaultCartItem = CartItem.builder()
-        .cartItemId(1L)
-        .startDate(LocalDate.now())
-        .endDate(LocalDate.now())
-        .headCount(3)
-        .price(5000)
-        .room(room)
-        .cart(defaultCart)
-        .build();
-
-
     //    @Test
     @DisplayName("카트 조회 성공")
     void findCartItemList_success() {
+        Accommodation defaultAccommodation = createAccommodation();
+        Room defaultRoom = createRoom(defaultAccommodation);
+        Member defaultMember = createMember();
+        Cart defaultCart = createCart(defaultMember);
+        CartItem defaultCartItem = createCartItem(defaultRoom, defaultCart);
+
         assertThat(cartService.findCartItemList(1L))
             .usingRecursiveComparison()
             .isEqualTo(List.of(CartResponse.from(defaultCart)));
