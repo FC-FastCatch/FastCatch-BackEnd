@@ -42,8 +42,13 @@ public class Member extends BaseEntity {
 
     @Builder
     public Member(
-        Long memberId, String email, String password, String name,
-        String nickname, LocalDate birthday, String phoneNumber
+        Long memberId,
+        String email,
+        String password,
+        String name,
+        String nickname,
+        LocalDate birthday,
+        String phoneNumber
     ) {
         this.memberId = memberId;
         this.email = email;
@@ -53,5 +58,4 @@ public class Member extends BaseEntity {
         this.birthday = birthday;
         this.phoneNumber = phoneNumber;
     }
-
 }
