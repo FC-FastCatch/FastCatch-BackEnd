@@ -1,7 +1,7 @@
 package kr.co.fastcampus.fastcatch.domain.cart.service;
 
 import java.util.Optional;
-import kr.co.fastcampus.fastcatch.common.exception.EntityNotFoundException;
+import kr.co.fastcampus.fastcatch.common.exception.CartItemNotFoundException;
 import kr.co.fastcampus.fastcatch.common.utility.AvailableOrderUtil;
 import kr.co.fastcampus.fastcatch.domain.accommodation.entity.Room;
 import kr.co.fastcampus.fastcatch.domain.accommodation.service.AccommodationService;
@@ -75,7 +75,7 @@ public class CartService {
     public CartResponse deleteCartItem(Long memberId, Long cartItemId) {
         Cart cart = findCartByMemberId(memberId);
         CartItem cartItem = cartItemRepository.findById(cartItemId)
-            .orElseThrow(EntityNotFoundException::new);
+            .orElseThrow(CartItemNotFoundException::new);
 
         cart.getCartItems().remove(cartItem);
         cartItemRepository.delete(cartItem);
