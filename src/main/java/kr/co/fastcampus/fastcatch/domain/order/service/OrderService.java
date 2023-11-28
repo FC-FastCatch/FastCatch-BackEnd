@@ -52,7 +52,7 @@ public class OrderService {
     private final CartService cartService;
 
     public void createOrder(Long memberId, OrderRequest orderRequest) {
-        Order order = orderRequest.toEntity(memberService.findById(memberId));
+        Order order = orderRequest.toEntity(memberService.findMemberById(memberId));
         for (OrderItemRequest orderItemRequest : orderRequest.orderItems()) {
             createOrderItem(orderItemRequest, order);
             checkOrderRecord(orderItemRequest);
@@ -64,7 +64,7 @@ public class OrderService {
     }
 
     public void createOrderByCart(Long memberId, OrderByCartRequest orderByCartRequest) {
-        Order order = orderByCartRequest.toEntity(memberService.findById(memberId));
+        Order order = orderByCartRequest.toEntity(memberService.findMemberById(memberId));
         for (Long cartItemId : orderByCartRequest.cartItemIds()) {
             OrderItemRequest orderItemRequest = OrderItemRequest.fromCartItem(
                 cartService.findCartItemById(cartItemId)
@@ -128,7 +128,7 @@ public class OrderService {
     }
 
     public OrderPageResponse findOrdersByStatus(Long memberId, String status, Pageable pageable) {
-        Member member = memberService.findById(memberId);
+        Member member = memberService.findMemberById(memberId);
         Page<Order> orders = new PageImpl<>(Collections.emptyList());
 
         if (status.equals("reserved")) {
@@ -167,7 +167,7 @@ public class OrderService {
 
     public void deleteOrder(Long memberId, Long orderId) {
         Order order = findOrderById(orderId);
-        if (order.getMember().getMemberId() != memberId) {
+        if (order.getMember().getId() != memberId) {
             throw new OrderUnauthorizedException();
         }
         if (order.getOrderStatus().equals(OrderStatus.CANCELED)) {

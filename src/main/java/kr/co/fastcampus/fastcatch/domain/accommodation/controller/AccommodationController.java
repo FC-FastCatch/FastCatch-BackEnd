@@ -77,11 +77,27 @@ public class AccommodationController {
         return ResponseBody.ok();
     }
 
+    @PostMapping("/list")
+    public ResponseBody<Void> addAccommodation(
+        @RequestBody List<AccommodationSaveRequest> requests
+    ) {
+        accommodationService.createAccommodations(requests);
+        return ResponseBody.ok();
+    }
+
     @PostMapping("/accommodationOption")
     public ResponseBody<Void> addAccommodationOption(
         @RequestBody AccommodationOptionSaveRequest request
     ) {
         accommodationService.createAccommodationOption(request);
+        return ResponseBody.ok();
+    }
+
+    @PostMapping("/accommodationOptionList")
+    public ResponseBody<Void> addAccommodationOption(
+        @RequestBody List<AccommodationOptionSaveRequest> requests
+    ) {
+        accommodationService.createAccommodationOptions(requests);
         return ResponseBody.ok();
     }
 
@@ -96,6 +112,12 @@ public class AccommodationController {
     @PostMapping("/roomOption")
     public ResponseBody<Void> addRoomOption(@RequestBody RoomOptionSaveRequest request) {
         accommodationService.createRoomOption(request);
+        return ResponseBody.ok();
+    }
+
+    @PostMapping("/roomOptionList")
+    public ResponseBody<Void> addRoomOption(@RequestBody List<RoomOptionSaveRequest> requests) {
+        accommodationService.createRoomOptions(requests);
         return ResponseBody.ok();
     }
 

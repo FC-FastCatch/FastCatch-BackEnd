@@ -1,5 +1,6 @@
 package kr.co.fastcampus.fastcatch.domain.accommodation.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -15,7 +16,9 @@ public record RoomResponse(
     int baseHeadCount,
     int maxHeadCount,
     String description,
+    @JsonFormat(pattern = "HH:mm")
     LocalTime checkInTime,
+    @JsonFormat(pattern = "HH:mm")
     LocalTime checkOutTime,
     boolean soldOut,
     RoomOptionResponse roomOption,
