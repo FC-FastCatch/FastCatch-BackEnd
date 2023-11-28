@@ -153,7 +153,7 @@ public class OrderService {
     }
 
     private OrderResponse mapToOrderResponse(Order order, String status) {
-        List<OrderItem> orderItems = orderItemRepository.findByOrder_Id(order.getId());
+        List<OrderItem> orderItems = orderItemRepository.findByOrderOrderId(order.getOrderId());
         List<OrderItemResponse> orderItemResponses = new ArrayList<>();
         for (OrderItem orderItem : orderItems) {
             orderItemResponses.add(OrderItemResponse.from(orderItem));
@@ -167,7 +167,7 @@ public class OrderService {
 
     public void deleteOrder(Long memberId, Long orderId) {
         Order order = findOrderById(orderId);
-        if (order.getMember().getId() != memberId) {
+        if (order.getMember().getMemberId() != memberId) {
             throw new OrderUnauthorizedException();
         }
         if (order.getOrderStatus().equals(OrderStatus.CANCELED)) {

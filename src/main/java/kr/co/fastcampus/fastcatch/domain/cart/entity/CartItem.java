@@ -25,7 +25,7 @@ public class CartItem extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonIgnore
-    private Long id;
+    private Long cartItemId;
 
     @Column(nullable = false)
     private LocalDate startDate;
@@ -51,10 +51,10 @@ public class CartItem extends BaseEntity {
 
     @Builder
     public CartItem(
-        Long id, Cart cart, Room room, LocalDate startDate,
+        Long cartItemId, Cart cart, Room room, LocalDate startDate,
         LocalDate endDate, Integer headCount, Integer price
     ) {
-        this.id = id;
+        this.cartItemId = cartItemId;
         this.cart = cart;
         this.room = room;
         this.startDate = startDate;

@@ -20,8 +20,7 @@ public class Member extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonIgnore
-    @Column(name = "id")
-    private Long id;
+    private Long memberId;
 
     @Column(unique = true, length = 30, nullable = false)
     private String email;
@@ -43,7 +42,7 @@ public class Member extends BaseEntity {
 
     @Builder
     public Member(
-        Long id,
+        Long memberId,
         String email,
         String password,
         String name,
@@ -51,7 +50,7 @@ public class Member extends BaseEntity {
         LocalDate birthday,
         String phoneNumber
     ) {
-        this.id = id;
+        this.memberId = memberId;
         this.email = email;
         this.name = name;
         this.nickname = nickname;
