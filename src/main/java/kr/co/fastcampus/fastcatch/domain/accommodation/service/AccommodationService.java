@@ -57,6 +57,13 @@ public class AccommodationService {
     }
 
     @Transactional
+    public void createAccommodations(List<AccommodationSaveRequest> requests) {
+        for (AccommodationSaveRequest request : requests) {
+            createAccommodation(request);
+        }
+    }
+
+    @Transactional
     public void createAccommodationOption(AccommodationOptionSaveRequest request) {
         Long accommodationId = request.accommodationId();
         Accommodation accommodation = findAccommodationById(accommodationId);
@@ -64,6 +71,13 @@ public class AccommodationService {
             throw new DuplicatedRequest();
         }
         accommodation.registerAccommodationOption(request.toEntity(accommodation));
+    }
+
+    @Transactional
+    public void createAccommodationOptions(List<AccommodationOptionSaveRequest> requests) {
+        for (AccommodationOptionSaveRequest request : requests) {
+            createAccommodationOption(request);
+        }
     }
 
     @Transactional
@@ -82,6 +96,13 @@ public class AccommodationService {
             throw new DuplicatedRequest();
         }
         room.registerRoomOption(request.toEntity(room));
+    }
+
+    @Transactional
+    public void createRoomOptions(List<RoomOptionSaveRequest> requests) {
+        for (RoomOptionSaveRequest request : requests) {
+            createRoomOption(request);
+        }
     }
 
     @Transactional
