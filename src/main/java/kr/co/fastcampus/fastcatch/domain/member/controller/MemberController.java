@@ -1,5 +1,6 @@
 package kr.co.fastcampus.fastcatch.domain.member.controller;
 
+import jakarta.validation.Valid;
 import kr.co.fastcampus.fastcatch.common.response.ResponseBody;
 import kr.co.fastcampus.fastcatch.domain.member.dto.request.MemberSignupRequest;
 import kr.co.fastcampus.fastcatch.domain.member.dto.response.MemberSignupResponse;
@@ -21,7 +22,7 @@ public class MemberController {
 
     @PostMapping("/signup")
     public ResponseBody<MemberSignupResponse> addMember(
-        @RequestBody MemberSignupRequest request) {
+        @Valid @RequestBody MemberSignupRequest request) {
         MemberSignupResponse response = memberService.createMember(request);
         return ResponseBody.ok(response);
     }
