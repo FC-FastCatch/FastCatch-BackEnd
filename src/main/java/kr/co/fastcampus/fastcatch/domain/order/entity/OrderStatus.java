@@ -1,14 +1,13 @@
 package kr.co.fastcampus.fastcatch.domain.order.entity;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
-@AllArgsConstructor
+@RequiredArgsConstructor
 public enum OrderStatus {
-    RESERVED("예약 완료"),
-    USED("사용 완료"),
-    CANCELED("취소");
+    COMPLETED("주문 완료"),
+    CANCELED("주문 취소");
 
     private final String description;
 }

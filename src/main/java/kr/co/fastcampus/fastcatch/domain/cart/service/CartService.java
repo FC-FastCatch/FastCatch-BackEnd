@@ -26,7 +26,7 @@ public class CartService {
     private final AccommodationService accommodationService;
     private final MemberService memberService;
 
-    @Transactional(readOnly = true)
+    @Transactional
     public CartResponse findCartItemList(Long memberId) {
         return CartResponse.from(findCartByMemberId(memberId));
     }
@@ -91,6 +91,16 @@ public class CartService {
         Room room = accommodationService.findRoomById(cartItemRequest.roomId());
         AvailableOrderUtil.validateHeadCount(cartItemRequest.headCount(), room.getBaseHeadCount(),
             room.getMaxHeadCount());
+    }
+
+    @Transactional(readOnly = true)
+    public CartItem findCartItemById(Long cartId) {
+        return cartItemRepository.findById(cartId).orElseThrow(CartItemNotFoundException::new);
+    }
+
+    @Transactional
+    public void deleteCartItemById(Long cartItemId) {
+        cartItemRepository.deleteById(cartItemId);
     }
 
 }

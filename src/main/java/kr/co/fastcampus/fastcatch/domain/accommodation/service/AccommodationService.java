@@ -29,7 +29,7 @@ import kr.co.fastcampus.fastcatch.domain.accommodation.repository.AccommodationO
 import kr.co.fastcampus.fastcatch.domain.accommodation.repository.AccommodationRepository;
 import kr.co.fastcampus.fastcatch.domain.accommodation.repository.RoomOptionRepository;
 import kr.co.fastcampus.fastcatch.domain.accommodation.repository.RoomRepository;
-import kr.co.fastcampus.fastcatch.domain.order.service.OrderService;
+import kr.co.fastcampus.fastcatch.domain.order.repository.OrderRecordRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -49,7 +49,7 @@ public class AccommodationService {
 
     private final RoomOptionRepository roomOptionRepository;
 
-    private final OrderService orderService;
+    private final OrderRecordRepository orderRecordRepository;
 
     @Transactional
     public void createAccommodation(AccommodationSaveRequest request) {
@@ -175,9 +175,8 @@ public class AccommodationService {
     }
 
     private boolean isRoomSoldOutOnDate(Accommodation accommodation, LocalDate date) {
-        return accommodation.getRooms().size() == orderService.countAccommodationAtDate(
-            accommodation.getId(), date
-        );
+        return accommodation.getRooms().size()
+            == orderRecordRepository.countByAccommodationIdAndStayDate(accommodation.getId(), date);
     }
 
     public AccommodationInfoResponse findAccommodationWithRooms(
@@ -197,7 +196,7 @@ public class AccommodationService {
             .map(room -> {
                 boolean isSoldOut = IntStream.range(
                     0, (int) ChronoUnit.DAYS.between(startDate, endDate)
-                ).anyMatch(offset -> orderService.existsByRoomIdOnDate(
+                ).anyMatch(offset -> orderRecordRepository.existsByRoomIdAndStayDate(
                     room.getId(), startDate.plusDays(offset))
                 );
                 return RoomResponse.from(room, isSoldOut);

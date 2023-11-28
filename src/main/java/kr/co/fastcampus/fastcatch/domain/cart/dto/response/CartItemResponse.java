@@ -18,7 +18,7 @@ public record CartItemResponse(
         CartItem cartItem
     ) {
         return CartItemResponse.builder()
-            .cartItemId(cartItem.getId())
+            .cartItemId(cartItem.getCartItemId())
             .roomId(cartItem.getRoom().getId())
             .accommodationName(cartItem.getRoom().getAccommodation().getName())
             .startDate(cartItem.getStartDate())

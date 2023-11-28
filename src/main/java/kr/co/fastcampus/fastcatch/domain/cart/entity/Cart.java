@@ -27,7 +27,7 @@ public class Cart extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonIgnore
-    private Long id;
+    private Long cartId;
 
     @OneToOne
     @JoinColumn(name = "member_id")
@@ -45,7 +45,7 @@ public class Cart extends BaseEntity {
     public Cart(
         Long id, Member member, List<CartItem> cartItems
     ) {
-        this.id = id;
+        this.cartId = id;
         this.member = member;
         this.cartItems = cartItems;
     }
