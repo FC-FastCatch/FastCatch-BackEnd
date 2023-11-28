@@ -26,7 +26,7 @@ public class CartService {
     private final AccommodationService accommodationService;
     private final MemberService memberService;
 
-    @Transactional(readOnly = true)
+    @Transactional
     public CartResponse findCartItemList(Long memberId) {
         return CartResponse.from(findCartByMemberId(memberId));
     }
