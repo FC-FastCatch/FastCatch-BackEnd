@@ -33,7 +33,7 @@ public class Order extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonIgnore
-    private Long orderId;
+    private Long id;
 
     @Column(length = 30, nullable = false)
     private String reservationPersonName;
@@ -61,10 +61,10 @@ public class Order extends BaseEntity {
 
     @Builder
     public Order(
-        Long orderId, Member member, String reservationPersonName, String reservationPhoneNumber,
+        Long id, Member member, String reservationPersonName, String reservationPhoneNumber,
         Integer totalPrice, OrderStatus orderStatus
     ) {
-        this.orderId = orderId;
+        this.id = id;
         this.member = member;
         this.reservationPersonName = reservationPersonName;
         this.reservationPhoneNumber = reservationPhoneNumber;

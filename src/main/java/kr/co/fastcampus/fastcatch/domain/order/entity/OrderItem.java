@@ -24,7 +24,7 @@ public class OrderItem extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonIgnore
-    private Long orderItemId;
+    private Long id;
 
     @Column(nullable = false)
     private LocalDate startDate;
@@ -50,10 +50,10 @@ public class OrderItem extends BaseEntity {
 
     @Builder
     public OrderItem(
-        Long orderItemId, Order order, Room room, LocalDate startDate,
+        Long id, Order order, Room room, LocalDate startDate,
         LocalDate endDate, Integer headCount, Integer price
     ) {
-        this.orderItemId = orderItemId;
+        this.id = id;
         this.order = order;
         this.room = room;
         this.startDate = startDate;

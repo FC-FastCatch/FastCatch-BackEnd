@@ -19,7 +19,7 @@ public record OrderResponse(
 
     public static OrderResponse from(Order order, List<OrderItemResponse> orderItems,
         String status) {
-        return OrderResponse.builder().orderId(order.getOrderId()).orderStatus(status)
+        return OrderResponse.builder().orderId(order.getId()).orderStatus(status)
             .orderDate(order.getOrderDate()).totalPrice(order.getTotalPrice())
             .reservationPersonName(order.getReservationPersonName()).reservationPhoneNumber(
                 order.getReservationPhoneNumber()).orderItems(orderItems).build();

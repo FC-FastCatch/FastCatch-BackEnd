@@ -33,7 +33,6 @@ public class OrderController {
         if (!orderRequest.ageConsent()) {
             return ResponseBody.fail("14세 이상 이용 동의가 필요합니다.");
         }
-        //memberId는 회원 기능 추가 후, 수정 예정
         orderService.createOrder(1L, orderRequest);
         return ResponseBody.ok();
     }
@@ -43,7 +42,6 @@ public class OrderController {
         if (!orderByCartRequest.ageConsent()) {
             return ResponseBody.fail("14세 이상 이용 동의가 필요합니다.");
         }
-        //memberId는 회원 기능 추가 후, 수정 예정
         orderService.createOrderByCart(1L, orderByCartRequest);
         return ResponseBody.ok();
     }
@@ -60,13 +58,11 @@ public class OrderController {
         @PathVariable String status,
         @PageableDefault(size = 3, sort = "createdDate", direction = Sort.Direction.DESC)
         Pageable pageable) {
-        //memberId는 회원 기능 추가 후, 수정 예정
         return ResponseBody.ok(orderService.findOrdersByStatus(1L, status, pageable));
     }
 
     @DeleteMapping("/{orderId}")
     public ResponseBody modifyOrderStatusToCanceled(@PathVariable Long orderId) {
-        //memberId는 회원 기능 추가 후, 수정 예정
         orderService.deleteOrder(1L, orderId);
         return ResponseBody.ok();
     }

@@ -10,15 +10,14 @@ import kr.co.fastcampus.fastcatch.common.exception.AlreadyReservedRoomException;
 import kr.co.fastcampus.fastcatch.common.exception.InvalidDateRangeException;
 import kr.co.fastcampus.fastcatch.common.exception.InvalidHeadCountException;
 import kr.co.fastcampus.fastcatch.common.exception.InvalidOrderStatusException;
-import kr.co.fastcampus.fastcatch.common.exception.MemberNotFoundException;
 import kr.co.fastcampus.fastcatch.common.exception.OrderNotFoundException;
 import kr.co.fastcampus.fastcatch.common.exception.OrderUnauthorizedException;
-import kr.co.fastcampus.fastcatch.common.exception.RoomNotFoundException;
+import kr.co.fastcampus.fastcatch.common.exception.PastDateException;
 import kr.co.fastcampus.fastcatch.domain.accommodation.entity.Room;
-import kr.co.fastcampus.fastcatch.domain.accommodation.repository.RoomRepository;
-import kr.co.fastcampus.fastcatch.domain.cart.repository.CartItemRepository;
+import kr.co.fastcampus.fastcatch.domain.accommodation.service.AccommodationService;
+import kr.co.fastcampus.fastcatch.domain.cart.service.CartService;
 import kr.co.fastcampus.fastcatch.domain.member.entity.Member;
-import kr.co.fastcampus.fastcatch.domain.member.repository.MemberRepository;
+import kr.co.fastcampus.fastcatch.domain.member.service.MemberService;
 import kr.co.fastcampus.fastcatch.domain.order.dto.request.OrderByCartRequest;
 import kr.co.fastcampus.fastcatch.domain.order.dto.request.OrderItemRequest;
 import kr.co.fastcampus.fastcatch.domain.order.dto.request.OrderRequest;
@@ -48,20 +47,12 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
     private final OrderRecordRepository orderRecordRepository;
-    //추후 각 도메인 service method 활용하여 수정 예정
-    private final RoomRepository roomRepository;
-    private final MemberRepository memberRepository;
-    private final CartItemRepository cartItemRepository;
+    private final AccommodationService accommodationService;
+    private final MemberService memberService;
+    private final CartService cartService;
 
-    /***
-     * <p>주문 생성.</p>
-     *
-     * @param memberId 회원 ID
-     * @param orderRequest 주문 요청 DTO
-     */
     public void createOrder(Long memberId, OrderRequest orderRequest) {
-        Order order = orderRequest.toEntity(
-            memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new));
+        Order order = orderRequest.toEntity(memberService.findById(memberId));
         for (OrderItemRequest orderItemRequest : orderRequest.orderItems()) {
             createOrderItem(orderItemRequest, order);
             checkOrderRecord(orderItemRequest);
@@ -72,21 +63,15 @@ public class OrderService {
         }
     }
 
-    /***
-     * <p>장바구니를 통한 주문 생성.</p>
-     *
-     * @param memberId 회원 ID
-     * @param orderByCartRequest 장바구니를 통한 주문 요청 DTO
-     */
     public void createOrderByCart(Long memberId, OrderByCartRequest orderByCartRequest) {
-        Order order = orderByCartRequest.toEntity(
-            memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new));
+        Order order = orderByCartRequest.toEntity(memberService.findById(memberId));
         for (Long cartItemId : orderByCartRequest.cartItemIds()) {
             OrderItemRequest orderItemRequest = OrderItemRequest.fromCartItem(
-                cartItemRepository.findById(cartItemId).orElseThrow());
+                cartService.findCartItemById(cartItemId)
+            );
             createOrderItem(orderItemRequest, order);
             checkOrderRecord(orderItemRequest);
-            cartItemRepository.deleteById(cartItemId);
+            cartService.deleteCartItemById(cartItemId);
         }
         orderRepository.save(order);
         for (OrderItem orderItem : order.getOrderItems()) {
@@ -94,52 +79,32 @@ public class OrderService {
         }
     }
 
-    /***
-     * <p>주문 아이템 생성.</p>
-     *
-     * @param orderItemRequest 주문 아이템 요청 DTO
-     * @param order 주문 Entity
-     */
     public void createOrderItem(OrderItemRequest orderItemRequest, Order order) {
-        checkOrderAvailable(orderItemRequest); //인원 수, 날짜 검증
+        checkOrderAvailable(orderItemRequest);
         OrderItem orderItem = OrderItem.builder()
             .startDate(orderItemRequest.startDate()).endDate(orderItemRequest.endDate())
             .headCount(orderItemRequest.headCount())
             .price(orderItemRequest.orderPrice())
             .order(order)
-            .room(roomRepository.findById(orderItemRequest.roomId())
-                .orElseThrow(RoomNotFoundException::new))
+            .room(accommodationService.findRoomById(orderItemRequest.roomId()))
             .build();
 
         order.getOrderItems().add(orderItem);
     }
 
-    /***
-     * <p>주문 현황 생성.</p>
-     *
-     * @param orderItem 주문 아이템 Entity
-     */
     public void createOrderRecord(OrderItem orderItem) {
         for (LocalDate date = orderItem.getStartDate();
             date.isBefore(orderItem.getEndDate()); date = date.plusDays(1)) {
-
             OrderRecord orderRecord = OrderRecord.builder()
-                .accommodation(roomRepository.findById(orderItem.getRoom().getId()).orElseThrow(
-                        RoomNotFoundException::new)
+                .accommodation(accommodationService.findRoomById((orderItem.getRoom().getId()))
                     .getAccommodation())
-                .room(roomRepository.findById(orderItem.getRoom().getId())
-                    .orElseThrow(RoomNotFoundException::new))
+                .room(accommodationService.findRoomById(orderItem.getRoom().getId()))
                 .order(orderItem.getOrder())
                 .stayDate(date).build();
             orderRecordRepository.save(orderRecord);
         }
     }
 
-    /**
-     * <p>객실 예약 여부 확인.</p>
-     *
-     * @param orderItemRequest 주문 아이템 요청 DTO
-     */
     public void checkOrderRecord(OrderItemRequest orderItemRequest) {
         for (LocalDate stayDate = orderItemRequest.startDate();
             stayDate.isBefore(orderItemRequest.endDate()); stayDate = stayDate.plusDays(1)) {
@@ -150,13 +115,6 @@ public class OrderService {
         }
     }
 
-    /***
-     * <p>주문 목록 조회.</p>
-     *
-     * @param memberId 회원 ID
-     * @param pageable 페이징 정보
-     * @return 주문 목록 응답 DTO
-     */
     public OrdersResponse findOrders(Long memberId, Pageable pageable) {
         List<OrderPageResponse> orderPageResponses = new ArrayList<>();
         orderPageResponses.add(findOrdersByStatus(memberId, "reserved", pageable));
@@ -165,27 +123,12 @@ public class OrderService {
         return OrdersResponse.from(orderPageResponses);
     }
 
-    /***
-     * <p>주문 상태 값 유효성 검증.</p>
-     *
-     * @param status 주문 상태 값
-     * @return 유효 여부
-     */
     private boolean isValidOrderStatus(String status) {
         return Arrays.asList("reserved", "used", "canceled").contains(status);
     }
 
-    /***
-     * <p>특정 주문 상태에 대한 주문 목록 조회.</p>
-     *
-     * @param memberId 회원 ID
-     * @param status 주문 상태
-     * @param pageable 페이징 정보
-     * @return 주문 페이징 응답 DTO
-     */
     public OrderPageResponse findOrdersByStatus(Long memberId, String status, Pageable pageable) {
-        Member member = memberRepository.findById(memberId)
-            .orElseThrow(MemberNotFoundException::new);
+        Member member = memberService.findById(memberId);
         Page<Order> orders = new PageImpl<>(Collections.emptyList());
 
         if (status.equals("reserved")) {
@@ -209,15 +152,8 @@ public class OrderService {
         return OrderPageResponse.from(orderResponsePage, status);
     }
 
-    /***
-     * <p>주문 정보 조회.</p>
-     *
-     * @param order 주문
-     * @param status 주문 상태
-     * @return 주문 정보 응답 DTO
-     */
     private OrderResponse mapToOrderResponse(Order order, String status) {
-        List<OrderItem> orderItems = orderItemRepository.findByOrder_OrderId(order.getOrderId());
+        List<OrderItem> orderItems = orderItemRepository.findByOrder_OrderId(order.getId());
         List<OrderItemResponse> orderItemResponses = new ArrayList<>();
         for (OrderItem orderItem : orderItems) {
             orderItemResponses.add(OrderItemResponse.from(orderItem));
@@ -225,22 +161,10 @@ public class OrderService {
         return OrderResponse.from(order, orderItemResponses, status);
     }
 
-    /***
-     * <p>주문 Entity 조회.</p>
-     *
-     * @param orderId 주문 ID
-     * @return 주문 Entity
-     */
     public Order findOrderById(Long orderId) {
         return orderRepository.findById(orderId).orElseThrow(OrderNotFoundException::new);
     }
 
-    /***
-     * <p>주문 취소.</p>
-     *
-     * @param memberId 회원 ID
-     * @param orderId 주문 ID
-     */
     public void deleteOrder(Long memberId, Long orderId) {
         Order order = findOrderById(orderId);
         if (order.getMember().getMemberId() != memberId) {
@@ -254,51 +178,23 @@ public class OrderService {
         orderRecordRepository.deleteByOrder(order);
     }
 
-    public long countAccommodationAtDate(Long accommodationId, LocalDate stayDate) {
-        return orderRecordRepository.countByAccommodationIdAndStayDate(
-            accommodationId, stayDate
-        );
-    }
-
-    public boolean existsByRoomIdOnDate(Long roomId, LocalDate stayDate) {
-        return orderRecordRepository.existsByRoomIdAndStayDate(
-            roomId, stayDate
-        );
-    }
-
-    /***
-     * <p>주문 가능 여부 확인.</p>
-     *
-     * @param orderItemRequest 주문 아이템 요청 DTO
-     */
     private void checkOrderAvailable(OrderItemRequest orderItemRequest) {
-        Room room = roomRepository.findById(orderItemRequest.roomId())
-            .orElseThrow(RoomNotFoundException::new);
-        checkHeadCountScope(orderItemRequest.headCount(), room.getBaseHeadCount(),
-            room.getMaxHeadCount());
+        Room room = accommodationService.findRoomById((orderItemRequest.roomId()));
+        checkHeadCountScope(
+            orderItemRequest.headCount(), room.getBaseHeadCount(), room.getMaxHeadCount()
+        );
         checkDateScope(orderItemRequest.startDate(), orderItemRequest.endDate());
     }
 
-    /***
-     * <p>숙박 날짜 범위 확인.</p>
-     *
-     * @param startDate 입실일
-     * @param endDate 퇴실일
-     */
     private void checkDateScope(LocalDate startDate, LocalDate endDate) {
-        if (startDate.isBefore(LocalDate.now()) || (startDate.isAfter(endDate))) {
-            //추후 자세한 날짜 예외로 대체
+        if (startDate.isBefore(LocalDate.now())) {
+            throw new PastDateException();
+        }
+        if (startDate.isAfter(endDate)) {
             throw new InvalidDateRangeException();
         }
     }
 
-    /***
-     * <p>숙박 인원 수 범위 확인.</p>
-     *
-     * @param headCount 참여 인원 수
-     * @param baseHeadCount 기존 인원 수
-     * @param maxHeadCount 최대 인원 수
-     */
     private void checkHeadCountScope(Integer headCount, Integer baseHeadCount,
         Integer maxHeadCount) {
         if (headCount < baseHeadCount || headCount > maxHeadCount) {
