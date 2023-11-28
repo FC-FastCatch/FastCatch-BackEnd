@@ -2,10 +2,9 @@ package kr.co.fastcampus.fastcatch.domain.member.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import java.time.LocalDate;
 import kr.co.fastcampus.fastcatch.domain.member.entity.Member;
 import lombok.Builder;
-
-import java.time.LocalDate;
 
 @Builder
 public record MemberSignupResponse(
@@ -24,6 +23,7 @@ public record MemberSignupResponse(
     @NotBlank(message = "핸드폰 번호를 필수로 입력하셔야 합니다.")
     String phoneNumber
 ) {
+
     public static MemberSignupResponse from(Member member) {
         return MemberSignupResponse.builder()
             .memberId(member.getMemberId())
