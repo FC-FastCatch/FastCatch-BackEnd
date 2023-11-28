@@ -19,6 +19,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
+
     @Transactional
     public MemberSignupResponse createMember(MemberSignupRequest request) {
 
