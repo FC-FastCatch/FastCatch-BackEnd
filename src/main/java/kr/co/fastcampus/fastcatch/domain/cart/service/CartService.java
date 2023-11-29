@@ -48,6 +48,12 @@ public class CartService {
         );
     }
 
+    @Transactional(readOnly = true)
+    public CartItem findCartItemById(Long cartItemId) {
+        return cartItemRepository.findById(cartItemId)
+            .orElseThrow(CartItemNotFoundException::new);
+    }
+
     @Transactional
     public CartResponse createCartItem(Long memberId, CartItemRequest cartItemRequest) {
         validateCartItemRequest(cartItemRequest);
@@ -93,15 +99,6 @@ public class CartService {
             room.getMaxHeadCount());
     }
 
-    @Transactional(readOnly = true)
-    public CartItem findCartItemById(Long cartId) {
-        return cartItemRepository.findById(cartId).orElseThrow(CartItemNotFoundException::new);
-    }
-
-    @Transactional
-    public void deleteCartItemById(Long cartItemId) {
-        cartItemRepository.deleteById(cartItemId);
-    }
 
 }
 
