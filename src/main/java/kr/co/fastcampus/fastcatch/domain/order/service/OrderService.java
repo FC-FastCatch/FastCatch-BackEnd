@@ -51,19 +51,22 @@ public class OrderService {
     private final MemberService memberService;
     private final CartService cartService;
 
-    public void createOrder(Long memberId, OrderRequest orderRequest) {
+    public OrderResponse createOrder(Long memberId, OrderRequest orderRequest) {
         Order order = orderRequest.toEntity(memberService.findMemberById(memberId));
         for (OrderItemRequest orderItemRequest : orderRequest.orderItems()) {
             createOrderItem(orderItemRequest, order);
             checkOrderRecord(orderItemRequest);
         }
         orderRepository.save(order);
+        List<OrderItemResponse> orderItemResponses = new ArrayList<>();
         for (OrderItem orderItem : order.getOrderItems()) {
             createOrderRecord(orderItem);
+            orderItemResponses.add(OrderItemResponse.from(orderItem));
         }
+        return OrderResponse.from(order, orderItemResponses, "reserved");
     }
 
-    public void createOrderByCart(Long memberId, OrderByCartRequest orderByCartRequest) {
+    public OrderResponse createOrderByCart(Long memberId, OrderByCartRequest orderByCartRequest) {
         Order order = orderByCartRequest.toEntity(memberService.findMemberById(memberId));
         for (Long cartItemId : orderByCartRequest.cartItemIds()) {
             OrderItemRequest orderItemRequest = OrderItemRequest.fromCartItem(
@@ -74,9 +77,12 @@ public class OrderService {
             cartService.deleteCartItem(memberId, cartItemId);
         }
         orderRepository.save(order);
+        List<OrderItemResponse> orderItemResponses = new ArrayList<>();
         for (OrderItem orderItem : order.getOrderItems()) {
             createOrderRecord(orderItem);
+            orderItemResponses.add(OrderItemResponse.from(orderItem));
         }
+        return OrderResponse.from(order, orderItemResponses, "reserved");
     }
 
     public void createOrderItem(OrderItemRequest orderItemRequest, Order order) {
@@ -94,7 +100,7 @@ public class OrderService {
 
     public void createOrderRecord(OrderItem orderItem) {
         for (LocalDate date = orderItem.getStartDate();
-             date.isBefore(orderItem.getEndDate()); date = date.plusDays(1)) {
+            date.isBefore(orderItem.getEndDate()); date = date.plusDays(1)) {
             OrderRecord orderRecord = OrderRecord.builder()
                 .accommodation(accommodationService.findRoomById((orderItem.getRoom().getId()))
                     .getAccommodation())
@@ -107,7 +113,7 @@ public class OrderService {
 
     public void checkOrderRecord(OrderItemRequest orderItemRequest) {
         for (LocalDate stayDate = orderItemRequest.startDate();
-             stayDate.isBefore(orderItemRequest.endDate()); stayDate = stayDate.plusDays(1)) {
+            stayDate.isBefore(orderItemRequest.endDate()); stayDate = stayDate.plusDays(1)) {
             if (orderRecordRepository.existsByRoomIdAndStayDate(orderItemRequest.roomId(),
                 stayDate)) {
                 throw new AlreadyReservedRoomException();
@@ -196,7 +202,7 @@ public class OrderService {
     }
 
     private void checkHeadCountScope(Integer headCount, Integer baseHeadCount,
-                                     Integer maxHeadCount) {
+        Integer maxHeadCount) {
         if (headCount < baseHeadCount || headCount > maxHeadCount) {
             throw new InvalidHeadCountException();
         }
