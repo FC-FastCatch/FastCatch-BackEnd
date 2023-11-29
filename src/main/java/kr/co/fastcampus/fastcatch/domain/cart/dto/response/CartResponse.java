@@ -25,7 +25,7 @@ public record CartResponse(
 
     public static CartResponse setCartItemResponseList(
         List<CartItemListResponse> cartItemResponseList
-    ){
+    ) {
         return CartResponse.builder()
             .cartItemResponseList(cartItemResponseList)
             .build();
