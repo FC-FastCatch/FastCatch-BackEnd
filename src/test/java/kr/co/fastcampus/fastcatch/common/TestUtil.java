@@ -1,13 +1,12 @@
 package kr.co.fastcampus.fastcatch.common;
 
+import java.time.LocalTime;
 import kr.co.fastcampus.fastcatch.domain.accommodation.entity.Accommodation;
 import kr.co.fastcampus.fastcatch.domain.accommodation.entity.AccommodationOption;
 import kr.co.fastcampus.fastcatch.domain.accommodation.entity.Category;
 import kr.co.fastcampus.fastcatch.domain.accommodation.entity.Region;
 import kr.co.fastcampus.fastcatch.domain.accommodation.entity.Room;
 import kr.co.fastcampus.fastcatch.domain.accommodation.entity.RoomOption;
-
-import java.time.LocalTime;
 
 public class TestUtil {
 
