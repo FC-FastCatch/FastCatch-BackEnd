@@ -1,11 +1,18 @@
 package kr.co.fastcampus.fastcatch.domain.cart.service;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+
 import kr.co.fastcampus.fastcatch.common.exception.CartItemNotFoundException;
 import kr.co.fastcampus.fastcatch.common.utility.AvailableOrderUtil;
 import kr.co.fastcampus.fastcatch.domain.accommodation.entity.Room;
 import kr.co.fastcampus.fastcatch.domain.accommodation.service.AccommodationService;
 import kr.co.fastcampus.fastcatch.domain.cart.dto.request.CartItemRequest;
+import kr.co.fastcampus.fastcatch.domain.cart.dto.response.CartItemListResponse;
+import kr.co.fastcampus.fastcatch.domain.cart.dto.response.CartItemResponse;
 import kr.co.fastcampus.fastcatch.domain.cart.dto.response.CartResponse;
 import kr.co.fastcampus.fastcatch.domain.cart.entity.Cart;
 import kr.co.fastcampus.fastcatch.domain.cart.entity.CartItem;
@@ -28,7 +35,31 @@ public class CartService {
 
     @Transactional
     public CartResponse findCartItemList(Long memberId) {
-        return CartResponse.from(findCartByMemberId(memberId));
+        //return CartResponse.from(findCartByMemberId(memberId));
+        return getCartResponse(findCartByMemberId(memberId));
+    }
+
+    private CartResponse getCartResponse(Cart cart) {
+        if (cart.getCartItems().isEmpty()) {
+            return CartResponse.from(new ArrayList<>());
+        }
+        List<CartItem> cartItems = cart.getCartItems();
+        Set<Long> isExist = new HashSet<>();
+        List<CartItemListResponse> cartItemListResponses = new ArrayList<>();
+        for (CartItem cartItem : cartItems) {
+            Long accommodationId = cartItem.getRoom().getAccommodation().getId();
+            if (isExist.contains(accommodationId)) {
+                for (CartItemListResponse response : cartItemListResponses) {
+                    if (response.accommodationId() == accommodationId) {
+                        response.rooms().add(CartItemResponse.from(cartItem));
+                    }
+                }
+            } else {
+                cartItemListResponses.add(CartItemListResponse.from(cartItem));
+                isExist.add(accommodationId);
+            }
+        }
+        return CartResponse.from(cartItemListResponses);
     }
 
     private Cart findCartByMemberId(Long memberId) {
@@ -59,7 +90,8 @@ public class CartService {
         cartItem.setCart(cart);
         cartItemRepository.save(cartItem);
 
-        return CartResponse.from(cart);
+        //return CartResponse.from(cart);
+        return getCartResponse(cart);
     }
 
     @Transactional
@@ -68,7 +100,8 @@ public class CartService {
         cart.getCartItems().clear();
         cartItemRepository.deleteAllByCart(cart);
 
-        return CartResponse.from(cart);
+        //return CartResponse.from(cart);
+        return getCartResponse(cart);
     }
 
     @Transactional
@@ -80,7 +113,7 @@ public class CartService {
         cart.getCartItems().remove(cartItem);
         cartItemRepository.delete(cartItem);
 
-        return CartResponse.from(
+        return getCartResponse(
             findCartByMemberId(memberId)
         );
     }
