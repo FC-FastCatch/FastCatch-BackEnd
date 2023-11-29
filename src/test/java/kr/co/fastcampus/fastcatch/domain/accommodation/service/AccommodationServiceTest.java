@@ -5,10 +5,10 @@ import static kr.co.fastcampus.fastcatch.common.TestUtil.createAccommodationOpti
 import static kr.co.fastcampus.fastcatch.common.TestUtil.createRoom;
 import static kr.co.fastcampus.fastcatch.common.TestUtil.createRoomOption;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.BDDMockito.given;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
@@ -97,10 +97,6 @@ public class AccommodationServiceTest {
     void findAccommodationWithRooms() {
 
         //given
-        Long accommodationId = 1L;
-        LocalDate startDate = LocalDate.now();
-        LocalDate endDate = startDate.plusDays(3);
-
         Accommodation accommodation = createAccommodation();
         AccommodationOption accommodationOption = createAccommodationOption(accommodation);
         accommodation.registerAccommodationOption(accommodationOption);
@@ -112,10 +108,17 @@ public class AccommodationServiceTest {
         room2.registerRoomOption(roomOption2);
         accommodation.addRoom(room);
         accommodation.addRoom(room2);
-        given(accommodationRepository.findById(accommodationId)).willReturn(Optional.of(accommodation));
+
+        Long accommodationId = 1L;
+        LocalDate startDate = LocalDate.now();
+        LocalDate endDate = startDate.plusDays(3);
+
+        given(accommodationRepository.findById(accommodationId))
+            .willReturn(Optional.of(accommodation));
 
         //when
-        AccommodationInfoResponse result = accommodationService.findAccommodationWithRooms(accommodationId, startDate, endDate);
+        AccommodationInfoResponse result = accommodationService
+            .findAccommodationWithRooms(accommodationId, startDate, endDate);
 
         //then
         assertNotNull(result);
@@ -135,7 +138,8 @@ public class AccommodationServiceTest {
         given(accommodationRepository.findById(accommodationId)).willReturn(Optional.empty());
 
         //when, then
-        assertThatThrownBy(() -> accommodationService.findAccommodationWithRooms(accommodationId, startDate, endDate))
+        assertThatThrownBy(() ->
+            accommodationService.findAccommodationWithRooms(accommodationId, startDate, endDate))
             .isInstanceOf(AccommodationNotFoundException.class);
 
     }
@@ -151,7 +155,8 @@ public class AccommodationServiceTest {
         when(accommodationRepository.findAllByNameContainingIgnoreCase("testHotel", pageable))
             .thenReturn(new PageImpl<>(new ArrayList<>()));
 
-        AccommodationSearchPageResponse result = accommodationService.findAccommodationByName("testHotel", pageable);
+        AccommodationSearchPageResponse result =
+            accommodationService.findAccommodationByName("testHotel", pageable);
 
         //then
         assertThat(result.accommodations().size()).isEqualTo(0);
