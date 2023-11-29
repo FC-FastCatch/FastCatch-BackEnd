@@ -11,8 +11,8 @@ import kr.co.fastcampus.fastcatch.domain.cart.entity.Cart;
 import kr.co.fastcampus.fastcatch.domain.cart.repository.CartRepository;
 import kr.co.fastcampus.fastcatch.domain.member.dto.request.MemberSigninRequest;
 import kr.co.fastcampus.fastcatch.domain.member.dto.request.MemberSignupRequest;
-import kr.co.fastcampus.fastcatch.domain.member.dto.response.MemberSigninResponse;
 import kr.co.fastcampus.fastcatch.domain.member.dto.response.MemberResponse;
+import kr.co.fastcampus.fastcatch.domain.member.dto.response.MemberSigninResponse;
 import kr.co.fastcampus.fastcatch.domain.member.entity.Member;
 import kr.co.fastcampus.fastcatch.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -41,7 +41,7 @@ public class MemberService {
         if (memberRepository.existsByEmail(request.email())) {
             throw new DuplicatedEmailException();
         }
-        if (memberRepository.existsByNickname(request.nickname())) {
+        if (existsByNickname(request.nickname())) {
             throw new DuplicatedNicknameException();
         }
 
@@ -98,5 +98,9 @@ public class MemberService {
     public Long findCartIdByMemberId(Long memberId) {
         return cartRepository.findByMemberId(memberId).orElseThrow(CartNotFoundException::new)
             .getCartId();
+    }
+
+    public boolean existsByNickname(String nickname) {
+        return memberRepository.existsByNickname(nickname);
     }
 }
