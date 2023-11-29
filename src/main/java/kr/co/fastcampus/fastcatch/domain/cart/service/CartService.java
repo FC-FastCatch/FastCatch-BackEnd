@@ -69,8 +69,7 @@ public class CartService {
         cartItem.setCart(cart);
         cartItemRepository.save(cartItem);
 
-        List<CartItemListResponse>
-            cartItemListResponseList = createCartItemListResponses(cart);
+        List<CartItemListResponse> cartItemListResponseList = createCartItemListResponses(cart);
 
         return CartResponse.setCartItemResponseList(cartItemListResponseList);
     }
@@ -124,9 +123,9 @@ public class CartService {
         cart.getCartItems().remove(cartItem);
         cartItemRepository.delete(cartItem);
 
-        return CartResponse.from(
-            findCartByMemberId(memberId)
-        );
+        List<CartItemListResponse> cartItemListResponseList = createCartItemListResponses(cart);
+
+        return CartResponse.setCartItemResponseList(cartItemListResponseList);
     }
 
     private void validateCartItemRequest(CartItemRequest cartItemRequest) {
