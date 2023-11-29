@@ -5,24 +5,26 @@ import kr.co.fastcampus.fastcatch.domain.member.entity.Member;
 import lombok.Builder;
 
 @Builder
-public record MemberSignupResponse(
+public record MemberResponse(
     Long id,
     String email,
     String password,
     String name,
     String nickname,
     LocalDate birthday,
-    String phoneNumber
+    String phoneNumber,
+    Long cartId
 ) {
 
-    public static MemberSignupResponse from(Member member) {
-        return MemberSignupResponse.builder()
+    public static MemberResponse from(Member member, Long cartId) {
+        return MemberResponse.builder()
             .id(member.getMemberId())
             .email(member.getEmail())
             .name(member.getName())
             .nickname(member.getNickname())
             .birthday(member.getBirthday())
             .phoneNumber(member.getPhoneNumber())
+            .cartId(cartId)
             .build();
     }
 }

@@ -6,8 +6,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
-import kr.co.fastcampus.fastcatch.domain.member.entity.Member;
-import kr.co.fastcampus.fastcatch.domain.member.passwordencoder.PasswordEncoder;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 
@@ -31,15 +29,4 @@ public record MemberSignupRequest(
     @NotBlank(message = "핸드폰 번호를 필수로 입력하셔야 합니다.")
     String phoneNumber
 ) {
-
-    public Member toEntity(PasswordEncoder passwordEncoder) {
-        return Member.builder()
-            .email(email)
-            .password(passwordEncoder.hashPassword(password))
-            .name(name)
-            .nickname(nickname)
-            .birthday(birthday)
-            .phoneNumber(phoneNumber)
-            .build();
-    }
 }
