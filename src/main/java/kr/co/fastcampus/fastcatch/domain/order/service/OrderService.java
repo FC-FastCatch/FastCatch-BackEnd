@@ -51,19 +51,22 @@ public class OrderService {
     private final MemberService memberService;
     private final CartService cartService;
 
-    public void createOrder(Long memberId, OrderRequest orderRequest) {
+    public OrderResponse createOrder(Long memberId, OrderRequest orderRequest) {
         Order order = orderRequest.toEntity(memberService.findMemberById(memberId));
         for (OrderItemRequest orderItemRequest : orderRequest.orderItems()) {
             createOrderItem(orderItemRequest, order);
             checkOrderRecord(orderItemRequest);
         }
         orderRepository.save(order);
+        List<OrderItemResponse> orderItemResponses = new ArrayList<>();
         for (OrderItem orderItem : order.getOrderItems()) {
             createOrderRecord(orderItem);
+            orderItemResponses.add(OrderItemResponse.from(orderItem));
         }
+        return OrderResponse.from(order, orderItemResponses, "reserved");
     }
 
-    public void createOrderByCart(Long memberId, OrderByCartRequest orderByCartRequest) {
+    public OrderResponse createOrderByCart(Long memberId, OrderByCartRequest orderByCartRequest) {
         Order order = orderByCartRequest.toEntity(memberService.findMemberById(memberId));
         for (Long cartItemId : orderByCartRequest.cartItemIds()) {
             OrderItemRequest orderItemRequest = OrderItemRequest.fromCartItem(
@@ -71,12 +74,15 @@ public class OrderService {
             );
             createOrderItem(orderItemRequest, order);
             checkOrderRecord(orderItemRequest);
-            cartService.deleteCartItemById(cartItemId);
+            cartService.deleteCartItem(memberId, cartItemId);
         }
         orderRepository.save(order);
+        List<OrderItemResponse> orderItemResponses = new ArrayList<>();
         for (OrderItem orderItem : order.getOrderItems()) {
             createOrderRecord(orderItem);
+            orderItemResponses.add(OrderItemResponse.from(orderItem));
         }
+        return OrderResponse.from(order, orderItemResponses, "reserved");
     }
 
     public void createOrderItem(OrderItemRequest orderItemRequest, Order order) {

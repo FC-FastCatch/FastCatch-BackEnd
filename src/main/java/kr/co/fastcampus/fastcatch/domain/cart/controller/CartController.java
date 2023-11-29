@@ -30,16 +30,16 @@ public class CartController {
         return ResponseBody.ok(cartService.findCartItemList(memberId));
     }
 
-    @PostMapping("/api/carts/{cartId}")
+    @PostMapping("/api/carts/members/{memberId}")
     public ResponseBody<CartResponse> addCartItem(
-        @RequestParam final Long memberId,
+        @PathVariable final Long memberId,
         @Valid @RequestBody final CartItemRequest cartItemRequest
     ) {
         log.info("장바구니에 상품을 추가 했습니다.");
         return ResponseBody.ok(cartService.createCartItem(memberId, cartItemRequest));
     }
 
-    @DeleteMapping("/api/carts/{cartId}")
+    @DeleteMapping("/api/carts/{memberId}")
     public ResponseBody<CartResponse> deleteAllCartItem(
         @RequestParam final Long memberId
     ) {
