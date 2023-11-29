@@ -71,7 +71,7 @@ public class OrderService {
             );
             createOrderItem(orderItemRequest, order);
             checkOrderRecord(orderItemRequest);
-            cartService.deleteCartItemById(cartItemId);
+            cartService.deleteCartItem(memberId, cartItemId);
         }
         orderRepository.save(order);
         for (OrderItem orderItem : order.getOrderItems()) {
@@ -94,7 +94,7 @@ public class OrderService {
 
     public void createOrderRecord(OrderItem orderItem) {
         for (LocalDate date = orderItem.getStartDate();
-            date.isBefore(orderItem.getEndDate()); date = date.plusDays(1)) {
+             date.isBefore(orderItem.getEndDate()); date = date.plusDays(1)) {
             OrderRecord orderRecord = OrderRecord.builder()
                 .accommodation(accommodationService.findRoomById((orderItem.getRoom().getId()))
                     .getAccommodation())
@@ -107,7 +107,7 @@ public class OrderService {
 
     public void checkOrderRecord(OrderItemRequest orderItemRequest) {
         for (LocalDate stayDate = orderItemRequest.startDate();
-            stayDate.isBefore(orderItemRequest.endDate()); stayDate = stayDate.plusDays(1)) {
+             stayDate.isBefore(orderItemRequest.endDate()); stayDate = stayDate.plusDays(1)) {
             if (orderRecordRepository.existsByRoomIdAndStayDate(orderItemRequest.roomId(),
                 stayDate)) {
                 throw new AlreadyReservedRoomException();
@@ -196,7 +196,7 @@ public class OrderService {
     }
 
     private void checkHeadCountScope(Integer headCount, Integer baseHeadCount,
-        Integer maxHeadCount) {
+                                     Integer maxHeadCount) {
         if (headCount < baseHeadCount || headCount > maxHeadCount) {
             throw new InvalidHeadCountException();
         }
