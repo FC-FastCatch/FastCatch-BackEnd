@@ -48,7 +48,7 @@ public class MemberController {
         return ResponseBody.ok(memberService.findMemberInfo(customUserDetails.getMemberId()));
     }
 
-    @GetMapping
+    @GetMapping("/nickname")
     public ResponseBody<Boolean> getNickname(
         @RequestParam String nickname
     ) {
