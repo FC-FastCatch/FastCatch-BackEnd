@@ -25,6 +25,7 @@ public record AccommodationSummaryResponse(
         return AccommodationSummaryResponse.builder()
             .id(accommodation.getId())
             .name(accommodation.getName())
+            .address(accommodation.getAddress())
             .region(accommodation.getRegion())
             .category(accommodation.getCategory())
             .lowestPrice(accommodation.getLowestPrice())
