@@ -11,6 +11,7 @@ public record CartItemResponse(
     Long cartItemId,
     Long roomId,
     String accommodationName,
+    String roomName,
     LocalDate startDate,
     LocalDate endDate,
     Integer headCount,
@@ -28,6 +29,7 @@ public record CartItemResponse(
             .cartItemId(cartItem.getCartItemId())
             .roomId(cartItem.getRoom().getId())
             .accommodationName(cartItem.getRoom().getAccommodation().getName())
+            .roomName(cartItem.getRoom().getName())
             .startDate(cartItem.getStartDate())
             .endDate(cartItem.getEndDate())
             .headCount(cartItem.getHeadCount())

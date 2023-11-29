@@ -32,7 +32,7 @@ public class CartController {
             cartService.findCartItemList(customUserDetails.getMemberId()));
     }
 
-    @PostMapping("/api/carts/{cartId}")
+    @PostMapping("/api/carts/members/{memberId}")
     public ResponseBody<CartResponse> addCartItem(
         @AuthenticationPrincipal CustomUserDetails customUserDetails,
         @Valid @RequestBody final CartItemRequest cartItemRequest
@@ -42,7 +42,7 @@ public class CartController {
             cartService.createCartItem(customUserDetails.getMemberId(), cartItemRequest));
     }
 
-    @DeleteMapping("/api/carts/{cartId}")
+    @DeleteMapping("/api/carts/{memberId}")
     public ResponseBody<CartResponse> deleteAllCartItem(
         @AuthenticationPrincipal CustomUserDetails customUserDetails
     ) {
