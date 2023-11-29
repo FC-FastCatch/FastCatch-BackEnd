@@ -30,7 +30,7 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf((csrf) -> csrf.disable()); // token 방식이므로 csrf 보호 비활성화
+        http.csrf((csrf) -> csrf.disable());
         http.authorizeHttpRequests((requests) -> requests
                 .requestMatchers(
                     new AntPathRequestMatcher("/api/members/signup"),
@@ -41,10 +41,9 @@ public class WebSecurityConfig {
                 .requestMatchers(
                     new AntPathRequestMatcher("/h2-console/**")).permitAll()
                 .anyRequest().authenticated())
-            .httpBasic((httpBasic) -> httpBasic.disable()) //일반적 루트가 아닌 다른 방식 요청 시 거절
-            .sessionManagement( //세션 사용하지 않기 때문에 STATELESS로 설정
+            .httpBasic((httpBasic) -> httpBasic.disable())
+            .sessionManagement(
                 (session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            //필터 등록: JwtAuthenticationFilter를 UsernamePasswordAuthenticationFilter 전에 넣음
             .addFilterBefore(
                 new JwtAuthenticationFilter(jwtTokenProvider, jwtAuthenticationEntryPoint),
                 UsernamePasswordAuthenticationFilter.class);
