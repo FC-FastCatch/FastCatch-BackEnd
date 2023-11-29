@@ -5,6 +5,7 @@ import kr.co.fastcampus.fastcatch.common.config.jwt.CustomUserDetails;
 import kr.co.fastcampus.fastcatch.common.response.ResponseBody;
 import kr.co.fastcampus.fastcatch.domain.member.dto.request.MemberSigninRequest;
 import kr.co.fastcampus.fastcatch.domain.member.dto.request.MemberSignupRequest;
+import kr.co.fastcampus.fastcatch.domain.member.dto.request.MemberUpdateRequest;
 import kr.co.fastcampus.fastcatch.domain.member.dto.response.MemberResponse;
 import kr.co.fastcampus.fastcatch.domain.member.dto.response.MemberSigninResponse;
 import kr.co.fastcampus.fastcatch.domain.member.service.MemberService;
@@ -13,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -52,5 +54,14 @@ public class MemberController {
     ) {
         boolean nicknameExists = memberService.existsByNickname(nickname);
         return ResponseBody.ok(nicknameExists);
+    }
+
+    @PutMapping
+    public ResponseBody<MemberResponse> modifyMemberInfo(
+        @AuthenticationPrincipal CustomUserDetails customUserDetails,
+        @Valid @RequestBody MemberUpdateRequest memberUpdateRequest
+    ) {
+        return ResponseBody.ok(
+            memberService.updateMember(customUserDetails.getMemberId(), memberUpdateRequest));
     }
 }

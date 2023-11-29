@@ -11,6 +11,7 @@ import kr.co.fastcampus.fastcatch.domain.cart.entity.Cart;
 import kr.co.fastcampus.fastcatch.domain.cart.repository.CartRepository;
 import kr.co.fastcampus.fastcatch.domain.member.dto.request.MemberSigninRequest;
 import kr.co.fastcampus.fastcatch.domain.member.dto.request.MemberSignupRequest;
+import kr.co.fastcampus.fastcatch.domain.member.dto.request.MemberUpdateRequest;
 import kr.co.fastcampus.fastcatch.domain.member.dto.response.MemberResponse;
 import kr.co.fastcampus.fastcatch.domain.member.dto.response.MemberSigninResponse;
 import kr.co.fastcampus.fastcatch.domain.member.entity.Member;
@@ -89,6 +90,13 @@ public class MemberService {
 
         Long cartId = findCartIdByMemberId(memberId);
         return MemberResponse.from(findMemberById(memberId), cartId);
+    }
+
+    public MemberResponse updateMember(Long memberId, MemberUpdateRequest memberUpdateRequest) {
+        Member member = findMemberById(memberId);
+        member.updateMember(memberUpdateRequest);
+
+        return MemberResponse.from(member, findCartIdByMemberId(memberId));
     }
 
     public Member findMemberById(Long memberId) {
