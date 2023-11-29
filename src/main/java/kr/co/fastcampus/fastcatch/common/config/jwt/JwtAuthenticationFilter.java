@@ -29,9 +29,9 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
         String token = resolveToken((HttpServletRequest) request);
 
         HttpServletRequest httpRequest = (HttpServletRequest) request;
-        String requestURI = httpRequest.getRequestURI();
-        if (requestURI.equals("/api/members/signup") || requestURI.equals("/api/members/signin")
-            || requestURI.equals("/error") || requestURI.startsWith("/api/accommodations")) {
+        String requestUri = httpRequest.getRequestURI();
+        if (requestUri.equals("/api/members/signup") || requestUri.equals("/api/members/signin")
+            || requestUri.equals("/error") || requestUri.startsWith("/api/accommodations")) {
             chain.doFilter(request, response);
             return;
         }
