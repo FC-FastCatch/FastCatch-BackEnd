@@ -8,7 +8,7 @@ import lombok.Builder;
 
 @Builder
 public record CartResponse(
-    List<CartItemResponse> cartItemResponseList
+    List<CartItemListResponse> cartItemResponseList
 ) {
     public static CartResponse from(
         Cart cart
@@ -17,9 +17,17 @@ public record CartResponse(
             .cartItemResponseList(
                 Optional.ofNullable(cart.getCartItems())
                     .orElse(new ArrayList<>())
-                    .stream().map(CartItemResponse::from)
+                    .stream().map(CartItemListResponse::from)
                     .toList()
             )
+            .build();
+    }
+
+    public static CartResponse setCartItemResponseList(
+        List<CartItemListResponse> cartItemResponseList
+    ){
+        return CartResponse.builder()
+            .cartItemResponseList(cartItemResponseList)
             .build();
     }
 
