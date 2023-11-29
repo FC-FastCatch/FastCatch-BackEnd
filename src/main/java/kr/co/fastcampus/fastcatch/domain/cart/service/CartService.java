@@ -1,11 +1,17 @@
 package kr.co.fastcampus.fastcatch.domain.cart.service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import kr.co.fastcampus.fastcatch.common.exception.CartItemNotFoundException;
 import kr.co.fastcampus.fastcatch.common.utility.AvailableOrderUtil;
 import kr.co.fastcampus.fastcatch.domain.accommodation.entity.Room;
 import kr.co.fastcampus.fastcatch.domain.accommodation.service.AccommodationService;
 import kr.co.fastcampus.fastcatch.domain.cart.dto.request.CartItemRequest;
+import kr.co.fastcampus.fastcatch.domain.cart.dto.response.CartItemListResponse;
+import kr.co.fastcampus.fastcatch.domain.cart.dto.response.CartItemResponse;
 import kr.co.fastcampus.fastcatch.domain.cart.dto.response.CartResponse;
 import kr.co.fastcampus.fastcatch.domain.cart.entity.Cart;
 import kr.co.fastcampus.fastcatch.domain.cart.entity.CartItem;
@@ -28,7 +34,20 @@ public class CartService {
 
     @Transactional
     public CartResponse findCartItemList(Long memberId) {
-        return CartResponse.from(findCartByMemberId(memberId));
+        Cart cart = findCartByMemberId(memberId);
+        return getCartResponse(cart);
+    }
+
+    private CartResponse getCartResponse(Cart cart) {
+        List<CartItem> cartItems = cart.getCartItems();
+        Map<Long, CartItemListResponse> responseMap = new HashMap<>();
+        for (CartItem cartItem : cartItems) {
+            Long accommodationId = cartItem.getRoom().getAccommodation().getId();
+            responseMap.computeIfAbsent(accommodationId, key -> CartItemListResponse.from(cartItem))
+                .rooms().add(CartItemResponse.from(cartItem));
+        }
+        List<CartItemListResponse> cartItemListResponses = new ArrayList<>(responseMap.values());
+        return CartResponse.from(cartItemListResponses);
     }
 
     private Cart findCartByMemberId(Long memberId) {
@@ -59,7 +78,7 @@ public class CartService {
         cartItem.setCart(cart);
         cartItemRepository.save(cartItem);
 
-        return CartResponse.from(cart);
+        return getCartResponse(cart);
     }
 
     @Transactional
@@ -68,7 +87,7 @@ public class CartService {
         cart.getCartItems().clear();
         cartItemRepository.deleteAllByCart(cart);
 
-        return CartResponse.from(cart);
+        return getCartResponse(cart);
     }
 
     @Transactional
@@ -80,9 +99,7 @@ public class CartService {
         cart.getCartItems().remove(cartItem);
         cartItemRepository.delete(cartItem);
 
-        return CartResponse.from(
-            findCartByMemberId(memberId)
-        );
+        return getCartResponse(cart);
     }
 
     private void validateCartItemRequest(CartItemRequest cartItemRequest) {
