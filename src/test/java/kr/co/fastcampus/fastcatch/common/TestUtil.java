@@ -94,7 +94,7 @@ public class TestUtil {
 
     public static CartItem createCartItem(Room room, Cart cart) {
         return CartItem.builder()
-            .cartItemId(1l)
+            .cartItemId(1L)
             .startDate(LocalDate.of(2023, 12, 12))
             .endDate(LocalDate.of(2023, 12, 13))
             .headCount(room.getBaseHeadCount())

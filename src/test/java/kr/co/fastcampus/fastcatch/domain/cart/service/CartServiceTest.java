@@ -42,7 +42,7 @@ class CartServiceTest {
     @DisplayName("존재 하지 않는 장바구니 아이템 아이디로 조회 시 예외 처리")
     void findCartItemById_fail_noCartItem() {
         assertThatThrownBy(() ->
-            cartService.findCartItemById(2l))
+            cartService.findCartItemById(2L))
             .isInstanceOf(CartItemNotFoundException.class);
 
     }
@@ -51,7 +51,7 @@ class CartServiceTest {
     @DisplayName("존재 하지 않는 장바구니 아이템 아이디 삭제 시 예외 처리")
     void deleteCartItem() {
         assertThatThrownBy(() ->
-            cartService.findCartItemById(2l))
+            cartService.findCartItemById(2L))
             .isInstanceOf(CartItemNotFoundException.class);
     }
 }
