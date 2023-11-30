@@ -38,8 +38,8 @@ public class OrderController {
         if (!orderRequest.ageConsent()) {
             return ResponseBody.fail("14세 이상 이용 동의가 필요합니다.");
         }
-        orderService.createOrder(customUserDetails.getMemberId(), orderRequest);
-        return ResponseBody.ok();
+        return ResponseBody.ok(
+            orderService.createOrder(customUserDetails.getMemberId(), orderRequest));
     }
 
     @PostMapping("/carts")
@@ -50,8 +50,8 @@ public class OrderController {
         if (!orderByCartRequest.ageConsent()) {
             return ResponseBody.fail("14세 이상 이용 동의가 필요합니다.");
         }
-        orderService.createOrderByCart(customUserDetails.getMemberId(), orderByCartRequest);
-        return ResponseBody.ok();
+        return ResponseBody.ok(
+            orderService.createOrderByCart(customUserDetails.getMemberId(), orderByCartRequest));
     }
 
     @GetMapping

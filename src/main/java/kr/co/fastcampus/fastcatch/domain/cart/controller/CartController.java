@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
@@ -32,7 +33,7 @@ public class CartController {
             cartService.findCartItemList(customUserDetails.getMemberId()));
     }
 
-    @PostMapping("/api/carts/members/{memberId}")
+    @PostMapping("/api/carts")
     public ResponseBody<CartResponse> addCartItem(
         @AuthenticationPrincipal CustomUserDetails customUserDetails,
         @Valid @RequestBody final CartItemRequest cartItemRequest
@@ -42,7 +43,7 @@ public class CartController {
             cartService.createCartItem(customUserDetails.getMemberId(), cartItemRequest));
     }
 
-    @DeleteMapping("/api/carts/{memberId}")
+    @DeleteMapping("/api/carts")
     public ResponseBody<CartResponse> deleteAllCartItem(
         @AuthenticationPrincipal CustomUserDetails customUserDetails
     ) {
@@ -60,5 +61,4 @@ public class CartController {
         return ResponseBody.ok(
             cartService.deleteCartItem(customUserDetails.getMemberId(), cartItemId));
     }
-
 }

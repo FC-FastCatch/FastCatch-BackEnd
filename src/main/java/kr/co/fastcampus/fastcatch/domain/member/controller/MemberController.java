@@ -41,19 +41,19 @@ public class MemberController {
         return ResponseBody.ok(memberService.createSignIn(request));
     }
 
-    @GetMapping
-    public ResponseBody<MemberResponse> getMemberInfo(
-        @AuthenticationPrincipal CustomUserDetails customUserDetails
-    ) {
-        return ResponseBody.ok(memberService.findMemberInfo(customUserDetails.getMemberId()));
-    }
-
     @GetMapping("/nickname")
     public ResponseBody<Boolean> getNickname(
         @RequestParam String nickname
     ) {
         boolean nicknameExists = memberService.existsByNickname(nickname);
         return ResponseBody.ok(nicknameExists);
+    }
+
+    @GetMapping
+    public ResponseBody<MemberResponse> getMemberInfo(
+        @AuthenticationPrincipal CustomUserDetails customUserDetails
+    ) {
+        return ResponseBody.ok(memberService.findMemberInfo(customUserDetails.getMemberId()));
     }
 
     @PutMapping
