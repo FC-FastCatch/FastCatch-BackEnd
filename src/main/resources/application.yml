@@ -17,7 +17,9 @@ spring:
         show_sql: true
         format_sql: true
   open-api:
-    key: 5534491fa36b380fbbade139ea1a48ac
+    base-url: http://apis.data.go.kr/B551011/KorService1/searchStay1
+    key: n8oW6q2iCO5wK9oMVq2Zo4y43lo274WDtI3AE69hTh8T9Zwpo0Sv4Warjs+vNyCxaJeZDjmSJWoGFUbaM4uPEA==
+
 jwt:
   secretKey: fastCatch8jo
   accessTokenValidTime: 86400000
