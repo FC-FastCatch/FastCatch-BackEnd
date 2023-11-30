@@ -16,8 +16,8 @@ public record OpenApiResponseDto(
             .mainKey((String) row.get("MAIN_KEY"))
             .category((String) row.get("CATE3_NAME"))
             .name((String) row.get("NAME_KOR"))
-            .address((String) row.get("H_KOR_CITY") + " " + row.get("H_KOR_GU") + " " +
-                row.get("H_KOR_DONG"))
+            .address((String) row.get("H_KOR_CITY") + " " + row.get("H_KOR_GU") + " "
+                + row.get("H_KOR_DONG"))
             .build();
     }
 }

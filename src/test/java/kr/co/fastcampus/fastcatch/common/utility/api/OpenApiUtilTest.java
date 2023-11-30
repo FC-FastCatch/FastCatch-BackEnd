@@ -11,7 +11,7 @@ class OpenApiUtilTest {
     @Test
     void requestOpenApi() throws ParseException {
         List<OpenApiResponseDto> openApiResponseDtoList = OpenApiUtil.requestOpenApi();
-        for (OpenApiResponseDto openApiresponseDto:openApiResponseDtoList) {
+        for (OpenApiResponseDto openApiresponseDto : openApiResponseDtoList) {
             System.out.println(openApiresponseDto);
         }
     }
