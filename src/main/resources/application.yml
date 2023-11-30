@@ -17,8 +17,8 @@ spring:
         show_sql: true
         format_sql: true
   open-api:
-    base-url: http://apis.data.go.kr/B551011/KorService1/searchStay1
-    key: n8oW6q2iCO5wK9oMVq2Zo4y43lo274WDtI3AE69hTh8T9Zwpo0Sv4Warjs+vNyCxaJeZDjmSJWoGFUbaM4uPEA==
+    base-url: http://openapi.seoul.go.kr:8088
+    key: 5756515a6a76696b38347645497154
 
 jwt:
   secretKey: fastCatch8jo
