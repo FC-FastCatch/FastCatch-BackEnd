@@ -1,0 +1,32 @@
+POST http://localhost:8080/api/accommodations/1
+Content-Type: application/json
+
+[
+  {
+    "name" : "별빛 1호",
+    "price" : 100000,
+    "baseHeadCount": 4,
+    "maxHeadCount": 8,
+    "description": "근처 강이 보이는 방",
+    "checkInTime": "16:00",
+    "checkOutTime": "12:00"
+  },
+  {
+    "name" : "달빛 2호",
+    "price" : 140000,
+    "baseHeadCount": 4,
+    "maxHeadCount": 10,
+    "description": "MT 인원 수용 가능",
+    "checkInTime": "16:00",
+    "checkOutTime": "12:00"
+  },
+  {
+    "name" : "햇빛 3호",
+    "price" : 260000,
+    "baseHeadCount": 10,
+    "maxHeadCount": 20,
+    "description": "음향 설비, 강당 있음",
+    "checkInTime": "16:00",
+    "checkOutTime": "12:00"
+  }
+]

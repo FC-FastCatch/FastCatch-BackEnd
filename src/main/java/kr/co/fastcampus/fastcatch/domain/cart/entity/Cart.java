@@ -13,14 +13,14 @@ import jakarta.persistence.OneToOne;
 import java.util.ArrayList;
 import java.util.List;
 import kr.co.fastcampus.fastcatch.common.baseentity.BaseEntity;
-import kr.co.fastcampus.fastcatch.domain.cartitem.entity.CartItem;
 import kr.co.fastcampus.fastcatch.domain.member.entity.Member;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class Cart extends BaseEntity {
 
@@ -33,6 +33,7 @@ public class Cart extends BaseEntity {
     @JoinColumn(name = "member_id")
     @JsonIgnore
     private Member member;
+
 
     @OneToMany(
         fetch = FetchType.LAZY, mappedBy = "cart",
@@ -47,6 +48,17 @@ public class Cart extends BaseEntity {
         this.cartId = cartId;
         this.member = member;
         this.cartItems = cartItems;
+    }
+
+    public static Cart createCart(Member member) {
+        return Cart.builder()
+            .member(member)
+            .build();
+    }
+
+    public void addCartItem(CartItem cartItem) {
+        cartItems.add(cartItem);
+        cartItem.setCart(this);
     }
 
 }

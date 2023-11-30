@@ -8,6 +8,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import java.time.LocalDate;
 import kr.co.fastcampus.fastcatch.common.baseentity.BaseEntity;
+import kr.co.fastcampus.fastcatch.domain.member.dto.request.MemberUpdateRequest;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -42,8 +43,13 @@ public class Member extends BaseEntity {
 
     @Builder
     public Member(
-        Long memberId, String email, String password, String name,
-        String nickname, LocalDate birthday, String phoneNumber
+        Long memberId,
+        String email,
+        String password,
+        String name,
+        String nickname,
+        LocalDate birthday,
+        String phoneNumber
     ) {
         this.memberId = memberId;
         this.email = email;
@@ -54,4 +60,10 @@ public class Member extends BaseEntity {
         this.phoneNumber = phoneNumber;
     }
 
+    public void updateMember(MemberUpdateRequest memberUpdateRequest) {
+        this.name = memberUpdateRequest.name();
+        this.nickname = memberUpdateRequest.nickname();
+        this.birthday = memberUpdateRequest.birthday();
+        this.phoneNumber = memberUpdateRequest.phoneNumber();
+    }
 }

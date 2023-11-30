@@ -1,0 +1,10 @@
+POST http://ec2-43-201-113-97.ap-northeast-2.compute.amazonaws.com/api/carts/1?memberId=1
+Content-Type: application/json
+
+{
+  "roomId": 1,
+  "startDate": "2023-12-22",
+  "endDate": "2023-12-29",
+  "headCount": 3,
+  "orderPrice": 5000
+}
