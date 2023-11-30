@@ -83,8 +83,8 @@ public class TestUtil {
     }
 
     public static Order createOrder(Member member, Long id) {
-        return Order.builder().orderId(id).member(member).
-            reservationPersonName("test").reservationPhoneNumber("01012341234")
+        return Order.builder().orderId(id).member(member)
+            .reservationPersonName("test").reservationPhoneNumber("01012341234")
             .totalPrice(80000).orderStatus(OrderStatus.COMPLETED).build();
     }
 

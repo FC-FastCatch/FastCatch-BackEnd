@@ -79,7 +79,7 @@ class OrderServiceTest {
 
     @Nested
     @DisplayName("createOrder()는 ")
-    class Context_createOrder {
+    class CreateOrder {
 
         @Test
         @DisplayName("시작일이 종료일보다 늦으면 주문을 생성할 수 없다.")
@@ -139,7 +139,7 @@ class OrderServiceTest {
 
     @Nested
     @DisplayName("createOrderByCart()는 ")
-    class Context_createOrderByCart {
+    class CreateOrderByCart {
 
         @Test
         @DisplayName("장바구니 아이템 정보를 조회할 수 없으면 장바구니를 통해 주문을 생성할 수 없다.")
@@ -166,7 +166,7 @@ class OrderServiceTest {
 
     @Nested
     @DisplayName("findOrders()는 ")
-    class Context_findOrders {
+    class FindOrders {
 
         @Test
         @DisplayName("회원정보를 조회할 수 없으면 주문 목록을 조회할 수 없다.")
@@ -193,7 +193,7 @@ class OrderServiceTest {
 
     @Nested
     @DisplayName("findOrdersByStatus()는 ")
-    class Context_findOrdersByStatus {
+    class FindOrdersByStatus {
 
         @Test
         @DisplayName("유효하지 않은 주문상태를 조회하면 특정 주문 상태의 주문 목록을 조회할 수 없다.")
@@ -219,11 +219,11 @@ class OrderServiceTest {
 
     @Nested
     @DisplayName("deleteOrder()는 ")
-    class Context_deleteOrder {
+    class DeleteOrder {
 
         @Test
         @DisplayName("주문을 취소할 수 있다.")
-        void _willSuccess() {
+        void willSuccess() {
 
             //given
             Long memberId = 1L;
