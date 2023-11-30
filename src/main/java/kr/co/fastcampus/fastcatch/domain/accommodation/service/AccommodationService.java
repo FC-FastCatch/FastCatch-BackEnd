@@ -50,8 +50,6 @@ public class AccommodationService {
 
     private final OrderRecordRepository orderRecordRepository;
 
-    private final AvailableOrderUtil availableOrderUtil;
-
     @Transactional
     public void createAccommodation(AccommodationSaveRequest request) {
         accommodationRepository.save(request.toEntity());
