@@ -1,5 +1,6 @@
 package kr.co.fastcampus.fastcatch.common.config;
 
+import java.util.List;
 import kr.co.fastcampus.fastcatch.common.security.jwt.JwtAuthenticationEntryPoint;
 import kr.co.fastcampus.fastcatch.common.security.jwt.JwtAuthenticationFilter;
 import kr.co.fastcampus.fastcatch.common.security.jwt.JwtTokenProvider;
@@ -18,9 +19,6 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
-import java.util.Arrays;
-import java.util.List;
 
 @Configuration
 @EnableWebSecurity
