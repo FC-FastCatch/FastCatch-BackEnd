@@ -21,6 +21,7 @@ public record AccommodationPageResponse(
             .accommodations(dto.getContent())
             .pageNum(dto.getNumber() + 1)
             .pageSize(dto.getSize())
+            .totalPages(dto.getTotalPages())
             .totalElements(dto.getTotalElements())
             .isFirst(dto.isFirst())
             .isLast(dto.isLast())
