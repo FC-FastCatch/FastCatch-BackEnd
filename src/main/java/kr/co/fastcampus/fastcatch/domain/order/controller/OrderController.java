@@ -1,7 +1,7 @@
 package kr.co.fastcampus.fastcatch.domain.order.controller;
 
 import jakarta.validation.Valid;
-import kr.co.fastcampus.fastcatch.common.config.jwt.CustomUserDetails;
+import kr.co.fastcampus.fastcatch.common.security.CustomUserDetails;
 import kr.co.fastcampus.fastcatch.common.response.ResponseBody;
 import kr.co.fastcampus.fastcatch.domain.order.dto.request.OrderByCartRequest;
 import kr.co.fastcampus.fastcatch.domain.order.dto.request.OrderRequest;

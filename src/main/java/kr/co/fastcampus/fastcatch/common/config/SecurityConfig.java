@@ -1,8 +1,8 @@
 package kr.co.fastcampus.fastcatch.common.config;
 
-import kr.co.fastcampus.fastcatch.common.config.jwt.JwtAuthenticationEntryPoint;
-import kr.co.fastcampus.fastcatch.common.config.jwt.JwtAuthenticationFilter;
-import kr.co.fastcampus.fastcatch.common.config.jwt.JwtTokenProvider;
+import kr.co.fastcampus.fastcatch.common.security.jwt.JwtAuthenticationEntryPoint;
+import kr.co.fastcampus.fastcatch.common.security.jwt.JwtAuthenticationFilter;
+import kr.co.fastcampus.fastcatch.common.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,7 +19,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-public class WebSecurityConfig {
+public class SecurityConfig {
 
     private final JwtTokenProvider jwtTokenProvider;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;

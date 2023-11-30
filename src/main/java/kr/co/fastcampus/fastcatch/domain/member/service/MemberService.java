@@ -1,7 +1,7 @@
 package kr.co.fastcampus.fastcatch.domain.member.service;
 
-import kr.co.fastcampus.fastcatch.common.config.jwt.CustomUserDetailsService;
-import kr.co.fastcampus.fastcatch.common.config.jwt.JwtTokenProvider;
+import kr.co.fastcampus.fastcatch.common.security.CustomUserDetailsService;
+import kr.co.fastcampus.fastcatch.common.security.jwt.JwtTokenProvider;
 import kr.co.fastcampus.fastcatch.common.exception.CartNotFoundException;
 import kr.co.fastcampus.fastcatch.common.exception.DuplicatedEmailException;
 import kr.co.fastcampus.fastcatch.common.exception.DuplicatedNicknameException;

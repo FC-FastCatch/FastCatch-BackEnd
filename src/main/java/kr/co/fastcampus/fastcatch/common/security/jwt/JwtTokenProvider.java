@@ -1,4 +1,4 @@
-package kr.co.fastcampus.fastcatch.common.config.jwt;
+package kr.co.fastcampus.fastcatch.common.security.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -9,14 +9,16 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.SignatureException;
 import io.jsonwebtoken.UnsupportedJwtException;
 import java.util.Date;
+import kr.co.fastcampus.fastcatch.common.security.CustomUserDetails;
+import kr.co.fastcampus.fastcatch.common.security.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
 
-@Configuration
+@Component
 public class JwtTokenProvider {
 
     @Value("${jwt.secretKey}")

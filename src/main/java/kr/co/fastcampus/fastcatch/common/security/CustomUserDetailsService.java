@@ -1,4 +1,4 @@
-package kr.co.fastcampus.fastcatch.common.config.jwt;
+package kr.co.fastcampus.fastcatch.common.security;
 
 import kr.co.fastcampus.fastcatch.domain.member.entity.Member;
 import kr.co.fastcampus.fastcatch.domain.member.repository.MemberRepository;

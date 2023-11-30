@@ -1,4 +1,4 @@
-package kr.co.fastcampus.fastcatch.common.config.jwt;
+package kr.co.fastcampus.fastcatch.common.security.jwt;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

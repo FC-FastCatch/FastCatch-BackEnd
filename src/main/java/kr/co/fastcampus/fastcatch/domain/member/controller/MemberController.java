@@ -1,7 +1,7 @@
 package kr.co.fastcampus.fastcatch.domain.member.controller;
 
 import jakarta.validation.Valid;
-import kr.co.fastcampus.fastcatch.common.config.jwt.CustomUserDetails;
+import kr.co.fastcampus.fastcatch.common.security.CustomUserDetails;
 import kr.co.fastcampus.fastcatch.common.response.ResponseBody;
 import kr.co.fastcampus.fastcatch.domain.member.dto.request.MemberSigninRequest;
 import kr.co.fastcampus.fastcatch.domain.member.dto.request.MemberSignupRequest;
