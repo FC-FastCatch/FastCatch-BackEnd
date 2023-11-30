@@ -10,7 +10,6 @@ import lombok.Builder;
 public record CartItemResponse(
     Long cartItemId,
     Long roomId,
-    String accommodationName,
     String roomName,
     LocalDate startDate,
     LocalDate endDate,
@@ -28,7 +27,6 @@ public record CartItemResponse(
         return CartItemResponse.builder()
             .cartItemId(cartItem.getCartItemId())
             .roomId(cartItem.getRoom().getId())
-            .accommodationName(cartItem.getRoom().getAccommodation().getName())
             .roomName(cartItem.getRoom().getName())
             .startDate(cartItem.getStartDate())
             .endDate(cartItem.getEndDate())

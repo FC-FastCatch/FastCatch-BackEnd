@@ -9,13 +9,24 @@ public record CartItemListResponse(
     Long accommodationId,
     String accommodationName,
     List<CartItemResponse> rooms
-) {
 
+) {
     public static CartItemListResponse from(CartItem cartItem) {
         return CartItemListResponse.builder()
             .accommodationId(cartItem.getRoom().getAccommodation().getId())
             .accommodationName(cartItem.getRoom().getAccommodation().getName())
             .rooms(List.of(CartItemResponse.from(cartItem)))
+            .build();
+    }
+
+    public static CartItemListResponse setRoomsList(
+        CartItem cartItem,
+        List<CartItemResponse> cartItemResponseList
+    ) {
+        return CartItemListResponse.builder()
+            .accommodationId(cartItem.getRoom().getAccommodation().getId())
+            .accommodationName(cartItem.getRoom().getAccommodation().getName())
+            .rooms(cartItemResponseList)
             .build();
     }
 }

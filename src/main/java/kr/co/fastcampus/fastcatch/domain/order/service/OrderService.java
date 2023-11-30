@@ -196,13 +196,14 @@ public class OrderService {
         if (startDate.isBefore(LocalDate.now())) {
             throw new PastDateException();
         }
-        if (startDate.isAfter(endDate)) {
+        if (!startDate.isBefore(endDate)) {
             throw new InvalidDateRangeException();
         }
     }
 
-    private void checkHeadCountScope(Integer headCount, Integer baseHeadCount,
-        Integer maxHeadCount) {
+    private void checkHeadCountScope(
+        Integer headCount, Integer baseHeadCount, Integer maxHeadCount
+    ) {
         if (headCount < baseHeadCount || headCount > maxHeadCount) {
             throw new InvalidHeadCountException();
         }
