@@ -64,7 +64,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOriginPatterns(List.of("*","http://localhost:5173"));
+        configuration.setAllowedOriginPatterns(List.of("*", "http://localhost:5173"));
         // 모든 origin 허용 (실제 운영에서는 필요에 따라 수정)
         configuration.addAllowedMethod("*"); // 모든 HTTP 메서드 허용
         configuration.addAllowedHeader("*"); // 모든 헤더 허용
