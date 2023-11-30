@@ -14,16 +14,16 @@ public enum ErrorCode {
     DUPLICATED_NICKNAME("이미 사용중인 닉네임입니다."),
     CART_NOT_FOUND("해당 하는 장바구니가 없습니다."),
     CART_ITEM_NOT_FOUND("해당 하는 장바구니 아이템이 없습니다."),
-    PAST_DATE("현재 날짜 보다 과거의 날짜는 예약 할 수 없습니다."),
+    PAST_DATE("현재 날짜 보다 과거의 날짜는 예약할 수 없습니다."),
     INVALID_DATE_RANGE("시작 날짜가 종료 날짜 보다 늦습니다."),
-    INVALID_HEAD_RANGE("해당 인원 수로 예약할 수 없습니다."),
+    INVALID_HEAD_COUNT_RANGE("해당 인원 수로 예약할 수 없습니다."),
     ORDER_NOT_FOUND("존재하지 않는 주문 정보입니다."),
     ORDER_UNAUTHORIZED("접근 권한이 없는 주문 정보입니다. "),
     INVALID_ORDER_STATUS("유효하지 않은 주문 상태입니다."),
-    INVALID_HEAD_COUNT("인원수가 유효한 범위를 벗어났습니다."),
     ALREADY_RESERVED_ROOM("이미 예약된 객실입니다."),
     ALREADY_ORDER_CANCELED("이미 본인이 취소한 주문입니다."),
-    MEMBER_NOT_FOUND("존재하지 않는 회원입니다.")
+    MEMBER_NOT_FOUND("존재하지 않는 회원입니다."),
+    PASSWORD_NOT_MATCHED("비밀번호가 틀렸습니다.")
     ;
 
     private final String errorMsg;

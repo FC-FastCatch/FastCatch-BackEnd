@@ -7,12 +7,10 @@ import java.util.Collections;
 import java.util.List;
 import kr.co.fastcampus.fastcatch.common.exception.AlreadyOrderCanceledException;
 import kr.co.fastcampus.fastcatch.common.exception.AlreadyReservedRoomException;
-import kr.co.fastcampus.fastcatch.common.exception.InvalidDateRangeException;
-import kr.co.fastcampus.fastcatch.common.exception.InvalidHeadCountException;
 import kr.co.fastcampus.fastcatch.common.exception.InvalidOrderStatusException;
 import kr.co.fastcampus.fastcatch.common.exception.OrderNotFoundException;
 import kr.co.fastcampus.fastcatch.common.exception.OrderUnauthorizedException;
-import kr.co.fastcampus.fastcatch.common.exception.PastDateException;
+import kr.co.fastcampus.fastcatch.common.utility.AvailableOrderUtil;
 import kr.co.fastcampus.fastcatch.domain.accommodation.entity.Room;
 import kr.co.fastcampus.fastcatch.domain.accommodation.service.AccommodationService;
 import kr.co.fastcampus.fastcatch.domain.cart.service.CartService;
@@ -51,19 +49,22 @@ public class OrderService {
     private final MemberService memberService;
     private final CartService cartService;
 
-    public void createOrder(Long memberId, OrderRequest orderRequest) {
+    public OrderResponse createOrder(Long memberId, OrderRequest orderRequest) {
         Order order = orderRequest.toEntity(memberService.findMemberById(memberId));
         for (OrderItemRequest orderItemRequest : orderRequest.orderItems()) {
             createOrderItem(orderItemRequest, order);
             checkOrderRecord(orderItemRequest);
         }
         orderRepository.save(order);
+        List<OrderItemResponse> orderItemResponses = new ArrayList<>();
         for (OrderItem orderItem : order.getOrderItems()) {
             createOrderRecord(orderItem);
+            orderItemResponses.add(OrderItemResponse.from(orderItem));
         }
+        return OrderResponse.from(order, orderItemResponses, "reserved");
     }
 
-    public void createOrderByCart(Long memberId, OrderByCartRequest orderByCartRequest) {
+    public OrderResponse createOrderByCart(Long memberId, OrderByCartRequest orderByCartRequest) {
         Order order = orderByCartRequest.toEntity(memberService.findMemberById(memberId));
         for (Long cartItemId : orderByCartRequest.cartItemIds()) {
             OrderItemRequest orderItemRequest = OrderItemRequest.fromCartItem(
@@ -74,9 +75,12 @@ public class OrderService {
             cartService.deleteCartItem(memberId, cartItemId);
         }
         orderRepository.save(order);
+        List<OrderItemResponse> orderItemResponses = new ArrayList<>();
         for (OrderItem orderItem : order.getOrderItems()) {
             createOrderRecord(orderItem);
+            orderItemResponses.add(OrderItemResponse.from(orderItem));
         }
+        return OrderResponse.from(order, orderItemResponses, "reserved");
     }
 
     public void createOrderItem(OrderItemRequest orderItemRequest, Order order) {
@@ -94,7 +98,7 @@ public class OrderService {
 
     public void createOrderRecord(OrderItem orderItem) {
         for (LocalDate date = orderItem.getStartDate();
-             date.isBefore(orderItem.getEndDate()); date = date.plusDays(1)) {
+            date.isBefore(orderItem.getEndDate()); date = date.plusDays(1)) {
             OrderRecord orderRecord = OrderRecord.builder()
                 .accommodation(accommodationService.findRoomById((orderItem.getRoom().getId()))
                     .getAccommodation())
@@ -107,7 +111,7 @@ public class OrderService {
 
     public void checkOrderRecord(OrderItemRequest orderItemRequest) {
         for (LocalDate stayDate = orderItemRequest.startDate();
-             stayDate.isBefore(orderItemRequest.endDate()); stayDate = stayDate.plusDays(1)) {
+            stayDate.isBefore(orderItemRequest.endDate()); stayDate = stayDate.plusDays(1)) {
             if (orderRecordRepository.existsByRoomIdAndStayDate(orderItemRequest.roomId(),
                 stayDate)) {
                 throw new AlreadyReservedRoomException();
@@ -180,25 +184,9 @@ public class OrderService {
 
     private void checkOrderAvailable(OrderItemRequest orderItemRequest) {
         Room room = accommodationService.findRoomById((orderItemRequest.roomId()));
-        checkHeadCountScope(
+        AvailableOrderUtil.validateDate(orderItemRequest.startDate(), orderItemRequest.endDate());
+        AvailableOrderUtil.validateHeadCount(
             orderItemRequest.headCount(), room.getBaseHeadCount(), room.getMaxHeadCount()
         );
-        checkDateScope(orderItemRequest.startDate(), orderItemRequest.endDate());
-    }
-
-    private void checkDateScope(LocalDate startDate, LocalDate endDate) {
-        if (startDate.isBefore(LocalDate.now())) {
-            throw new PastDateException();
-        }
-        if (startDate.isAfter(endDate)) {
-            throw new InvalidDateRangeException();
-        }
-    }
-
-    private void checkHeadCountScope(Integer headCount, Integer baseHeadCount,
-                                     Integer maxHeadCount) {
-        if (headCount < baseHeadCount || headCount > maxHeadCount) {
-            throw new InvalidHeadCountException();
-        }
     }
 }
