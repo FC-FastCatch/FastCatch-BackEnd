@@ -7,6 +7,7 @@ import kr.co.fastcampus.fastcatch.domain.accommodation.entity.Category;
 import kr.co.fastcampus.fastcatch.domain.accommodation.entity.Region;
 import kr.co.fastcampus.fastcatch.domain.accommodation.entity.Room;
 import kr.co.fastcampus.fastcatch.domain.accommodation.entity.RoomOption;
+import kr.co.fastcampus.fastcatch.domain.member.dto.request.MemberSignupRequest;
 
 public class TestUtil {
 
