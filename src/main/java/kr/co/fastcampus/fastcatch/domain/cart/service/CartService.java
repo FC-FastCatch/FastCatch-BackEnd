@@ -39,7 +39,10 @@ public class CartService {
 
     @Transactional
     public CartResponse findCartItemList(Long memberId) {
-        return CartResponse.from(findCartByMemberId(memberId));
+        List<CartItemListResponse> cartItemListResponseList =
+            createCartItemListResponses(findCartByMemberId(memberId));
+
+        return CartResponse.setCartItemResponseList(cartItemListResponseList);
     }
 
     private Cart findCartByMemberId(Long memberId) {
@@ -76,7 +79,9 @@ public class CartService {
 
     private List<CartItemListResponse> createCartItemListResponses(Cart cart) {
         List<CartItemListResponse> cartItemListResponseList = new ArrayList<>();
-        List<CartItem> cartItemList = cart.getCartItems();
+        List<CartItem> cartItemList = Optional.ofNullable(cart.getCartItems())
+            .orElse(new ArrayList<>())
+            .stream().toList();
 
         for (CartItem item : cartItemList) {
             if (cartItemListResponseList.stream()
@@ -111,7 +116,9 @@ public class CartService {
         cart.getCartItems().clear();
         cartItemRepository.deleteAllByCart(cart);
 
-        return CartResponse.from(cart);
+        List<CartItemListResponse> cartItemListResponseList = createCartItemListResponses(cart);
+
+        return CartResponse.setCartItemResponseList(cartItemListResponseList);
     }
 
     @Transactional
