@@ -43,9 +43,9 @@ public class Cart extends BaseEntity {
 
     @Builder
     public Cart(
-        Long id, Member member, List<CartItem> cartItems
+        Long cartId, Member member, List<CartItem> cartItems
     ) {
-        this.cartId = id;
+        this.cartId = cartId;
         this.member = member;
         this.cartItems = cartItems;
     }

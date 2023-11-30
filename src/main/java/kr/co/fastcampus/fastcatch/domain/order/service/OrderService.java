@@ -127,7 +127,7 @@ public class OrderService {
         return OrdersResponse.from(orderPageResponses);
     }
 
-    private boolean isValidOrderStatus(String status) {
+    public boolean isValidOrderStatus(String status) {
         return Arrays.asList("reserved", "used", "canceled").contains(status);
     }
 
@@ -156,7 +156,7 @@ public class OrderService {
         return OrderPageResponse.from(orderResponsePage, status);
     }
 
-    private OrderResponse mapToOrderResponse(Order order, String status) {
+    public OrderResponse mapToOrderResponse(Order order, String status) {
         List<OrderItem> orderItems = orderItemRepository.findByOrderOrderId(order.getOrderId());
         List<OrderItemResponse> orderItemResponses = new ArrayList<>();
         for (OrderItem orderItem : orderItems) {
@@ -182,7 +182,7 @@ public class OrderService {
         orderRecordRepository.deleteByOrder(order);
     }
 
-    private void checkOrderAvailable(OrderItemRequest orderItemRequest) {
+    public void checkOrderAvailable(OrderItemRequest orderItemRequest) {
         Room room = accommodationService.findRoomById((orderItemRequest.roomId()));
         AvailableOrderUtil.validateDate(orderItemRequest.startDate(), orderItemRequest.endDate());
         AvailableOrderUtil.validateHeadCount(
