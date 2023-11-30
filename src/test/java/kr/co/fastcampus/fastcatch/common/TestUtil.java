@@ -76,21 +76,22 @@ public class TestUtil {
             .build();
     }
 
-    public static Member createMember() {
-        return Member.builder().memberId(1L).email("test@naver.com")
+    public static Member createMember(Long id) {
+        return Member.builder().memberId(id).email("test@naver.com")
             .password("test1234").name("test").nickname("test")
-            .birthday(LocalDate.of(2000, 0, 1)).build();
+            .birthday(LocalDate.of(2000, 1, 1)).build();
     }
 
-    public static Order createOrder(Member member) {
-        return Order.builder().orderId(1L).member(member).
+    public static Order createOrder(Member member, Long id) {
+        return Order.builder().orderId(id).member(member).
             reservationPersonName("test").reservationPhoneNumber("01012341234")
             .totalPrice(80000).orderStatus(OrderStatus.COMPLETED).build();
     }
 
     public static OrderItem createOrderItem(Room room, Order order) {
-       return OrderItem.builder().orderItemId(1L).order(order).room(room).startDate(LocalDate.of(2023, 11, 29))
-            .endDate(LocalDate.of(2023, 11, 30)).headCount(2).price(80000).build();
+        return OrderItem.builder().orderItemId(1L).order(order).room(room)
+            .startDate(LocalDate.of(2023, 12, 01))
+            .endDate(LocalDate.of(2023, 12, 02)).headCount(2).price(80000).build();
     }
 
     public static OrderRequest createOrderRequest(List<OrderItemRequest> orderItemRequestList) {
@@ -99,8 +100,8 @@ public class TestUtil {
     }
 
     public static OrderItemRequest createOrderItemRequest() {
-        return new OrderItemRequest(1L, LocalDate.of(2023, 11, 29),
-            LocalDate.of(2023, 11, 30), 2, 80000);
+        return new OrderItemRequest(1L, LocalDate.of(2023, 12, 01),
+            LocalDate.of(2023, 12, 02), 2, 80000);
     }
 
     public static OrderByCartRequest createOrderByCartRequest(List<Long> cartIdList) {
