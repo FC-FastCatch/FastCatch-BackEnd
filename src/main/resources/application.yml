@@ -7,6 +7,7 @@ spring:
   h2:
     console:
       enabled: true
+      path: /h2-console
   jpa:
     database-platform: H2
     hibernate:
@@ -17,3 +18,21 @@ spring:
         format_sql: true
   open-api:
     key: 5534491fa36b380fbbade139ea1a48ac
+jwt:
+  secretKey: fastCatch8jo
+  accessTokenValidTime: 86400000
+  refreshTokenValidTime: 604800000
+#  datasource:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://localhost:3306/MiniProject?createDatabaseIfNotExist=true&useSSL=true
+#    username: root
+#    password: root1234!!
+#  jpa:
+#    hibernate:
+#      ddl-auto: update
+#    database: mysql
+#    show-sql: true
+#    properties:
+#      hibernate:
+#        show_sql: true
+#        format_sql: true
