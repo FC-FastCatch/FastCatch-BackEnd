@@ -32,7 +32,6 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf((csrf) -> csrf.disable());
-        http.cors((cors) -> cors.disable());
         http.authorizeHttpRequests((requests) -> requests
                 .requestMatchers(
                     new AntPathRequestMatcher("/api/members/signup"),
