@@ -26,7 +26,7 @@ public class OpenApiUtil {
     }
 
     public static List<OpenApiResponseDto> requestOpenApi() {
-        URI uri = UriBuilder();
+        URI uri = uriBuilder();
 
         RestTemplate restTemplate = new RestTemplate();
 
@@ -39,7 +39,7 @@ public class OpenApiUtil {
             .toList();
     }
 
-    private static URI UriBuilder() {
+    private static URI uriBuilder() {
         return UriComponentsBuilder.fromHttpUrl(baseUrl)
             .queryParam("numOfRows", 100)
             .queryParam("pageNo", 1)
