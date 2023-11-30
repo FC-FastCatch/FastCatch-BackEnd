@@ -1,6 +1,5 @@
 package kr.co.fastcampus.fastcatch.domain.order.controller;
 
-import static io.restassured.RestAssured.given;
 import static kr.co.fastcampus.fastcatch.common.MemberTokenUtil.getAccessToken;
 import static kr.co.fastcampus.fastcatch.common.TestUtil.createAccommodation;
 import static kr.co.fastcampus.fastcatch.common.TestUtil.createAccommodationOption;
@@ -13,6 +12,7 @@ import static kr.co.fastcampus.fastcatch.common.TestUtil.createRoom;
 import static kr.co.fastcampus.fastcatch.common.TestUtil.createRoomOption;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import io.restassured.RestAssured;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
@@ -38,7 +38,6 @@ import kr.co.fastcampus.fastcatch.domain.order.entity.OrderRecord;
 import kr.co.fastcampus.fastcatch.domain.order.repository.OrderItemRepository;
 import kr.co.fastcampus.fastcatch.domain.order.repository.OrderRecordRepository;
 import kr.co.fastcampus.fastcatch.domain.order.repository.OrderRepository;
-import kr.co.fastcampus.fastcatch.domain.order.service.OrderService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -47,9 +46,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
 public class OrderControllerTest extends ApiTest {
-
-    @Autowired
-    private OrderService orderService;
 
     @Autowired
     private AccommodationRepository accommodationRepository;
@@ -139,6 +135,45 @@ public class OrderControllerTest extends ApiTest {
     }
 
     @Test
+    @DisplayName("주문 목록 조회")
+    void getOrders() {
+
+        //given
+        String url = "/api/orders";
+        String accessToken = getAccessToken();
+
+        //when
+        ExtractableResponse<Response> response = restAssuredGetListWithToken(url, accessToken);
+
+        //then
+        JsonPath jsonPath = response.jsonPath();
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+        assertThat(jsonPath.getList("data.orders")).isNotNull();
+    }
+
+    @Test
+    @DisplayName("특정 상태의 주문 목록 조회")
+    void getOrdersByOrderStatus() {
+
+        //given
+        String url = "/api/orders/status/{status}";
+        Map<String, ?> pathParams = Map.of("status", "reserved");
+        Map<String, ?> queryParams = Map.of("page", 1);
+
+        String accessToken = getAccessToken();
+
+        //when
+        ExtractableResponse<Response> response = restAssuredGetWithToken(url, pathParams,
+            queryParams, accessToken);
+
+        //then
+        JsonPath jsonPath = response.jsonPath();
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+        assertThat(jsonPath.getInt("data.pageSize")).isEqualTo(3);
+        assertThat(jsonPath.getList("data.orderResponses")).isNotNull();
+    }
+
+    @Test
     @DisplayName("주문 취소 접근 권한 예외")
     void deleteOrder() {
 
@@ -162,7 +197,8 @@ public class OrderControllerTest extends ApiTest {
         String url,
         OrderRequest request,
         String accessToken) {
-        return given().log().all()
+        return RestAssured
+            .given().log().all()
             .contentType(MediaType.APPLICATION_JSON_VALUE)
             .header("Authorization", accessToken)
             .body(request)
@@ -172,9 +208,43 @@ public class OrderControllerTest extends ApiTest {
             .extract();
     }
 
+
+    private ExtractableResponse<Response> restAssuredGetListWithToken(
+        String url,
+        String accessToken
+    ) {
+        return RestAssured
+            .given().log().all()
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+            .header("Authorization", accessToken)
+            .when()
+            .get(url)
+            .then().log().all()
+            .extract();
+    }
+
+    private ExtractableResponse<Response> restAssuredGetWithToken(
+        String url,
+        Map<String, ?> pathParams,
+        Map<String, ?> queryParams,
+        String accessToken
+    ) {
+        return RestAssured
+            .given().log().all()
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+            .header("Authorization", accessToken)
+            .pathParams(pathParams)
+            .queryParams(queryParams)
+            .when()
+            .get(url)
+            .then().log().all()
+            .extract();
+    }
+
     private ExtractableResponse<Response> restAssuredDeleteWithToken(String url,
         Map<String, ?> pathParams, String accessToken) {
-        return given().log().all()
+        return RestAssured
+            .given().log().all()
             .contentType(MediaType.APPLICATION_JSON_VALUE)
             .header("Authorization", accessToken)
             .pathParams(pathParams)
