@@ -7,9 +7,8 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import kr.co.fastcampus.fastcatch.common.exception.AccommodationNotFoundException;
 import kr.co.fastcampus.fastcatch.common.exception.DuplicatedRequest;
-import kr.co.fastcampus.fastcatch.common.exception.InvalidDateRangeException;
-import kr.co.fastcampus.fastcatch.common.exception.PastDateException;
 import kr.co.fastcampus.fastcatch.common.exception.RoomNotFoundException;
+import kr.co.fastcampus.fastcatch.common.utility.AvailableOrderUtil;
 import kr.co.fastcampus.fastcatch.domain.accommodation.dto.request.AccommodationOptionSaveRequest;
 import kr.co.fastcampus.fastcatch.domain.accommodation.dto.request.AccommodationSaveRequest;
 import kr.co.fastcampus.fastcatch.domain.accommodation.dto.request.RoomImageSaveRequest;
@@ -50,6 +49,8 @@ public class AccommodationService {
     private final RoomOptionRepository roomOptionRepository;
 
     private final OrderRecordRepository orderRecordRepository;
+
+    private final AvailableOrderUtil availableOrderUtil;
 
     @Transactional
     public void createAccommodation(AccommodationSaveRequest request) {
@@ -117,7 +118,7 @@ public class AccommodationService {
         Category category, Region region, LocalDate startDate,
         LocalDate endDate, Integer headCount, Pageable pageable
     ) {
-        invalidDateCheck(startDate, endDate);
+        AvailableOrderUtil.validateDate(startDate, endDate);
         Page<Accommodation> accommodations =
             findFilteredAccommodations(
                 category, region, headCount, pageable
@@ -182,7 +183,7 @@ public class AccommodationService {
     public AccommodationInfoResponse findAccommodationWithRooms(
         Long accommodationId, LocalDate startDate, LocalDate endDate
     ) {
-        invalidDateCheck(startDate, endDate);
+        AvailableOrderUtil.validateDate(startDate, endDate);
         Accommodation accommodation = findAccommodationById(accommodationId);
         List<Room> rooms = accommodation.getRooms();
         List<RoomResponse> roomResponses = convertRoomsToRoomResponses(rooms, startDate, endDate);
@@ -212,15 +213,6 @@ public class AccommodationService {
     public Room findRoomById(Long id) {
         return roomRepository.findById(id)
             .orElseThrow(RoomNotFoundException::new);
-    }
-
-    private void invalidDateCheck(LocalDate startDate, LocalDate endDate) {
-        if (endDate.isBefore(startDate)) {
-            throw new InvalidDateRangeException();
-        }
-        if (startDate.isBefore(LocalDate.now())) {
-            throw new PastDateException();
-        }
     }
 
     public AccommodationSearchPageResponse findAccommodationByName(
