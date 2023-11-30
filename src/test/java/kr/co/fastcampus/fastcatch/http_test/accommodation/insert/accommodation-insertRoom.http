@@ -3,30 +3,30 @@ Content-Type: application/json
 
 [
   {
-    "name" : "스탠다드 룸",
-    "price" : 45000,
-    "baseHeadCount": 2,
-    "maxHeadCount": 4,
-    "description": "기본적인 방으로 편안한 휴식을 제공합니다.",
-    "checkInTime": "15:00",
+    "name" : "별빛 1호",
+    "price" : 100000,
+    "baseHeadCount": 4,
+    "maxHeadCount": 8,
+    "description": "근처 강이 보이는 방",
+    "checkInTime": "16:00",
     "checkOutTime": "12:00"
   },
   {
-    "name" : "스댄다드 디럭스 룸",
-    "price" : 55000,
-    "baseHeadCount": 2,
-    "maxHeadCount": 4,
-    "description": "디럭스 침대로 편안한 휴식을 제공합니다.",
-    "checkInTime": "15:00",
+    "name" : "달빛 2호",
+    "price" : 140000,
+    "baseHeadCount": 4,
+    "maxHeadCount": 10,
+    "description": "MT 인원 수용 가능",
+    "checkInTime": "16:00",
     "checkOutTime": "12:00"
   },
   {
-    "name" : "럭셔리 룸",
-    "price" : 85000,
-    "baseHeadCount": 2,
-    "maxHeadCount": 6,
-    "description": "큰 방과 두개의 디럭스 침대로 편안한 휴식을 제공합니다.",
-    "checkInTime": "15:00",
+    "name" : "햇빛 3호",
+    "price" : 260000,
+    "baseHeadCount": 10,
+    "maxHeadCount": 20,
+    "description": "음향 설비, 강당 있음",
+    "checkInTime": "16:00",
     "checkOutTime": "12:00"
   }
 ]
