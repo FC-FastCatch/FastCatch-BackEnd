@@ -75,6 +75,7 @@ class CartControllerTest extends ApiTest {
         accommodation.addRoom(room);
         accommodation.addRoom(room2);
     }
+
     @Test
     @DisplayName("장바구니 전체 정보 조회")
     void getCart() {
@@ -98,7 +99,7 @@ class CartControllerTest extends ApiTest {
         // given
         String url = "/api/carts";
         CartItemRequest request = new CartItemRequest(
-            1l,
+            1L,
             LocalDate.of(2024, 11, 11),
             LocalDate.of(2024, 11, 12),
             2,
@@ -114,19 +115,22 @@ class CartControllerTest extends ApiTest {
         JsonPath jsonPath = response.jsonPath();
         assertThat(jsonPath.getList("data.cartItemResponseList.rooms[0]"))
             .isEqualTo(Arrays.asList(
-                new HashMap<String, Object>() {{
-                    put("cartItemId", 1);
-                    put("roomId", 1);
-                    put("roomName", "testRoom");
-                    put("startDate", "2024-11-11");
-                    put("endDate", "2024-11-12");
-                    put("headCount", 2);
-                    put("price", 5000);
-                    put("checkInTime", "14:00");
-                    put("checkOutTime", "12:00");
-                    put("maxHeadCount", 4);
-                }}
-            ));
+                    new HashMap<String, Object>() {
+                        {
+                            put("cartItemId", 1);
+                            put("roomId", 1);
+                            put("roomName", "testRoom");
+                            put("startDate", "2024-11-11");
+                            put("endDate", "2024-11-12");
+                            put("headCount", 2);
+                            put("price", 5000);
+                            put("checkInTime", "14:00");
+                            put("checkOutTime", "12:00");
+                            put("maxHeadCount", 4);
+                        }
+                    }
+                )
+            );
     }
 
     @Test

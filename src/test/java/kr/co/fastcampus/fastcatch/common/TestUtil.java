@@ -74,7 +74,7 @@ public class TestUtil {
 
     public static Member createMember() {
         return Member.builder()
-            .memberId(1l)
+            .memberId(1L)
             .email("ad@asd.com")
             .password("password")
             .name("das")
@@ -86,7 +86,7 @@ public class TestUtil {
 
     public static Cart createCart(Member member) {
         return Cart.builder()
-            .cartId(1l)
+            .cartId(1L)
             .member(member)
             .cartItems(new ArrayList<>())
             .build();
