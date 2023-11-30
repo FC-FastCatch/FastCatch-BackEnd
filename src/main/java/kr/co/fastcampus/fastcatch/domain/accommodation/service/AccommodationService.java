@@ -215,7 +215,7 @@ public class AccommodationService {
     }
 
     private void invalidDateCheck(LocalDate startDate, LocalDate endDate) {
-        if (!startDate.isBefore(endDate)) {
+        if (endDate.isBefore(startDate)) {
             throw new InvalidDateRangeException();
         }
         if (startDate.isBefore(LocalDate.now())) {

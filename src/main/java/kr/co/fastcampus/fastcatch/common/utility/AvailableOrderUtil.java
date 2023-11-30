@@ -10,7 +10,7 @@ public class AvailableOrderUtil {
         if (startDate.isBefore(LocalDate.now())) {
             throw new PastDateException();
         }
-        if (!startDate.isBefore(endDate)) {
+        if (endDate.isBefore(startDate)) {
             throw new InvalidDateRangeException();
         }
     }
@@ -21,5 +21,4 @@ public class AvailableOrderUtil {
             throw new InvalidHeadRangeException();
         }
     }
-
 }
