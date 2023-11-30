@@ -1,11 +1,15 @@
 package kr.co.fastcampus.fastcatch.domain.cart.service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import kr.co.fastcampus.fastcatch.common.exception.CartItemNotFoundException;
 import kr.co.fastcampus.fastcatch.common.utility.AvailableOrderUtil;
 import kr.co.fastcampus.fastcatch.domain.accommodation.entity.Room;
 import kr.co.fastcampus.fastcatch.domain.accommodation.service.AccommodationService;
 import kr.co.fastcampus.fastcatch.domain.cart.dto.request.CartItemRequest;
+import kr.co.fastcampus.fastcatch.domain.cart.dto.response.CartItemListResponse;
+import kr.co.fastcampus.fastcatch.domain.cart.dto.response.CartItemResponse;
 import kr.co.fastcampus.fastcatch.domain.cart.dto.response.CartResponse;
 import kr.co.fastcampus.fastcatch.domain.cart.entity.Cart;
 import kr.co.fastcampus.fastcatch.domain.cart.entity.CartItem;
@@ -27,8 +31,18 @@ public class CartService {
     private final MemberService memberService;
 
     @Transactional
+    public Cart createNewCart(Long memberId) {
+        return cartRepository.save(
+            Cart.createCart(memberService.findMemberById(memberId))
+        );
+    }
+
+    @Transactional
     public CartResponse findCartItemList(Long memberId) {
-        return CartResponse.from(findCartByMemberId(memberId));
+        List<CartItemListResponse> cartItemListResponseList =
+            createCartItemListResponses(findCartByMemberId(memberId));
+
+        return CartResponse.setCartItemResponseList(cartItemListResponseList);
     }
 
     private Cart findCartByMemberId(Long memberId) {
@@ -41,11 +55,10 @@ public class CartService {
         }
     }
 
-    @Transactional
-    public Cart createNewCart(Long memberId) {
-        return cartRepository.save(
-            Cart.createCart(memberService.findMemberById(memberId))
-        );
+    @Transactional(readOnly = true)
+    public CartItem findCartItemById(Long cartItemId) {
+        return cartItemRepository.findById(cartItemId)
+            .orElseThrow(CartItemNotFoundException::new);
     }
 
     @Transactional
@@ -59,7 +72,42 @@ public class CartService {
         cartItem.setCart(cart);
         cartItemRepository.save(cartItem);
 
-        return CartResponse.from(cart);
+        List<CartItemListResponse> cartItemListResponseList = createCartItemListResponses(cart);
+
+        return CartResponse.setCartItemResponseList(cartItemListResponseList);
+    }
+
+    private List<CartItemListResponse> createCartItemListResponses(Cart cart) {
+        List<CartItemListResponse> cartItemListResponseList = new ArrayList<>();
+        List<CartItem> cartItemList = Optional.ofNullable(cart.getCartItems())
+            .orElse(new ArrayList<>())
+            .stream().toList();
+
+        for (CartItem item : cartItemList) {
+            if (cartItemListResponseList.stream()
+                .anyMatch(c -> c.accommodationId() == item.getRoom().getAccommodation().getId())
+            ) {
+                CartItemListResponse oldCartItemListResponse = cartItemListResponseList.stream()
+                    .filter(c -> c.accommodationId() == item.getRoom().getAccommodation().getId())
+                    .findFirst()
+                    .get();
+                cartItemListResponseList.remove(oldCartItemListResponse);
+
+                List<CartItemResponse> cartItemResponseList = new ArrayList<>();
+                for (CartItemResponse roomItem : oldCartItemListResponse.rooms()) {
+                    cartItemResponseList.add(roomItem);
+                }
+                cartItemResponseList.add(CartItemResponse.from(item));
+
+                cartItemListResponseList.add(
+                    CartItemListResponse.setRoomsList(item, cartItemResponseList)
+                );
+            } else {
+                CartItemListResponse newCartItemListResponse = CartItemListResponse.from(item);
+                cartItemListResponseList.add(newCartItemListResponse);
+            }
+        }
+        return cartItemListResponseList;
     }
 
     @Transactional
@@ -68,7 +116,9 @@ public class CartService {
         cart.getCartItems().clear();
         cartItemRepository.deleteAllByCart(cart);
 
-        return CartResponse.from(cart);
+        List<CartItemListResponse> cartItemListResponseList = createCartItemListResponses(cart);
+
+        return CartResponse.setCartItemResponseList(cartItemListResponseList);
     }
 
     @Transactional
@@ -80,9 +130,9 @@ public class CartService {
         cart.getCartItems().remove(cartItem);
         cartItemRepository.delete(cartItem);
 
-        return CartResponse.from(
-            findCartByMemberId(memberId)
-        );
+        List<CartItemListResponse> cartItemListResponseList = createCartItemListResponses(cart);
+
+        return CartResponse.setCartItemResponseList(cartItemListResponseList);
     }
 
     private void validateCartItemRequest(CartItemRequest cartItemRequest) {
@@ -93,15 +143,6 @@ public class CartService {
             room.getMaxHeadCount());
     }
 
-    @Transactional(readOnly = true)
-    public CartItem findCartItemById(Long cartId) {
-        return cartItemRepository.findById(cartId).orElseThrow();
-    }
-
-    @Transactional
-    public void deleteCartItemById(Long cartItemId) {
-        cartItemRepository.deleteById(cartItemId);
-    }
 
 }
 

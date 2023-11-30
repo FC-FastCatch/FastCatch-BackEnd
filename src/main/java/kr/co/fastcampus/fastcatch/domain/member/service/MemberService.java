@@ -1,6 +1,5 @@
 package kr.co.fastcampus.fastcatch.domain.member.service;
 
-
 import kr.co.fastcampus.fastcatch.common.exception.DuplicatedEmailException;
 import kr.co.fastcampus.fastcatch.common.exception.DuplicatedNicknameException;
 import kr.co.fastcampus.fastcatch.common.exception.MemberNotFoundException;
@@ -39,5 +38,9 @@ public class MemberService {
 
     public Member findMemberById(Long memberId) {
         return memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
+    }
+
+    public boolean existsByNickname(String nickname) {
+        return memberRepository.existsByNickname(nickname);
     }
 }
