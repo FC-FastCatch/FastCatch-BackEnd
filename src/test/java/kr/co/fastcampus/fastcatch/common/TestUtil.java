@@ -78,7 +78,7 @@ public class TestUtil {
 
     public static Member createMember(Long id) {
         return Member.builder().memberId(id).email("test@naver.com")
-            .password("test1234").name("test").nickname("test")
+            .password("test1234").name("test").nickname("test").phoneNumber("01012341234")
             .birthday(LocalDate.of(2000, 1, 1)).build();
     }
 
