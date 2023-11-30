@@ -22,7 +22,9 @@ public enum ErrorCode {
     INVALID_ORDER_STATUS("유효하지 않은 주문 상태입니다."),
     ALREADY_RESERVED_ROOM("이미 예약된 객실입니다."),
     ALREADY_ORDER_CANCELED("이미 본인이 취소한 주문입니다."),
-    MEMBER_NOT_FOUND("존재하지 않는 회원입니다.");
+    MEMBER_NOT_FOUND("존재하지 않는 회원입니다."),
+    PASSWORD_NOT_MATCHED("비밀번호가 틀렸습니다.")
+    ;
 
     private final String errorMsg;
 

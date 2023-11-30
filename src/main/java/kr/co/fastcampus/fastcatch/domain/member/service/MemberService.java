@@ -1,15 +1,27 @@
 package kr.co.fastcampus.fastcatch.domain.member.service;
 
+import kr.co.fastcampus.fastcatch.common.config.jwt.CustomUserDetailsService;
+import kr.co.fastcampus.fastcatch.common.config.jwt.JwtTokenProvider;
+import kr.co.fastcampus.fastcatch.common.exception.CartNotFoundException;
 import kr.co.fastcampus.fastcatch.common.exception.DuplicatedEmailException;
 import kr.co.fastcampus.fastcatch.common.exception.DuplicatedNicknameException;
 import kr.co.fastcampus.fastcatch.common.exception.MemberNotFoundException;
+import kr.co.fastcampus.fastcatch.common.exception.PasswordNotMatchedException;
+import kr.co.fastcampus.fastcatch.domain.cart.entity.Cart;
+import kr.co.fastcampus.fastcatch.domain.cart.repository.CartRepository;
+import kr.co.fastcampus.fastcatch.domain.member.dto.request.MemberSigninRequest;
 import kr.co.fastcampus.fastcatch.domain.member.dto.request.MemberSignupRequest;
-import kr.co.fastcampus.fastcatch.domain.member.dto.response.MemberSignupResponse;
+import kr.co.fastcampus.fastcatch.domain.member.dto.request.MemberUpdateRequest;
+import kr.co.fastcampus.fastcatch.domain.member.dto.response.MemberResponse;
+import kr.co.fastcampus.fastcatch.domain.member.dto.response.MemberSigninResponse;
 import kr.co.fastcampus.fastcatch.domain.member.entity.Member;
-import kr.co.fastcampus.fastcatch.domain.member.passwordencoder.PasswordEncoder;
 import kr.co.fastcampus.fastcatch.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,24 +32,80 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberService {
 
     private final MemberRepository memberRepository;
-
     private final PasswordEncoder passwordEncoder;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final CustomUserDetailsService customUserDetailsService;
+    private final CartRepository cartRepository;
 
-    public MemberSignupResponse createMember(MemberSignupRequest request) {
+    public MemberResponse createMember(MemberSignupRequest request) {
 
         if (memberRepository.existsByEmail(request.email())) {
             throw new DuplicatedEmailException();
         }
-        if (memberRepository.existsByNickname(request.nickname())) {
+        if (existsByNickname(request.nickname())) {
             throw new DuplicatedNicknameException();
         }
-        Member member = memberRepository.save(request.toEntity(passwordEncoder));
 
-        return MemberSignupResponse.from(member);
+        Member member = Member.builder()
+            .email(request.email())
+            .name(request.name())
+            .nickname(request.nickname())
+            .password(passwordEncoder.encode(request.password()))
+            .birthday(request.birthday())
+            .phoneNumber(request.phoneNumber())
+            .build();
+
+        memberRepository.save(member);
+        Long cartId = cartRepository.save(Cart.createCart(member)).getCartId();
+
+        return MemberResponse.from(member, cartId);
+    }
+
+    public MemberSigninResponse createSignIn(MemberSigninRequest memberSigninRequest) {
+        String email = memberSigninRequest.email();
+        String password = memberSigninRequest.password();
+
+        Member member = memberRepository.findByEmail(email)
+            .orElseThrow(MemberNotFoundException::new);
+        String dbPassword = member.getPassword();
+        if (!passwordEncoder.matches(password, dbPassword)) {
+            throw new PasswordNotMatchedException();
+        }
+
+        UserDetails userDetails = customUserDetailsService.loadUserByUsername(email);
+        Authentication authentication = new UsernamePasswordAuthenticationToken(
+            userDetails, null, userDetails.getAuthorities());
+
+        String accessToken = jwtTokenProvider.createAccessToken(authentication);
+        String refreshToken = jwtTokenProvider.createRefreshToken();
+
+        Long cartId = findCartIdByMemberId(member.getMemberId());
+
+        return MemberSigninResponse.from(
+            accessToken, refreshToken, MemberResponse.from(member, cartId)
+        );
+    }
+
+    public MemberResponse findMemberInfo(Long memberId) {
+
+        Long cartId = findCartIdByMemberId(memberId);
+        return MemberResponse.from(findMemberById(memberId), cartId);
+    }
+
+    public MemberResponse updateMember(Long memberId, MemberUpdateRequest memberUpdateRequest) {
+        Member member = findMemberById(memberId);
+        member.updateMember(memberUpdateRequest);
+
+        return MemberResponse.from(member, findCartIdByMemberId(memberId));
     }
 
     public Member findMemberById(Long memberId) {
         return memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
+    }
+
+    public Long findCartIdByMemberId(Long memberId) {
+        return cartRepository.findByMemberId(memberId).orElseThrow(CartNotFoundException::new)
+            .getCartId();
     }
 
     public boolean existsByNickname(String nickname) {
