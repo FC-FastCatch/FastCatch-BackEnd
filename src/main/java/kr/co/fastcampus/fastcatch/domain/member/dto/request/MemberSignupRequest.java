@@ -14,7 +14,7 @@ public record MemberSignupRequest(
     @NotBlank(message = "이메일을 필수로 입력하셔야 합니다.")
     String email,
     @Size(min = 8, max = 20, message = "비밀번호는 8자에서 20자 사이어야 합니다.")
-    @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*\\d).+$", message = "영문자와 숫자를 최소 1개씩 포함하셔야 합니다.")
+    @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*\\d).+$", message = "비밀번호는 영문자와 숫자를 최소 1개씩 포함하셔야 합니다.")
     String password,
     @Size(min = 2, message = "이름은 최소 2자 이상이어야 합니다.")
     @Pattern(regexp = "^[a-zA-Z가-힣]*$", message = "이름은 한글 또는 영문으로만 입력하셔야 합니다.")

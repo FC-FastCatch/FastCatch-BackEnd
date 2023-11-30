@@ -1,5 +1,6 @@
 package kr.co.fastcampus.fastcatch.common.config;
 
+import java.util.List;
 import kr.co.fastcampus.fastcatch.common.security.jwt.JwtAuthenticationEntryPoint;
 import kr.co.fastcampus.fastcatch.common.security.jwt.JwtAuthenticationFilter;
 import kr.co.fastcampus.fastcatch.common.security.jwt.JwtTokenProvider;
@@ -15,6 +16,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
@@ -32,11 +36,14 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf((csrf) -> csrf.disable());
+        http.cors(cors -> cors.configurationSource(corsConfigurationSource()));
         http.authorizeHttpRequests((requests) -> requests
                 .requestMatchers(
                     new AntPathRequestMatcher("/api/members/signup"),
                     new AntPathRequestMatcher("/api/members/signin"),
-                    new AntPathRequestMatcher("/error")).permitAll()
+                    new AntPathRequestMatcher("/api/members/nickname/**"),
+                    new AntPathRequestMatcher("/error"))
+                    .permitAll()
                 .requestMatchers(
                     new AntPathRequestMatcher("/api/accommodations/**")).permitAll()
                 .requestMatchers(
@@ -52,5 +59,19 @@ public class SecurityConfig {
             .exceptionHandling(exceptionHandling -> exceptionHandling
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint));
         return http.build();
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOriginPatterns(List.of("*", "http://localhost:5173"));
+        // 모든 origin 허용 (실제 운영에서는 필요에 따라 수정)
+        configuration.addAllowedMethod("*"); // 모든 HTTP 메서드 허용
+        configuration.addAllowedHeader("*"); // 모든 헤더 허용
+        configuration.setAllowCredentials(true); // 인증 정보를 서버로 보낼 수 있도록 설정
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 }
