@@ -1,13 +1,17 @@
 package kr.co.fastcampus.fastcatch.common;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import kr.co.fastcampus.fastcatch.domain.accommodation.entity.Accommodation;
 import kr.co.fastcampus.fastcatch.domain.accommodation.entity.AccommodationOption;
 import kr.co.fastcampus.fastcatch.domain.accommodation.entity.Category;
 import kr.co.fastcampus.fastcatch.domain.accommodation.entity.Region;
 import kr.co.fastcampus.fastcatch.domain.accommodation.entity.Room;
 import kr.co.fastcampus.fastcatch.domain.accommodation.entity.RoomOption;
-import kr.co.fastcampus.fastcatch.domain.member.dto.request.MemberSignupRequest;
+import kr.co.fastcampus.fastcatch.domain.cart.entity.Cart;
+import kr.co.fastcampus.fastcatch.domain.cart.entity.CartItem;
+import kr.co.fastcampus.fastcatch.domain.member.entity.Member;
 
 public class TestUtil {
 
@@ -65,6 +69,38 @@ public class TestUtil {
             .petAccompanying(false)
             .canSmoking(false)
             .hasNetflix(true)
+            .build();
+    }
+
+    public static Member createMember() {
+        return Member.builder()
+            .memberId(1l)
+            .email("ad@asd.com")
+            .password("password")
+            .name("das")
+            .nickname("fd")
+            .birthday(LocalDate.of(1023, 12, 12))
+            .phoneNumber("01000001111")
+            .build();
+    }
+
+    public static Cart createCart(Member member) {
+        return Cart.builder()
+            .cartId(1l)
+            .member(member)
+            .cartItems(new ArrayList<>())
+            .build();
+    }
+
+    public static CartItem createCartItem(Room room, Cart cart) {
+        return CartItem.builder()
+            .cartItemId(1l)
+            .startDate(LocalDate.of(2023, 12, 12))
+            .endDate(LocalDate.of(2023, 12, 13))
+            .headCount(room.getBaseHeadCount())
+            .price(room.getPrice())
+            .room(room)
+            .cart(cart)
             .build();
     }
 }
