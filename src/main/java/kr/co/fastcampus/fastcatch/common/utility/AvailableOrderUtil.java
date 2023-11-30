@@ -15,8 +15,8 @@ public class AvailableOrderUtil {
         }
     }
 
-    public static void validateHeadCount(int requestHeadCount, int roomBaseHeadCount,
-                                         int roomMaxHeadcount) {
+    public static void validateHeadCount(
+        int requestHeadCount, int roomBaseHeadCount, int roomMaxHeadcount) {
         if (requestHeadCount < roomBaseHeadCount || requestHeadCount > roomMaxHeadcount) {
             throw new InvalidHeadRangeException();
         }
