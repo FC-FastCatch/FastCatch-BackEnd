@@ -11,7 +11,7 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addMapping("/**")
             .allowedOrigins("http://localhost:8080", "http://localhost:8081",
                 "https://fast-catch-front-end-umh7.vercel.app", "http://localhost:5173",
-                "http://58.127.37.16:5173",
+                "http://58.127.37.16",
                 "http://localhost:5174",
                 "http://localhost:5175",
                 "http://localhost:5176",
