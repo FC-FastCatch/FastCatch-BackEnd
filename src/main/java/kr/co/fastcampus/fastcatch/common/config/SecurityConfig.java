@@ -6,7 +6,6 @@ import kr.co.fastcampus.fastcatch.common.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer.FrameOptionsConfig;
@@ -36,8 +35,8 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf((csrf) -> csrf.disable());
+        http.cors(cors -> cors.configurationSource(corsConfigurationSource()));
         http.authorizeHttpRequests((requests) -> requests
-                .requestMatchers(HttpMethod.OPTIONS, "/api/**").permitAll()
                 .requestMatchers(
                     new AntPathRequestMatcher("/api/members/signup"),
                     new AntPathRequestMatcher("/api/members/signin"),
