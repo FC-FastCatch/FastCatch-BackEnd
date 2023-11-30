@@ -1,10 +1,17 @@
 package kr.co.fastcampus.fastcatch.domain.member.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.verify;
+
+import java.time.LocalDate;
 import kr.co.fastcampus.fastcatch.common.exception.DuplicatedEmailException;
 import kr.co.fastcampus.fastcatch.common.exception.DuplicatedNicknameException;
 import kr.co.fastcampus.fastcatch.domain.cart.entity.Cart;
 import kr.co.fastcampus.fastcatch.domain.cart.repository.CartRepository;
-import kr.co.fastcampus.fastcatch.domain.member.dto.request.MemberSigninRequest;
 import kr.co.fastcampus.fastcatch.domain.member.dto.request.MemberSignupRequest;
 import kr.co.fastcampus.fastcatch.domain.member.dto.response.MemberResponse;
 import kr.co.fastcampus.fastcatch.domain.member.entity.Member;
@@ -16,16 +23,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import java.time.LocalDate;
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.atLeastOnce;
-import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 public class MemberServiceTest {
