@@ -6,11 +6,11 @@ import kr.co.fastcampus.fastcatch.common.exception.InvalidHeadRangeException;
 import kr.co.fastcampus.fastcatch.common.exception.PastDateException;
 
 public class AvailableOrderUtil {
-    public static void validateDate(LocalDate start, LocalDate end) {
-        if (start.isBefore(LocalDate.now())) {
+    public static void validateDate(LocalDate startDate, LocalDate endDate) {
+        if (startDate.isBefore(LocalDate.now())) {
             throw new PastDateException();
         }
-        if (end.isBefore(start)) {
+        if (!startDate.isBefore(endDate)) {
             throw new InvalidDateRangeException();
         }
     }
