@@ -22,6 +22,7 @@ public record AccommodationSearchResponse(
             .id(accommodation.getId())
             .name(accommodation.getName())
             .region(accommodation.getRegion())
+            .address(accommodation.getAddress())
             .category(accommodation.getCategory())
             .lowestPrice(accommodation.getLowestPrice())
             .image(accommodation.getImage())
