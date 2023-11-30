@@ -4,12 +4,15 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+
 import kr.co.fastcampus.fastcatch.domain.accommodation.entity.Accommodation;
 import kr.co.fastcampus.fastcatch.domain.accommodation.entity.AccommodationOption;
 import kr.co.fastcampus.fastcatch.domain.accommodation.entity.Category;
 import kr.co.fastcampus.fastcatch.domain.accommodation.entity.Region;
 import kr.co.fastcampus.fastcatch.domain.accommodation.entity.Room;
 import kr.co.fastcampus.fastcatch.domain.accommodation.entity.RoomOption;
+import kr.co.fastcampus.fastcatch.domain.cart.entity.Cart;
+import kr.co.fastcampus.fastcatch.domain.cart.entity.CartItem;
 import kr.co.fastcampus.fastcatch.domain.member.entity.Member;
 import kr.co.fastcampus.fastcatch.domain.order.dto.request.OrderByCartRequest;
 import kr.co.fastcampus.fastcatch.domain.order.dto.request.OrderItemRequest;
@@ -17,9 +20,6 @@ import kr.co.fastcampus.fastcatch.domain.order.dto.request.OrderRequest;
 import kr.co.fastcampus.fastcatch.domain.order.entity.Order;
 import kr.co.fastcampus.fastcatch.domain.order.entity.OrderItem;
 import kr.co.fastcampus.fastcatch.domain.order.entity.OrderStatus;
-import kr.co.fastcampus.fastcatch.domain.cart.entity.Cart;
-import kr.co.fastcampus.fastcatch.domain.cart.entity.CartItem;
-import kr.co.fastcampus.fastcatch.domain.member.entity.Member;
 
 public class TestUtil {
 
@@ -86,6 +86,18 @@ public class TestUtil {
             .birthday(LocalDate.of(2000, 1, 1)).build();
     }
 
+    public static Member createMember() {
+        return Member.builder()
+            .memberId(1L)
+            .email("ad@asd.com")
+            .password("password")
+            .name("das")
+            .nickname("fd")
+            .birthday(LocalDate.of(1023, 12, 12))
+            .phoneNumber("01000001111")
+            .build();
+    }
+
     public static Order createOrder(Member member, Long id) {
         return Order.builder().orderId(id).member(member)
             .reservationPersonName("test").reservationPhoneNumber("01012341234")
@@ -111,18 +123,6 @@ public class TestUtil {
     public static OrderByCartRequest createOrderByCartRequest(List<Long> cartIdList) {
         return new OrderByCartRequest(true, "test", "01012341234",
             80000, cartIdList);
-    }
-
-    public static Member createMember() {
-        return Member.builder()
-            .memberId(1L)
-            .email("ad@asd.com")
-            .password("password")
-            .name("das")
-            .nickname("fd")
-            .birthday(LocalDate.of(1023, 12, 12))
-            .phoneNumber("01000001111")
-            .build();
     }
 
     public static Cart createCart(Member member) {
