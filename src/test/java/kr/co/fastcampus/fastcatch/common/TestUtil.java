@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
-
 import kr.co.fastcampus.fastcatch.domain.accommodation.entity.Accommodation;
 import kr.co.fastcampus.fastcatch.domain.accommodation.entity.AccommodationOption;
 import kr.co.fastcampus.fastcatch.domain.accommodation.entity.Category;
@@ -106,8 +105,11 @@ public class TestUtil {
 
     public static OrderItem createOrderItem(Room room, Order order) {
         return OrderItem.builder().orderItemId(1L).order(order).room(room)
-            .startDate(LocalDate.of(2023, 12, 01))
-            .endDate(LocalDate.of(2023, 12, 02)).headCount(2).price(80000).build();
+            .startDate(LocalDate.now())
+            .endDate(LocalDate.now().plusDays(1))
+            .headCount(2)
+            .price(80000)
+            .build();
     }
 
     public static OrderRequest createOrderRequest(List<OrderItemRequest> orderItemRequestList) {
@@ -116,8 +118,8 @@ public class TestUtil {
     }
 
     public static OrderItemRequest createOrderItemRequest() {
-        return new OrderItemRequest(1L, LocalDate.of(2023, 12, 01),
-            LocalDate.of(2023, 12, 02), 2, 80000);
+        return new OrderItemRequest(1L, LocalDate.now(),
+            LocalDate.now().plusDays(1), 2, 80000);
     }
 
     public static OrderByCartRequest createOrderByCartRequest(List<Long> cartIdList) {
@@ -136,8 +138,8 @@ public class TestUtil {
     public static CartItem createCartItem(Room room, Cart cart) {
         return CartItem.builder()
             .cartItemId(1L)
-            .startDate(LocalDate.of(2023, 12, 12))
-            .endDate(LocalDate.of(2023, 12, 13))
+            .startDate(LocalDate.now())
+            .endDate(LocalDate.now().plusDays(1))
             .headCount(room.getBaseHeadCount())
             .price(room.getPrice())
             .room(room)
