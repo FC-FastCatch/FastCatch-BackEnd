@@ -87,8 +87,8 @@ class OrderServiceTest {
 
             //given
             Long memberId = 1L;
-            OrderItemRequest orderItemRequest = new OrderItemRequest(1L, LocalDate.of(2023, 12, 03),
-                LocalDate.of(2023, 12, 02), 2, 80000);
+            OrderItemRequest orderItemRequest = new OrderItemRequest(1L, LocalDate.now(),
+                LocalDate.now().minusDays(1), 2, 80000);
             OrderRequest orderRequest = createOrderRequest(List.of(orderItemRequest));
             Member member = createMember(memberId);
             Order order = createOrder(member, 1L);
@@ -115,8 +115,12 @@ class OrderServiceTest {
 
             //given
             Long memberId = 1L;
-            OrderItemRequest orderItemRequest = new OrderItemRequest(1L, LocalDate.of(2023, 11, 23),
-                LocalDate.of(2023, 12, 02), 2, 80000);
+            OrderItemRequest orderItemRequest = new OrderItemRequest(
+                1L,
+                LocalDate.now().minusDays(1),
+                LocalDate.now(),
+                2,
+                80000);
             OrderRequest orderRequest = createOrderRequest(List.of(orderItemRequest));
             Member member = createMember(memberId);
             Order order = createOrder(member, 1L);
