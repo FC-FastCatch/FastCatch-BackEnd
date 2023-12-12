@@ -41,26 +41,27 @@ public class JwtTokenProvider {
     public String createAccessToken(Authentication authentication) {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
 
-        Claims claims = Jwts.claims().setSubject(userDetails.getUsername());
-
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + accessTokenValidTime);
 
         return Jwts.builder()
-            .setClaims(claims)
+            .setSubject(userDetails.getUsername())
             .setIssuedAt(now)
             .setExpiration(expiryDate)
-            .signWith(SignatureAlgorithm.HS512, secretKey)
+            .signWith(SignatureAlgorithm.HS256, secretKey)
             .compact();
     }
 
-    public String createRefreshToken() {
+    public String createRefreshToken(Authentication authentication) {
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+
         Date now = new Date();
 
         return Jwts.builder()
+            .setSubject(userDetails.getUsername())
             .setIssuedAt(now)
             .setExpiration(new Date(now.getTime() + refreshTokenValidTime))
-            .signWith(SignatureAlgorithm.HS512, secretKey)
+            .signWith(SignatureAlgorithm.HS256, secretKey)
             .compact();
     }
 
