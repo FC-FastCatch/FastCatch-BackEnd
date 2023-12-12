@@ -42,6 +42,7 @@ public class SecurityConfig {
                     new AntPathRequestMatcher("/api/members/signup"),
                     new AntPathRequestMatcher("/api/members/signin"),
                     new AntPathRequestMatcher("/api/members/nickname/**"),
+                    new AntPathRequestMatcher("/api/members/re-token"),
                     new AntPathRequestMatcher("/error"))
                     .permitAll()
                 .requestMatchers(

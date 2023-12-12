@@ -6,8 +6,10 @@ import kr.co.fastcampus.fastcatch.common.security.CustomUserDetails;
 import kr.co.fastcampus.fastcatch.domain.member.dto.request.MemberSigninRequest;
 import kr.co.fastcampus.fastcatch.domain.member.dto.request.MemberSignupRequest;
 import kr.co.fastcampus.fastcatch.domain.member.dto.request.MemberUpdateRequest;
+import kr.co.fastcampus.fastcatch.domain.member.dto.request.ReIssueTokenRequest;
 import kr.co.fastcampus.fastcatch.domain.member.dto.response.MemberResponse;
 import kr.co.fastcampus.fastcatch.domain.member.dto.response.MemberSigninResponse;
+import kr.co.fastcampus.fastcatch.domain.member.dto.response.TokenResponse;
 import kr.co.fastcampus.fastcatch.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,6 +41,12 @@ public class MemberController {
     public ResponseBody<MemberSigninResponse> signIn(
         @Valid @RequestBody MemberSigninRequest request) {
         return ResponseBody.ok(memberService.createSignIn(request));
+    }
+
+    @PostMapping("/re-token")
+    public ResponseBody<TokenResponse> addReAccessToken(
+        @Valid @RequestBody ReIssueTokenRequest request) {
+        return ResponseBody.ok(memberService.recreateAccessToken(request));
     }
 
     @GetMapping("/nickname")

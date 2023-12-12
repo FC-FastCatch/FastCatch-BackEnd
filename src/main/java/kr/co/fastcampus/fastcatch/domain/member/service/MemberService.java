@@ -12,8 +12,10 @@ import kr.co.fastcampus.fastcatch.domain.cart.repository.CartRepository;
 import kr.co.fastcampus.fastcatch.domain.member.dto.request.MemberSigninRequest;
 import kr.co.fastcampus.fastcatch.domain.member.dto.request.MemberSignupRequest;
 import kr.co.fastcampus.fastcatch.domain.member.dto.request.MemberUpdateRequest;
+import kr.co.fastcampus.fastcatch.domain.member.dto.request.ReIssueTokenRequest;
 import kr.co.fastcampus.fastcatch.domain.member.dto.response.MemberResponse;
 import kr.co.fastcampus.fastcatch.domain.member.dto.response.MemberSigninResponse;
+import kr.co.fastcampus.fastcatch.domain.member.dto.response.TokenResponse;
 import kr.co.fastcampus.fastcatch.domain.member.entity.Member;
 import kr.co.fastcampus.fastcatch.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +26,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 @Service
 @RequiredArgsConstructor
@@ -77,13 +80,29 @@ public class MemberService {
             userDetails, null, userDetails.getAuthorities());
 
         String accessToken = jwtTokenProvider.createAccessToken(authentication);
-        String refreshToken = jwtTokenProvider.createRefreshToken();
+        String refreshToken = jwtTokenProvider.createRefreshToken(authentication);
 
         Long cartId = findCartIdByMemberId(member.getMemberId());
 
         return MemberSigninResponse.from(
             accessToken, refreshToken, MemberResponse.from(member, cartId)
         );
+    }
+
+    public TokenResponse recreateAccessToken(ReIssueTokenRequest reIssueTokenRequest) {
+        String refreshToken = reIssueTokenRequest.refreshToken();
+        String reAccessToken = "";
+        if (StringUtils.hasText(refreshToken) && refreshToken.startsWith("Bearer")) {
+            refreshToken = refreshToken.substring(7);
+        }
+        if (jwtTokenProvider.validateToken(refreshToken)) {
+            UserDetails userDetails = customUserDetailsService.loadUserByUsername(
+                jwtTokenProvider.extractEmailFromToken(refreshToken));
+            Authentication authentication = new UsernamePasswordAuthenticationToken(
+                userDetails, null, userDetails.getAuthorities());
+            reAccessToken = jwtTokenProvider.createAccessToken(authentication);
+        }
+        return TokenResponse.from(reAccessToken);
     }
 
     public MemberResponse findMemberInfo(Long memberId) {
