@@ -1,5 +1,7 @@
 package kr.co.fastcampus.fastcatch.common.security.jwt;
 
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
@@ -45,6 +47,8 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
             SecurityContextHolder.clearContext();
             jwtAuthenticationEntryPoint.commence((HttpServletRequest) request,
                 (HttpServletResponse) response, e);
+        } catch (ExpiredJwtException e) {
+            throw new JwtException("토큰 기한 만료");
         }
         chain.doFilter(request, response);
     }
