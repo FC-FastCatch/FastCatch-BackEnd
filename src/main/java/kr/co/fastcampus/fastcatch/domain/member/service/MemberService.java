@@ -5,16 +5,21 @@ import kr.co.fastcampus.fastcatch.common.exception.DuplicatedEmailException;
 import kr.co.fastcampus.fastcatch.common.exception.DuplicatedNicknameException;
 import kr.co.fastcampus.fastcatch.common.exception.MemberNotFoundException;
 import kr.co.fastcampus.fastcatch.common.exception.PasswordNotMatchedException;
+import kr.co.fastcampus.fastcatch.common.exception.TokenNotMatchedException;
 import kr.co.fastcampus.fastcatch.common.security.CustomUserDetailsService;
 import kr.co.fastcampus.fastcatch.common.security.jwt.JwtTokenProvider;
 import kr.co.fastcampus.fastcatch.domain.cart.entity.Cart;
 import kr.co.fastcampus.fastcatch.domain.cart.repository.CartRepository;
+import kr.co.fastcampus.fastcatch.domain.member.dto.request.MemberSignOutRequest;
 import kr.co.fastcampus.fastcatch.domain.member.dto.request.MemberSigninRequest;
 import kr.co.fastcampus.fastcatch.domain.member.dto.request.MemberSignupRequest;
 import kr.co.fastcampus.fastcatch.domain.member.dto.request.MemberUpdateRequest;
 import kr.co.fastcampus.fastcatch.domain.member.dto.response.MemberResponse;
+import kr.co.fastcampus.fastcatch.domain.member.dto.response.MemberSignOutResponse;
 import kr.co.fastcampus.fastcatch.domain.member.dto.response.MemberSigninResponse;
+import kr.co.fastcampus.fastcatch.domain.member.entity.BlackList;
 import kr.co.fastcampus.fastcatch.domain.member.entity.Member;
+import kr.co.fastcampus.fastcatch.domain.member.repository.BlackListRepository;
 import kr.co.fastcampus.fastcatch.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,6 +41,7 @@ public class MemberService {
     private final JwtTokenProvider jwtTokenProvider;
     private final CustomUserDetailsService customUserDetailsService;
     private final CartRepository cartRepository;
+    private final BlackListRepository blackListRepository;
 
     public MemberResponse createMember(MemberSignupRequest request) {
 
@@ -84,6 +90,24 @@ public class MemberService {
         return MemberSigninResponse.from(
             accessToken, refreshToken, MemberResponse.from(member, cartId)
         );
+    }
+
+    public MemberSignOutResponse createSignOut(Long memberId,
+        MemberSignOutRequest memberSignOutRequest) {
+        Member member = findMemberById(memberId);
+        String accessToken = memberSignOutRequest.accessToken();
+        String refreshToken = memberSignOutRequest.refreshToken();
+        if(member.getEmail().equals(jwtTokenProvider.extractEmailFromToken(accessToken))) {
+            throw new TokenNotMatchedException();
+        }
+        BlackList blackList = BlackList.builder().email(member.getEmail())
+            .accessToken(memberSignOutRequest.accessToken())
+            .refreshToken(memberSignOutRequest.refreshToken()).build();
+        blackListRepository.save(blackList);
+        return MemberSignOutResponse.builder().blackListId(blackList.getBlackListId())
+            .memberId(memberId).email(member.getEmail())
+            .accessToken(memberSignOutRequest.accessToken()).refreshToken(
+                memberSignOutRequest.refreshToken()).build();
     }
 
     public MemberResponse findMemberInfo(Long memberId) {
