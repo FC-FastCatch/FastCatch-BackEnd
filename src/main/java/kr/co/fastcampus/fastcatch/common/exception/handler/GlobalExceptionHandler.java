@@ -1,6 +1,6 @@
 package kr.co.fastcampus.fastcatch.common.exception.handler;
 
-import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import kr.co.fastcampus.fastcatch.common.exception.BaseException;
-import kr.co.fastcampus.fastcatch.common.exception.ExpiredTokenException;
 import kr.co.fastcampus.fastcatch.common.response.ResponseBody;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.NestedExceptionUtils;
@@ -26,6 +25,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(value = BaseException.class)
     public ResponseBody<Void> handleBaseException(BaseException e) {
@@ -85,12 +85,10 @@ public class GlobalExceptionHandler {
     }
 
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    @ExceptionHandler(value = {ExpiredJwtException.class, ExpiredTokenException.class})
-    public ResponseBody<Void> expiredJwtException(
-        ExpiredJwtException e) {
-        log.error("[ExpiredJwtException] Message = {}", e.getMessage());
-        return ResponseBody.fail(e.getMessage()
-            + " 토큰의 기한이 만료되었습니다.");
+    @ExceptionHandler(value = JwtException.class)
+    public ResponseBody<Void> jwtException(Exception e) {
+        log.error("[JwtException] Message = {}", e.getMessage());
+        return ResponseBody.fail(e.getMessage());
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)

@@ -1,11 +1,8 @@
 package kr.co.fastcampus.fastcatch.domain.member.service;
 
-import io.jsonwebtoken.JwtException;
 import kr.co.fastcampus.fastcatch.common.exception.CartNotFoundException;
 import kr.co.fastcampus.fastcatch.common.exception.DuplicatedEmailException;
 import kr.co.fastcampus.fastcatch.common.exception.DuplicatedNicknameException;
-import kr.co.fastcampus.fastcatch.common.exception.ExpiredTokenException;
-import kr.co.fastcampus.fastcatch.common.exception.InvalidTokenException;
 import kr.co.fastcampus.fastcatch.common.exception.MemberNotFoundException;
 import kr.co.fastcampus.fastcatch.common.exception.PasswordNotMatchedException;
 import kr.co.fastcampus.fastcatch.common.exception.TokenNotMatchedException;
@@ -100,21 +97,15 @@ public class MemberService {
         if (StringUtils.hasText(refreshToken) && refreshToken.startsWith("Bearer")) {
             refreshToken = refreshToken.substring(7);
         }
-        if (!email.equals(jwtTokenProvider.extractEmailFromToken(refreshToken))) {
-            throw new TokenNotMatchedException();
-        }
-        try {
-            if (jwtTokenProvider.validateToken(refreshToken)) {
-                UserDetails userDetails = customUserDetailsService.loadUserByUsername(
-                    jwtTokenProvider.extractEmailFromToken(refreshToken));
-                Authentication authentication = new UsernamePasswordAuthenticationToken(
-                    userDetails, null, userDetails.getAuthorities());
-                reAccessToken = jwtTokenProvider.createAccessToken(authentication);
+        if (jwtTokenProvider.validateToken(refreshToken)) {
+            if (!email.equals(jwtTokenProvider.extractEmailFromToken(refreshToken))) {
+                throw new TokenNotMatchedException();
             }
-        } catch (ExpiredTokenException e) {
-            throw new ExpiredTokenException();
-        } catch (JwtException e) {
-            throw new InvalidTokenException();
+            UserDetails userDetails = customUserDetailsService.loadUserByUsername(
+                jwtTokenProvider.extractEmailFromToken(refreshToken));
+            Authentication authentication = new UsernamePasswordAuthenticationToken(
+                userDetails, null, userDetails.getAuthorities());
+            reAccessToken = jwtTokenProvider.createAccessToken(authentication);
         }
         return TokenResponse.builder().accessToken(reAccessToken).build();
     }

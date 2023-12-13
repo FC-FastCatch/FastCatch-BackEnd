@@ -1,5 +1,11 @@
 package kr.co.fastcampus.fastcatch.common.security.jwt;
 
+import static kr.co.fastcampus.fastcatch.common.response.ErrorCode.EXPIRED_TOKEN;
+import static kr.co.fastcampus.fastcatch.common.response.ErrorCode.ILLEGAL_ARGUMENT_TOKEN;
+import static kr.co.fastcampus.fastcatch.common.response.ErrorCode.MALFORMED_TOKEN;
+import static kr.co.fastcampus.fastcatch.common.response.ErrorCode.SIGNATURE_TOKEN;
+import static kr.co.fastcampus.fastcatch.common.response.ErrorCode.UNSUPPORTED_TOKEN;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
@@ -80,15 +86,15 @@ public class JwtTokenProvider {
                 .parseClaimsJws(token).getBody();
             return true;
         } catch (ExpiredJwtException e) {
-            throw new JwtException("토큰 기한이 만료되었습니다.");
+            throw new JwtException(EXPIRED_TOKEN.getErrorMsg());
         } catch (UnsupportedJwtException e) {
-            throw new JwtException("지원되지 않는 JWT 토큰입니다.");
+            throw new JwtException(UNSUPPORTED_TOKEN.getErrorMsg());
         } catch (MalformedJwtException e) {
-            throw new JwtException("올바르게 구성되지 않은 JWT 토큰입니다.");
+            throw new JwtException(MALFORMED_TOKEN.getErrorMsg());
         } catch (SignatureException e) {
-            throw new JwtException("유효하지 않은 JWT 서명입니다.");
+            throw new JwtException(SIGNATURE_TOKEN.getErrorMsg());
         } catch (IllegalArgumentException e) {
-            throw new JwtException("JWT 클레임이 비어있습니다.");
+            throw new JwtException(ILLEGAL_ARGUMENT_TOKEN.getErrorMsg());
         }
     }
 }

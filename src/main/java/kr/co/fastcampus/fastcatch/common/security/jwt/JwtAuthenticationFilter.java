@@ -1,5 +1,7 @@
 package kr.co.fastcampus.fastcatch.common.security.jwt;
 
+import static kr.co.fastcampus.fastcatch.common.response.ErrorCode.EXPIRED_TOKEN;
+
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
@@ -48,7 +50,7 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
             jwtAuthenticationEntryPoint.commence((HttpServletRequest) request,
                 (HttpServletResponse) response, e);
         } catch (ExpiredJwtException e) {
-            throw new JwtException("토큰 기한 만료");
+            throw new JwtException(EXPIRED_TOKEN.getErrorMsg());
         }
         chain.doFilter(request, response);
     }
