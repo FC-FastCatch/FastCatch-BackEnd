@@ -9,6 +9,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.SignatureException;
 import io.jsonwebtoken.UnsupportedJwtException;
 import java.util.Date;
+import kr.co.fastcampus.fastcatch.common.exception.ExpiredTokenException;
 import kr.co.fastcampus.fastcatch.common.security.CustomUserDetails;
 import kr.co.fastcampus.fastcatch.common.security.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,7 +81,7 @@ public class JwtTokenProvider {
                 .parseClaimsJws(token).getBody();
             return true;
         } catch (ExpiredJwtException e) {
-            throw new JwtException("JWT 토큰이 만료되었습니다.");
+            throw new ExpiredTokenException();
         } catch (UnsupportedJwtException e) {
             throw new JwtException("지원되지 않는 JWT 토큰입니다.");
         } catch (MalformedJwtException e) {

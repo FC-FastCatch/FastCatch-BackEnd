@@ -1,5 +1,6 @@
 package kr.co.fastcampus.fastcatch.common.exception.handler;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -7,6 +8,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import kr.co.fastcampus.fastcatch.common.exception.BaseException;
+import kr.co.fastcampus.fastcatch.common.exception.ExpiredTokenException;
 import kr.co.fastcampus.fastcatch.common.response.ResponseBody;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.NestedExceptionUtils;
@@ -80,6 +82,15 @@ public class GlobalExceptionHandler {
         log.error("[MissingServletRequestParameterException] Message = {}", e.getMessage());
         return ResponseBody.fail(e.getParameterName()
             + " 파라미터가 빈 값이거나 잘못된 유형입니다.");
+    }
+
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(value = {ExpiredJwtException.class, ExpiredTokenException.class})
+    public ResponseBody<Void> expiredJwtException(
+        ExpiredJwtException e) {
+        log.error("[ExpiredJwtException] Message = {}", e.getMessage());
+        return ResponseBody.fail(e.getMessage()
+            + " 토큰의 기한이 만료되었습니다.");
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
