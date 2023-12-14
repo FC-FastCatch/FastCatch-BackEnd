@@ -32,7 +32,7 @@ public enum ErrorCode {
     INVALID_TOKEN("토큰이 유효하지 않습니다."),
     TOKEN_NOT_MATCHED("회원정보가 일치하지 않는 토큰입니다."),
     MEMBER_EMAIL_NOT_FOUND("존재하지 않는 회원입니다."),
-    ;
+    UNAUTHORIZED_TOKEN("로그인이 필요합니다.");
 
     private final String errorMsg;
 

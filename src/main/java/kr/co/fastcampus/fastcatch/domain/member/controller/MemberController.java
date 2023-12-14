@@ -3,11 +3,13 @@ package kr.co.fastcampus.fastcatch.domain.member.controller;
 import jakarta.validation.Valid;
 import kr.co.fastcampus.fastcatch.common.response.ResponseBody;
 import kr.co.fastcampus.fastcatch.common.security.CustomUserDetails;
+import kr.co.fastcampus.fastcatch.domain.member.dto.request.MemberSignOutRequest;
 import kr.co.fastcampus.fastcatch.domain.member.dto.request.MemberSigninRequest;
 import kr.co.fastcampus.fastcatch.domain.member.dto.request.MemberSignupRequest;
 import kr.co.fastcampus.fastcatch.domain.member.dto.request.MemberUpdateRequest;
 import kr.co.fastcampus.fastcatch.domain.member.dto.request.ReIssueTokenRequest;
 import kr.co.fastcampus.fastcatch.domain.member.dto.response.MemberResponse;
+import kr.co.fastcampus.fastcatch.domain.member.dto.response.MemberSignOutResponse;
 import kr.co.fastcampus.fastcatch.domain.member.dto.response.MemberSigninResponse;
 import kr.co.fastcampus.fastcatch.domain.member.dto.response.TokenResponse;
 import kr.co.fastcampus.fastcatch.domain.member.service.MemberService;
@@ -42,6 +44,14 @@ public class MemberController {
     public ResponseBody<MemberSigninResponse> signIn(
         @Valid @RequestBody MemberSigninRequest request) {
         return ResponseBody.ok(memberService.createSignIn(request));
+    }
+
+    @PostMapping("/signout")
+    public ResponseBody<MemberSignOutResponse> signOut(
+        @AuthenticationPrincipal CustomUserDetails customUserDetails,
+        @Valid @RequestBody MemberSignOutRequest request) {
+        return ResponseBody.ok(
+            memberService.createSignOut(customUserDetails.getMemberId(), request));
     }
 
     @PostMapping("/re-token")
