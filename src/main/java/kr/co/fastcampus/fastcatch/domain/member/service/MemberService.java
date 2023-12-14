@@ -1,5 +1,8 @@
 package kr.co.fastcampus.fastcatch.domain.member.service;
 
+import static kr.co.fastcampus.fastcatch.common.response.ErrorCode.UNAUTHORIZED_TOKEN;
+
+import io.jsonwebtoken.JwtException;
 import kr.co.fastcampus.fastcatch.common.exception.CartNotFoundException;
 import kr.co.fastcampus.fastcatch.common.exception.DuplicatedEmailException;
 import kr.co.fastcampus.fastcatch.common.exception.DuplicatedNicknameException;
@@ -122,6 +125,9 @@ public class MemberService {
             refreshToken = refreshToken.substring(7);
         }
         if (jwtTokenProvider.validateToken(refreshToken)) {
+            if (blackListRepository.existsByRefreshToken(refreshToken)) {
+                throw new JwtException(UNAUTHORIZED_TOKEN.getErrorMsg());
+            }
             if (!email.equals(jwtTokenProvider.extractEmailFromToken(refreshToken))) {
                 throw new TokenNotMatchedException();
             }

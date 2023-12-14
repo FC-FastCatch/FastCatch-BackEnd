@@ -3,7 +3,6 @@ package kr.co.fastcampus.fastcatch.domain.member.service;
 import static kr.co.fastcampus.fastcatch.common.response.ErrorCode.UNAUTHORIZED_TOKEN;
 
 import io.jsonwebtoken.JwtException;
-import javax.security.sasl.AuthenticationException;
 import kr.co.fastcampus.fastcatch.domain.member.repository.BlackListRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -21,9 +20,5 @@ public class BlackListService {
             throw new JwtException(UNAUTHORIZED_TOKEN.getErrorMsg());
         }
         return false;
-    }
-
-    public boolean existsByRefreshTokenInBlackList(String refreshToken) {
-        return blackListRepository.existsByRefreshToken(refreshToken);
     }
 }

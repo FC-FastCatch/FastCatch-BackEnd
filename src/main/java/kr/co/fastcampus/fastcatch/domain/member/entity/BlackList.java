@@ -21,7 +21,7 @@ public class BlackList extends BaseEntity {
     @JsonIgnore
     private Long blackListId;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String email;
 
     @Column(nullable = false)
