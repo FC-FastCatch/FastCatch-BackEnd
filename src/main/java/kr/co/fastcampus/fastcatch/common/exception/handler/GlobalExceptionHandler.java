@@ -91,7 +91,7 @@ public class GlobalExceptionHandler {
         MissingRequestHeaderException e
     ) {
         log.error("[MissingRequestHeaderException] Message = {}", e.getMessage());
-        return ResponseBody.fail("헤더가 빈 값이거나 잘못된 유형입니다. : "+ e.getMessage());
+        return ResponseBody.fail("헤더가 빈 값이거나 잘못된 유형입니다. : " + e.getMessage());
     }
 
     @ResponseStatus(HttpStatus.UNAUTHORIZED)

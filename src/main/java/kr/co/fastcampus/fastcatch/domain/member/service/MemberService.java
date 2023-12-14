@@ -90,7 +90,8 @@ public class MemberService {
         );
     }
 
-    public TokenResponse recreateAccessToken(String headerRefreshToken, ReIssueTokenRequest reIssueTokenRequest) {
+    public TokenResponse recreateAccessToken(
+        String headerRefreshToken, ReIssueTokenRequest reIssueTokenRequest) {
         String email = reIssueTokenRequest.email();
         String refreshToken = headerRefreshToken;
         String reAccessToken = "";
