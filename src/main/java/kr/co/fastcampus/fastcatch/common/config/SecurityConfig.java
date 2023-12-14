@@ -3,9 +3,9 @@ package kr.co.fastcampus.fastcatch.common.config;
 import java.util.List;
 import kr.co.fastcampus.fastcatch.common.security.jwt.JwtAuthenticationEntryPoint;
 import kr.co.fastcampus.fastcatch.common.security.jwt.JwtAuthenticationFilter;
+import kr.co.fastcampus.fastcatch.common.security.jwt.JwtExceptionFilter;
 import kr.co.fastcampus.fastcatch.common.security.jwt.JwtTokenProvider;
 import kr.co.fastcampus.fastcatch.domain.member.service.BlackListService;
-import kr.co.fastcampus.fastcatch.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,6 +29,7 @@ public class SecurityConfig {
 
     private final JwtTokenProvider jwtTokenProvider;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private final JwtExceptionFilter jwtExceptionFilter;
     private final BlackListService blackListService;
 
     @Bean
@@ -45,8 +46,9 @@ public class SecurityConfig {
                     new AntPathRequestMatcher("/api/members/signup"),
                     new AntPathRequestMatcher("/api/members/signin"),
                     new AntPathRequestMatcher("/api/members/nickname/**"),
+                    new AntPathRequestMatcher("/api/members/re-token"),
                     new AntPathRequestMatcher("/error"))
-                    .permitAll()
+                .permitAll()
                 .requestMatchers(
                     new AntPathRequestMatcher("/api/accommodations/**")).permitAll()
                 .requestMatchers(
@@ -57,8 +59,10 @@ public class SecurityConfig {
             .sessionManagement(
                 (session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .addFilterBefore(
-                new JwtAuthenticationFilter(jwtTokenProvider, jwtAuthenticationEntryPoint, blackListService),
+                new JwtAuthenticationFilter(jwtTokenProvider, jwtAuthenticationEntryPoint,
+                    blackListService),
                 UsernamePasswordAuthenticationFilter.class)
+            .addFilterBefore(jwtExceptionFilter, JwtAuthenticationFilter.class)
             .exceptionHandling(exceptionHandling -> exceptionHandling
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint));
         return http.build();

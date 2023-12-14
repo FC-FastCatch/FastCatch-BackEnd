@@ -14,9 +14,11 @@ import kr.co.fastcampus.fastcatch.domain.member.dto.request.MemberSignOutRequest
 import kr.co.fastcampus.fastcatch.domain.member.dto.request.MemberSigninRequest;
 import kr.co.fastcampus.fastcatch.domain.member.dto.request.MemberSignupRequest;
 import kr.co.fastcampus.fastcatch.domain.member.dto.request.MemberUpdateRequest;
+import kr.co.fastcampus.fastcatch.domain.member.dto.request.ReIssueTokenRequest;
 import kr.co.fastcampus.fastcatch.domain.member.dto.response.MemberResponse;
 import kr.co.fastcampus.fastcatch.domain.member.dto.response.MemberSignOutResponse;
 import kr.co.fastcampus.fastcatch.domain.member.dto.response.MemberSigninResponse;
+import kr.co.fastcampus.fastcatch.domain.member.dto.response.TokenResponse;
 import kr.co.fastcampus.fastcatch.domain.member.entity.BlackList;
 import kr.co.fastcampus.fastcatch.domain.member.entity.Member;
 import kr.co.fastcampus.fastcatch.domain.member.repository.BlackListRepository;
@@ -29,6 +31,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 @Service
 @RequiredArgsConstructor
@@ -83,7 +86,7 @@ public class MemberService {
             userDetails, null, userDetails.getAuthorities());
 
         String accessToken = jwtTokenProvider.createAccessToken(authentication);
-        String refreshToken = jwtTokenProvider.createRefreshToken();
+        String refreshToken = jwtTokenProvider.createRefreshToken(authentication);
 
         Long cartId = findCartIdByMemberId(member.getMemberId());
 
@@ -97,7 +100,7 @@ public class MemberService {
         Member member = findMemberById(memberId);
         String accessToken = memberSignOutRequest.accessToken();
         String refreshToken = memberSignOutRequest.refreshToken();
-        if(!member.getEmail().equals(jwtTokenProvider.extractEmailFromToken(accessToken))) {
+        if (!member.getEmail().equals(jwtTokenProvider.extractEmailFromToken(accessToken))) {
             throw new TokenNotMatchedException();
         }
         BlackList blackList = BlackList.builder().email(member.getEmail())
@@ -108,6 +111,27 @@ public class MemberService {
             .memberId(memberId).email(member.getEmail())
             .accessToken(memberSignOutRequest.accessToken()).refreshToken(
                 memberSignOutRequest.refreshToken()).build();
+    }
+
+    public TokenResponse recreateAccessToken(
+        String headerRefreshToken, ReIssueTokenRequest reIssueTokenRequest) {
+        String email = reIssueTokenRequest.email();
+        String refreshToken = headerRefreshToken;
+        String reAccessToken = "";
+        if (StringUtils.hasText(headerRefreshToken) && headerRefreshToken.startsWith("Bearer")) {
+            refreshToken = refreshToken.substring(7);
+        }
+        if (jwtTokenProvider.validateToken(refreshToken)) {
+            if (!email.equals(jwtTokenProvider.extractEmailFromToken(refreshToken))) {
+                throw new TokenNotMatchedException();
+            }
+            UserDetails userDetails = customUserDetailsService.loadUserByUsername(
+                jwtTokenProvider.extractEmailFromToken(refreshToken));
+            Authentication authentication = new UsernamePasswordAuthenticationToken(
+                userDetails, null, userDetails.getAuthorities());
+            reAccessToken = jwtTokenProvider.createAccessToken(authentication);
+        }
+        return TokenResponse.builder().accessToken(reAccessToken).build();
     }
 
     public MemberResponse findMemberInfo(Long memberId) {
