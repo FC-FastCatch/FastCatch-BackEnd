@@ -97,12 +97,12 @@ public class MemberService {
         Member member = findMemberById(memberId);
         String accessToken = memberSignOutRequest.accessToken();
         String refreshToken = memberSignOutRequest.refreshToken();
-        if(member.getEmail().equals(jwtTokenProvider.extractEmailFromToken(accessToken))) {
+        if(!member.getEmail().equals(jwtTokenProvider.extractEmailFromToken(accessToken))) {
             throw new TokenNotMatchedException();
         }
         BlackList blackList = BlackList.builder().email(member.getEmail())
-            .accessToken(memberSignOutRequest.accessToken())
-            .refreshToken(memberSignOutRequest.refreshToken()).build();
+            .accessToken(accessToken)
+            .refreshToken(refreshToken).build();
         blackListRepository.save(blackList);
         return MemberSignOutResponse.builder().blackListId(blackList.getBlackListId())
             .memberId(memberId).email(member.getEmail())

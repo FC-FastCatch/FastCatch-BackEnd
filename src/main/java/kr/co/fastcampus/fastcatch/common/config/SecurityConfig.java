@@ -4,6 +4,8 @@ import java.util.List;
 import kr.co.fastcampus.fastcatch.common.security.jwt.JwtAuthenticationEntryPoint;
 import kr.co.fastcampus.fastcatch.common.security.jwt.JwtAuthenticationFilter;
 import kr.co.fastcampus.fastcatch.common.security.jwt.JwtTokenProvider;
+import kr.co.fastcampus.fastcatch.domain.member.service.BlackListService;
+import kr.co.fastcampus.fastcatch.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,6 +29,7 @@ public class SecurityConfig {
 
     private final JwtTokenProvider jwtTokenProvider;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private final BlackListService blackListService;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -54,7 +57,7 @@ public class SecurityConfig {
             .sessionManagement(
                 (session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .addFilterBefore(
-                new JwtAuthenticationFilter(jwtTokenProvider, jwtAuthenticationEntryPoint),
+                new JwtAuthenticationFilter(jwtTokenProvider, jwtAuthenticationEntryPoint, blackListService),
                 UsernamePasswordAuthenticationFilter.class)
             .exceptionHandling(exceptionHandling -> exceptionHandling
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint));
