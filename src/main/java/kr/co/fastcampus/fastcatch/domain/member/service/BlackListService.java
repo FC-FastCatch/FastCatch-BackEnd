@@ -16,7 +16,7 @@ public class BlackListService {
     private final BlackListRepository blackListRepository;
 
     public boolean existsByAccessTokenInBlackList(String accessToken) {
-        if(blackListRepository.existsByAccessToken(accessToken)) {
+        if (blackListRepository.existsByAccessToken(accessToken)) {
             throw new JwtException(UNAUTHORIZED_TOKEN.getErrorMsg());
         }
         return false;
