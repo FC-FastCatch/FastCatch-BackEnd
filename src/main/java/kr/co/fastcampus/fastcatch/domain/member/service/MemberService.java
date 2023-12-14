@@ -90,11 +90,11 @@ public class MemberService {
         );
     }
 
-    public TokenResponse recreateAccessToken(ReIssueTokenRequest reIssueTokenRequest) {
+    public TokenResponse recreateAccessToken(String headerRefreshToken, ReIssueTokenRequest reIssueTokenRequest) {
         String email = reIssueTokenRequest.email();
-        String refreshToken = reIssueTokenRequest.refreshToken();
+        String refreshToken = headerRefreshToken;
         String reAccessToken = "";
-        if (StringUtils.hasText(refreshToken) && refreshToken.startsWith("Bearer")) {
+        if (StringUtils.hasText(headerRefreshToken) && headerRefreshToken.startsWith("Bearer")) {
             refreshToken = refreshToken.substring(7);
         }
         if (jwtTokenProvider.validateToken(refreshToken)) {
