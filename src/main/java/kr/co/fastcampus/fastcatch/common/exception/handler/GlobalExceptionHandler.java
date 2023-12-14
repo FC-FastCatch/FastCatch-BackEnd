@@ -1,5 +1,6 @@
 package kr.co.fastcampus.fastcatch.common.exception.handler;
 
+import io.jsonwebtoken.JwtException;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -15,6 +16,7 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -24,6 +26,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(value = BaseException.class)
     public ResponseBody<Void> handleBaseException(BaseException e) {
@@ -80,6 +83,22 @@ public class GlobalExceptionHandler {
         log.error("[MissingServletRequestParameterException] Message = {}", e.getMessage());
         return ResponseBody.fail(e.getParameterName()
             + " 파라미터가 빈 값이거나 잘못된 유형입니다.");
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MissingRequestHeaderException.class)
+    public ResponseBody<Void> missingRequestHeaderException(
+        MissingRequestHeaderException e
+    ) {
+        log.error("[MissingRequestHeaderException] Message = {}", e.getMessage());
+        return ResponseBody.fail("헤더가 빈 값이거나 잘못된 유형입니다. : " + e.getMessage());
+    }
+
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(value = JwtException.class)
+    public ResponseBody<Void> jwtException(Exception e) {
+        log.error("[JwtException] Message = {}", e.getMessage());
+        return ResponseBody.fail(e.getMessage());
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)

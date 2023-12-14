@@ -1,5 +1,9 @@
 package kr.co.fastcampus.fastcatch.common.security.jwt;
 
+import static kr.co.fastcampus.fastcatch.common.response.ErrorCode.EXPIRED_TOKEN;
+
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
@@ -31,7 +35,8 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         String requestUri = httpRequest.getRequestURI();
         if (requestUri.equals("/api/members/signup") || requestUri.equals("/api/members/signin")
-            || requestUri.equals("/error") || requestUri.startsWith("/api/accommodations")) {
+            || requestUri.equals("/error") || requestUri.startsWith("/api/accommodations")
+            || requestUri.equals("/api/members/re-token")) {
             chain.doFilter(request, response);
             return;
         }
@@ -44,6 +49,8 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
             SecurityContextHolder.clearContext();
             jwtAuthenticationEntryPoint.commence((HttpServletRequest) request,
                 (HttpServletResponse) response, e);
+        } catch (ExpiredJwtException e) {
+            throw new JwtException(EXPIRED_TOKEN.getErrorMsg());
         }
         chain.doFilter(request, response);
     }
