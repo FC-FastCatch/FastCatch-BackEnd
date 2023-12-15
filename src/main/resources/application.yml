@@ -21,6 +21,6 @@ spring:
     key: 5756515a6a76696b38347645497154
 
 jwt:
-  secretKey: fastCatch8jo
-  accessTokenValidTime: 86400000
-  refreshTokenValidTime: 604800000
+  secretKey: fastCatch8jofromminiprojectoffastcampusnumberfour
+  accessTokenValidTime: 180000
+  refreshTokenValidTime: 300000

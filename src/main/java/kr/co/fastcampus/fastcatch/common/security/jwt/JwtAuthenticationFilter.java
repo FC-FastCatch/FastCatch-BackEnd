@@ -1,5 +1,9 @@
 package kr.co.fastcampus.fastcatch.common.security.jwt;
 
+import static kr.co.fastcampus.fastcatch.common.response.ErrorCode.EXPIRED_TOKEN;
+
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
@@ -7,6 +11,7 @@ import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import kr.co.fastcampus.fastcatch.domain.member.service.BlackListService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,6 +24,7 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
 
     private final JwtTokenProvider jwtTokenProvider;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private final BlackListService blackListService;
 
     @Override
     public void doFilter(
@@ -31,12 +37,14 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         String requestUri = httpRequest.getRequestURI();
         if (requestUri.equals("/api/members/signup") || requestUri.equals("/api/members/signin")
-            || requestUri.equals("/error") || requestUri.startsWith("/api/accommodations")) {
+            || requestUri.equals("/error") || requestUri.startsWith("/api/accommodations")
+            || requestUri.equals("/api/members/re-token")) {
             chain.doFilter(request, response);
             return;
         }
         try {
-            if (token != null && jwtTokenProvider.validateToken(token)) {
+            if (token != null && jwtTokenProvider.validateToken(token)
+                && !blackListService.existsByAccessTokenInBlackList(token)) {
                 Authentication authentication = jwtTokenProvider.getAuthentication(token);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
@@ -44,6 +52,8 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
             SecurityContextHolder.clearContext();
             jwtAuthenticationEntryPoint.commence((HttpServletRequest) request,
                 (HttpServletResponse) response, e);
+        } catch (ExpiredJwtException e) {
+            throw new JwtException(EXPIRED_TOKEN.getErrorMsg());
         }
         chain.doFilter(request, response);
     }
