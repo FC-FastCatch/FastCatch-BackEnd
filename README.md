@@ -1,13 +1,18 @@
 ﻿
 # 빨(8)리 잡아 - FastCatch
+## 팀 - 이거 다 되면 8조?!
+**프론트엔드** : 어준혁, 고솔미, 윤태관, 이예인, 정범환
 
-## 8️⃣ 이거 다 되면 8조?! - 백엔드
-|박주현|김현아|이의인|정병주|
-|:---:|:---:|:---:|:---:|
-|👑팀장|팀원|팀원|팀원|
-|[Programmer-may](https://github.com/Programmer-may)|[decten](https://github.com/decten)|[dldmldlsy](https://github.com/dldmldlsy)|[JeongByungJoo](https://github.com/JeongByungJoo)|
-|![](https://avatars.githubusercontent.com/u/114227320?v=4)|![](https://avatars.githubusercontent.com/u/52107658?v=4)|![](https://avatars.githubusercontent.com/u/76683396?v=4)|![](https://avatars.githubusercontent.com/u/129931655?v=4)|
-|숙박|장바구니|구매, 회원|회원|
+**백엔드** : 박주현, 김현아, 이의인, 정병주
+***
+### 백엔드 팀원 소개 및 역할
+|                            박주현                             |                            김현아                            |                            이의인                            |                            정병주                             |
+|:----------------------------------------------------------:|:---------------------------------------------------------:|:---------------------------------------------------------:|:----------------------------------------------------------:|
+|                            👑팀장                            |                            팀원                             |                            팀원                             |                             팀원                             |
+|    [Programmer-may](https://github.com/Programmer-may)     |            [decten](https://github.com/decten)            |         [dldmldlsy](https://github.com/dldmldlsy)         |     [JeongByungJoo](https://github.com/JeongByungJoo)      |
+| ![](https://avatars.githubusercontent.com/u/114227320?v=4) | ![](https://avatars.githubusercontent.com/u/52107658?v=4) | ![](https://avatars.githubusercontent.com/u/76683396?v=4) | ![](https://avatars.githubusercontent.com/u/129931655?v=4) |
+|               숙박 도메인 API<br/>프로젝트 전체 인프라 구축                |                장바구니 도메인 API<br/>OpenAPI 연동                |           주문 도메인 API<br/>Spring Security 회원API            |                         회원 도메인 API                         |
+공통 : API 명세서 작성, 테이블 설계, 팀 노션페이지 작성 및 정리, 단위/통합 테스트 코드 작성
 ***
 ## 🚩 개요
 **프로젝트 내용**: 숙박 예약 서비스
