@@ -47,6 +47,17 @@
 - User Name: sa
 - Password: (빈칸)
 
+### 프로젝트 테스트 가이드
+
+<details>
+<summary>매뉴얼</summary>
+프로젝트 배포 사이트 : https://www.fastcatchapp.com
+
+ID : aaaa@naver.com
+
+PW: aaaa1111
+</details>
+
 # ⚖️ 컨벤션
 
 ----
