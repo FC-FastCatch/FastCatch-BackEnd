@@ -37,6 +37,10 @@
 ### 프로젝트 파이프라인
 ![최종배포파이프라인.png](%EC%B5%9C%EC%A2%85%EB%B0%B0%ED%8F%AC%ED%8C%8C%EC%9D%B4%ED%94%84%EB%9D%BC%EC%9D%B8.png)
 
+### 서버 인프라
+![미니프로젝트 서버 인프라.png](%EB%AF%B8%EB%8B%88%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%20%EC%84%9C%EB%B2%84%20%EC%9D%B8%ED%94%84%EB%9D%BC.png)
+
+
 ### 로컬 데이터베이스 H2 접속 경로
 
 1. http://localhost:8080/h2-console 에 들어간다.
