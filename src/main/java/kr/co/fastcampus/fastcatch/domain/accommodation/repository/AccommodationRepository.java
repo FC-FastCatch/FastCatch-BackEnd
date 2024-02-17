@@ -11,38 +11,13 @@ import org.springframework.data.repository.query.Param;
 
 public interface AccommodationRepository extends JpaRepository<Accommodation, Long> {
 
-    @Query("SELECT a FROM Accommodation a "
-        + "WHERE a.category = :category "
-        + "AND a.region = :region "
+    @Query("SELECT a FROM Accommodation a WHERE "
+        + "a.category = COALESCE(:category, a.category) "
+        + "AND a.region = COALESCE(:region, a.region) "
         + "AND a.maximumCapacity >= :headCount")
-    Page<Accommodation> findAccommodationsByCategoryAndRegionAndHeadCount(
+    Page<Accommodation> findAccommodations(
         @Param("category") Category category,
         @Param("region") Region region,
-        @Param("headCount") Integer headCount,
-        Pageable pageable
-    );
-
-    @Query("SELECT a FROM Accommodation a "
-        + "WHERE a.category = :category "
-        + "AND a.maximumCapacity >= :headCount")
-    Page<Accommodation> findAccommodationsByCategoryAndHeadCount(
-        @Param("category") Category category,
-        @Param("headCount") Integer headCount,
-        Pageable pageable
-    );
-
-    @Query("SELECT a FROM Accommodation a "
-        + "WHERE a.region = :region "
-        + "AND a.maximumCapacity >= :headCount")
-    Page<Accommodation> findAccommodationsByRegionAndHeadCount(
-        @Param("region") Region region,
-        @Param("headCount") Integer headCount,
-        Pageable pageable
-    );
-
-    @Query("SELECT a FROM Accommodation a "
-        + "WHERE a.maximumCapacity >= :headCount ")
-    Page<Accommodation> findAccommodationsByHeadCount(
         @Param("headCount") Integer headCount,
         Pageable pageable
     );

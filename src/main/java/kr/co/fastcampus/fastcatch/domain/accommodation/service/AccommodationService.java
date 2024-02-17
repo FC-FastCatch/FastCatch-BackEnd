@@ -125,25 +125,11 @@ public class AccommodationService {
     }
 
     private Page<Accommodation> findFilteredAccommodations(
-        Category category, Region region, Integer headCount, Pageable pageable
-    ) {
-        if (category == Category.ALL && region == Region.ALL) {
-            return accommodationRepository.findAccommodationsByHeadCount(
-                headCount, pageable
-            );
-        } else if (category != Category.ALL && region == Region.ALL) {
-            return accommodationRepository.findAccommodationsByCategoryAndHeadCount(
-                category, headCount, pageable
-            );
-        } else if (category == Category.ALL) {
-            return accommodationRepository.findAccommodationsByRegionAndHeadCount(
-                region, headCount, pageable
-            );
-        } else {
-            return accommodationRepository.findAccommodationsByCategoryAndRegionAndHeadCount(
-                category, region, headCount, pageable
-            );
-        }
+        Category category, Region region, Integer headCount, Pageable pageable) {
+        Category searchCategory = (category == Category.ALL) ? null : category;
+        Region searchRegion = (region == Region.ALL) ? null : region;
+
+        return accommodationRepository.findAccommodations(searchCategory, searchRegion, headCount, pageable);
     }
 
     private AccommodationPageResponse mapToAccommodationPageResponse(
