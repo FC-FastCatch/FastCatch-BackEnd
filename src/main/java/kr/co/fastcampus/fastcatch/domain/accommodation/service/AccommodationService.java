@@ -129,7 +129,9 @@ public class AccommodationService {
         Category searchCategory = (category == Category.ALL) ? null : category;
         Region searchRegion = (region == Region.ALL) ? null : region;
 
-        return accommodationRepository.findAccommodations(searchCategory, searchRegion, headCount, pageable);
+        return accommodationRepository.findAccommodations(
+            searchCategory, searchRegion, headCount, pageable
+        );
     }
 
     private AccommodationPageResponse mapToAccommodationPageResponse(
