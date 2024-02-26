@@ -9,8 +9,10 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
 import kr.co.fastcampus.fastcatch.common.baseentity.BaseEntity;
@@ -21,6 +23,9 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Formula;
 
 @Entity
+@Table(name = "accommodation", indexes = {
+    @Index(name = "idx_accommodation_category_region", columnList = "category, region")
+})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class Accommodation extends BaseEntity {
