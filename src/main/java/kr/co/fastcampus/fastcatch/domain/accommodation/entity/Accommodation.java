@@ -24,7 +24,7 @@ import org.hibernate.annotations.Formula;
 
 @Entity
 @Table(name = "accommodation", indexes = {
-    @Index(name = "idx_accommodation_category_region", columnList = "category, region")
+    @Index(name = "idx_accommodation_region_category", columnList = "region, category")
 })
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
