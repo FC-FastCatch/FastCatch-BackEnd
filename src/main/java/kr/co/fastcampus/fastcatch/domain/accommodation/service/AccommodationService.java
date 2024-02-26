@@ -130,7 +130,7 @@ public class AccommodationService {
         Region searchRegion = (region == Region.ALL) ? null : region;
 
         return accommodationRepository.findAccommodations(
-            searchCategory, searchRegion, headCount, pageable
+            searchRegion, searchCategory, headCount, pageable
         );
     }
 
