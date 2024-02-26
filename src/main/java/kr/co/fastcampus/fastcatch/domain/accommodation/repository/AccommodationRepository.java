@@ -12,13 +12,13 @@ import org.springframework.data.repository.query.Param;
 public interface AccommodationRepository extends JpaRepository<Accommodation, Long> {
 
     @Query("SELECT a FROM Accommodation a WHERE "
-        + "a.maximumCapacity >= :headCount "
-        + "AND a.category = COALESCE(:category, a.category) "
-        + "AND a.region = COALESCE(:region, a.region)")
+        + "a.category = COALESCE(:category, a.category) "
+        + "AND a.region = COALESCE(:region, a.region) "
+        + "AND a.maximumCapacity >= :headCount")
     Page<Accommodation> findAccommodations(
-        @Param("headCount") Integer headCount,
         @Param("category") Category category,
         @Param("region") Region region,
+        @Param("headCount") Integer headCount,
         Pageable pageable
     );
 
