@@ -12,8 +12,8 @@ import org.springframework.data.repository.query.Param;
 public interface AccommodationRepository extends JpaRepository<Accommodation, Long> {
 
     @Query("SELECT a FROM Accommodation a WHERE "
-        + "a.region = COALESCE(:region, a.region) "
-        + "AND a.category = COALESCE(:category, a.category) "
+        + "(a.region = :region OR :region IS NULL) "
+        + "AND (a.category = :category OR :category IS NULL) "
         + "AND a.maximumCapacity >= :headCount")
     Page<Accommodation> findAccommodations(
         @Param("region") Region region,
